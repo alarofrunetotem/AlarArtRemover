@@ -5,7 +5,7 @@ externals:
   libs/CallbackHandler-1.0: svn://svn.wowace.com/wow/callbackhandler/mainline/tags/1.0.3/CallbackHandler-1.0
   #libs/Ace2: svn://svn.wowace.com/wow/ace2/mainline/trunk
   #libs/AlarLib: svn://svn.wowace.com/wow/alarlib/mainline/trunk
-  #libs/Ace3 svn://svn.wowace.com/wow/ace3/mainline/branches/RC1
+  libs/Ace3: svn://svn.wowace.com/wow/ace3/mainline/branches/RC1
   libs/AceAddon-3.0: svn://svn.wowace.com/wow/ace3/mainline/branches/RC1/AceAddon-3.0
   #libs/AceBucket-3.0: svn://svn.wowace.com/wow/ace3/mainline/branches/RC1/AceBucket-3.0
   #libs/AceComm-3.0: svn://svn.wowace.com/wow/ace3/mainline/branches/RC1/AceComm-3.0
@@ -27,4 +27,11 @@ move-folders:
    AlarArtRemover/libs/AlarLib/Media: AlarArtRemover/libs/Media
 
 ignore: 
-  - luac.out
+ - luac.out
+ - tests
+ - benchs
+ - docs
+ - split.bat
+ - unsplit.bat  
+ - LibStub
+ - CallbackHandler-1.0
