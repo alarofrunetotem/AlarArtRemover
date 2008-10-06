@@ -9,7 +9,9 @@ Description:
 Dependencies: Alarmod
 License: GPL v2.1
 --]]
---DEFAULT_CHAT_FRAME:AddMessage(GetTime().. " AlarArtRemover",1,0,0)
+--@debug@ 
+DEFAULT_CHAT_FRAME:AddMessage(GetTime().. " AlarArtRemover",1,0,0)
+--@end-debug@
 local function help(self)
 --===DOCBEGIN===
     self:HF_Title("Blizzard art remover")
