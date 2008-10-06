@@ -77,4 +77,10 @@ function aar:Apply(toggle,value)
         end
     end 
 end
+
+function aar:OnDisabled()
+    for i,v in self:Vars() do
+        self._Apply[i](self,i,false)
+    end
+end
 AAR=aar

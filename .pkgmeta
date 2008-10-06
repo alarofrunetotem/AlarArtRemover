@@ -7,9 +7,6 @@ externals:
   libs/AlarShared-3.0: http://alarwowaddons.googlecode.com/svn/trunk/AlarShared/AlarShared-3.0
   libs/MiniStub: http://alarwowaddons.googlecode.com/svn/trunk/AlarShared/MiniStub  
 
-move-folders:
-   AlarArtRemover/libs/AlarLib/Media: AlarArtRemover/libs/Media
-
 ignore: 
  - luac.out
  - tests
