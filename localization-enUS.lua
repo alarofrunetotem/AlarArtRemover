@@ -1,3 +1,4 @@
+LoadAddOn("AlarShared")
 AMO:Locale("enUS",{
 ["Hide gryphon"]=true,
 ["Hide pet bar"]=true,

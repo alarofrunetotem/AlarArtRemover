@@ -12,6 +12,7 @@ License: GPL v2.1
 --@debug@ 
 DEFAULT_CHAT_FRAME:AddMessage(GetTime().. " AlarArtRemover",1,0,0)
 --@end-debug@
+LoadAddOn('AlarShared')
 local function help(self)
 --===DOCBEGIN===
     self:HF_Title("Blizzard art remover")
@@ -38,13 +39,13 @@ setglobal(Id,AlarCreateAddon(Fullname,true))
 local aar=getglobal(Id)
 aar.ID=Id
 aar.DATABASE='db' ..Id
+local L=AlarGetLocale()
 function aar:OnInitialized()
-    L=AlarGetLocale()
     help(self)
     g=self:AddToggle("HIDEGRYPHON",false,L["Hide gryphon"],L["If checked, hides gryphon art"])
     g.width='full'
-    g=self:AddToggle("HIDEMAINBAR",false,L["Hide main bar"],L["If checked, hides main bar art"])
-    g.width='full'
+    --g=self:AddToggle("HIDEMAINBAR",false,L["Hide main bar"],L["If checked, hides main bar art"])
+    --g.width='full'
     g=self:AddToggle("HIDELAGMETER",false,L["Hide lagmeter"],L["If checked, hides lagmeter art"])
     g.width='full'
 --[[
@@ -54,7 +55,7 @@ function aar:OnInitialized()
     self.HIDEGRYPHON={tipo="form",
         items={"MainMenuBarLeftEndCap","MainMenuBarRightEndCap"}
         }
-    self.HIDELAGMETER={tipo="form",
+    self.HIDELAGMETER={tipo="unknown",
                     items={"MainMenuBarPerformanceBarFrame"}
                     }
     self.HIDEMAINBAR={tipo="form",

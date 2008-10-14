@@ -1,4 +1,4 @@
-## Interface: 20400
+## Interface: 30000
 ## Title: Alar:|c00ff9900ArtRemover|r
 ## Notes: Removes Blizzard Art from Action Bars (Build: 54683)
 ## Author: Alar of Daggerspine
