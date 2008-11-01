@@ -6,7 +6,7 @@
 ## eMail: alar@aspide.it
 ## URL: http://wow.aspide.it
 ## RequiredDeps: 
-## OptionalDeps: AlarShared,FuBar,Titan
+## OptionalDeps: FuBar,Titan
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
 ## SavedVariables: dbAARgen

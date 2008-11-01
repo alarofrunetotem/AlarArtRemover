@@ -12,11 +12,14 @@ License: GPL v2.1
 --@debug@ 
 DEFAULT_CHAT_FRAME:AddMessage(GetTime().. " AlarArtRemover",1,0,0)
 --@end-debug@
-LoadAddOn('AlarShared')
 local function help(self)
 --===DOCBEGIN===
-    self:HF_Title("Blizzard art remover")
-    self:HF_Commands()
+    self:HF_Title("Blizzard art remover","Description")
+    self:HF_Paragraph("Description")
+    self:HF_Pre("Hides gryphons and artwork from blzzard main actionbar")
+    self:RelNotes(3,0,0,[[
+Upgrade: Updated for WotLK
+]])
     self:RelNotes(2,0,0,[[
 Upgrade: Now uses Ace3
 Fixed: Art status is now always remember betweeen section
