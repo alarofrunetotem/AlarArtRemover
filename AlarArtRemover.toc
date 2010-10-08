@@ -9,8 +9,10 @@
 ## OptionalDeps: FuBar,Titan,Ace3
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
-## SavedVariables: dbAARgen
-## SavedVariablesPerCharacter: dbAAR
+## SavedVariables: dbAAR
+## SavedVariablesPerCharacter: localdbAAR
+## X-ID: AAR
+## X-DATABASE: dbAAR
 ## X-RelSite-WoWI: 0
 ## X-RelSite-Curse: 9568
 ## X-RelSite-WoWUI: 0
@@ -23,5 +25,5 @@
 ## X-eMail: alar@aspide.it
 ## X-Date: @project-date-iso@
 embeds.xml
-localization-enUS.lua
+localization.lua
 AlarArtRemover.lua

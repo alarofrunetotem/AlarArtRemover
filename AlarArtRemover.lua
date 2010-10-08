@@ -1,17 +1,47 @@
+local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
+local _,_,_,toc=GetBuildInfo()
+local pp=print
 --[[
 Name: AlarArtRemover.lua
-Revision: $Revision: 65902 $
+Revision: $Rev: 426 $
 Author: Alar of Daggerspine
-Website: http://wow.aspide.it
-Documentation:
-SVN:
-Description:
-Dependencies: Alarmod
+Email: alar@aspide.it
+Website: http://www.curse.com
+SVN: $HeadUrl:$
 License: GPL v2.1
 --]]
---@debug@ 
-DEFAULT_CHAT_FRAME:AddMessage(GetTime().. " AlarArtRemover",1,0,0)
+local me, ns = ...
+--@debug@
+print("Loading",__FILE__," inside ",me)
 --@end-debug@
+if (LibDebug) then LibDebug() end
+local function debug(...) 
+--@debug@
+print(...)
+--@end-debug@
+end
+local print=_G.print
+local notify=_G.print
+local error=_G.error
+local function dump() end
+local function debugEnable() end
+if (LibStub("AlarLoader-3.0",true) then
+	rc=LibStub("AlarLoader-3.0"):GetPrintFunctions(me)
+	print=rc.print
+	--@debug@
+	debug=rc.debug
+	dump=rc.dump
+	--@end-debug@
+	notify=rc.notify
+	error=rc.error
+	debugEnable=rc.debugEnable
+else
+	debug("Missing AlarLoader-3.0")
+end
+debugEnable(false)
+local L=LibStub("AceLocale-3.0"):GetLocale(me,true)
+--[[ Standard prologue end --]]
+
 local function help(self)
 --===DOCBEGIN===
     self:HF_Title("Blizzard art remover","Description")
@@ -36,14 +66,8 @@ Feature: Updated to WoW 2.3
 ]])
 --===DOCEND===
 end
-local Id="AAR"
-local Fullname="AlarArtRemover"
-setglobal(Id,AlarCreateAddon(Fullname,true))
-local aar=getglobal(Id)
-aar.ID=Id
-aar.DATABASE='db' ..Id
-local L=AlarGetLocale()
-function aar:OnInitialized()
+local addon=LibStub("AlarLoader-3.0"):CreateAddon(me)
+function addon:OnInitialized()
     help(self)
     g=self:AddToggle("HIDEGRYPHON",false,L["Hide gryphon"],L["If checked, hides gryphon art"])
     g.width='full'
@@ -68,7 +92,7 @@ function aar:OnInitialized()
                     items={"SlidingActionBarTexture0","SlidingActionBarTexture1"}
                     }
 end
-function aar:Apply(toggle,value)
+function addon:Apply(toggle,value)
     local work=self[toggle]
     if (not work) then return end
     if (work.tipo == "form") then
@@ -82,9 +106,8 @@ function aar:Apply(toggle,value)
     end 
 end
 
-function aar:OnDisabled()
+function addon:OnDisabled()
     for i,v in self:Vars() do
         self._Apply[i](self,i,false)
     end
 end
-AAR=aar
