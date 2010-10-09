@@ -1,4 +1,6 @@
-local me,ns=...
+local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
+local me, ns = ...
+print("Loading",__FILE__," inside ",me)
 local l=LibStub("AceLocale-3.0")
 local L=l:NewLocale(me,"enUS",true,true)
 --@localization(locale="enUS", format="lua_additive_table" , escape-non-ascii=true, same-key-is-true=true, handle-unlocalized="english" )@
