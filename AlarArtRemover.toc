@@ -1,4 +1,5 @@
 ## Interface: 30300
+## X-Compatible-With: 40000
 ## Title: Alar:|c00ff9900ArtRemover|r
 ## Notes: Removes Blizzard Art from Action Bars
 ## Author: Alar of Daggerspine
@@ -6,7 +7,7 @@
 ## eMail: alar@aspide.it
 ## URL: http://wow.aspide.it
 ## RequiredDeps: 
-## OptionalDeps: FuBar,Titan,Ace3
+## OptionalDeps: FuBar,Titan,Ace3,LibDebug
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
 ## SavedVariables: dbAAR

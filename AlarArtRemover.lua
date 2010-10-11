@@ -1,6 +1,7 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
 local _,_,_,toc=GetBuildInfo()
 local pp=print
+local me, ns = ...
 --[[
 Name: AlarArtRemover.lua
 Revision: $Rev: 426 $
@@ -10,7 +11,6 @@ Website: http://www.curse.com
 SVN: $HeadUrl:$
 License: GPL v2.1
 --]]
-local me, ns = ...
 --@debug@
 print("Loading",__FILE__," inside ",me)
 --@end-debug@
@@ -25,7 +25,7 @@ local notify=_G.print
 local error=_G.error
 local function dump() end
 local function debugEnable() end
-if (LibStub("AlarLoader-3.0",true) then
+if (LibStub("AlarLoader-3.0",true)) then
 	rc=LibStub("AlarLoader-3.0"):GetPrintFunctions(me)
 	print=rc.print
 	--@debug@
@@ -66,10 +66,10 @@ Feature: Updated to WoW 2.3
 ]])
 --===DOCEND===
 end
-local addon=LibStub("AlarLoader-3.0"):CreateAddon(me)
+local addon=LibStub("AlarLoader-3.0"):CreateAddon(me,true)
 function addon:OnInitialized()
     help(self)
-    g=self:AddToggle("HIDEGRYPHON",false,L["Hide gryphon"],L["If checked, hides gryphon art"])
+    local g=self:AddToggle("HIDEGRYPHON",false,L["Hide gryphon"],L["If checked, hides gryphon art"])
     g.width='full'
     g=self:AddToggle("HIDEMAINBAR",false,L["Hide main bar"],L["If checked, hides main bar art"])
     g.width='full'
@@ -98,9 +98,9 @@ function addon:Apply(toggle,value)
     if (work.tipo == "form") then
         for _,f in pairs(work.items) do
             if (not value) then
-                getglobal(f):Show()
+                _G[f]:Show()
             else 
-                getglobal(f):Hide()
+                _G[f]:Hide()
             end             
         end
     end 
@@ -108,6 +108,7 @@ end
 
 function addon:OnDisabled()
     for i,v in self:Vars() do
-        self._Apply[i](self,i,false)
+        self:Apply(i,false)
     end
 end
+_G.AAR=addon
