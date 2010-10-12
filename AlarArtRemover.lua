@@ -13,8 +13,8 @@ License: GPL v2.1
 --]]
 --@debug@
 print("Loading",__FILE__," inside ",me)
---@end-debug@
 if (LibDebug) then LibDebug() end
+--@end-debug@
 local function debug(...) 
 --@debug@
 print(...)
@@ -26,7 +26,7 @@ local error=_G.error
 local function dump() end
 local function debugEnable() end
 if (LibStub("AlarLoader-3.0",true)) then
-	rc=LibStub("AlarLoader-3.0"):GetPrintFunctions(me)
+	local rc=LibStub("AlarLoader-3.0"):GetPrintFunctions(me)
 	print=rc.print
 	--@debug@
 	debug=rc.debug
