@@ -2,8 +2,8 @@ package-as: AlarArtRemover
 enable-nolib-creation: no
 
 externals:
-  libs/Ace3: svn://svn.wowace.com/wow/ace3/mainline/tags/Release-r960
-  libs/AlarShared-3.0: http://alarwowaddons.googlecode.com/svn/AlarShared/tags/2010-10-11.001/AlarShared-3.0
+  libs/Ace3: svn://svn.wowace.com/wow/ace3/mainline/tags/Release-r971
+  libs/AlarShared-3.0: http://alarwowaddons.googlecode.com/svn/AlarShared/tags/2010-10-13.001/AlarShared-3.0
 
 ignore: 
  - luac.out
