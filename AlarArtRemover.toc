@@ -4,7 +4,7 @@
 ## Notes: Removes Blizzard Art from Action Bars
 ## Author: Alar of Daggerspine
 ## Version: @project-version@ @project-revision@
-## X-Version: 3.2.4
+## X-Version: 3.2.6
 ## eMail: alar@aspide.it
 ## URL: http://wow.aspide.it
 ## RequiredDeps: 

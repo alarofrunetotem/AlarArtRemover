@@ -47,6 +47,10 @@ local function help(self)
     self:HF_Title("Blizzard art remover","Description")
     self:HF_Paragraph("Description")
     self:HF_Pre("Hides gryphons and artwork from blzzard main actionbar")
+    self:RelNotes(3,2,6,[[
+Fixed: Usage: NewLocale(application, locale[, isDefault[, silent]]): 'silent' must be specified for the first locale registered:
+    AlarArtRemover-3.2.5 37\localization.lua:14: in main chunk
+]])
     self:RelNotes(3,0,0,[[
 Upgrade: Updated for WotLK
 ]])
