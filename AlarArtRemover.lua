@@ -15,7 +15,7 @@ License: GPL v2.1
 print("Loading",__FILE__," inside ",me)
 if (LibDebug) then LibDebug() end
 --@end-debug@
-local function debug(...) 
+local function debug(...)
 --@debug@
 print(...)
 --@end-debug@
@@ -47,9 +47,11 @@ local function help(self)
     self:HF_Title("Blizzard art remover","Description")
     self:HF_Paragraph("Description")
     self:HF_Pre("Hides gryphons and artwork from blzzard main actionbar")
+    self:RelNotes(3,2,7,[[
+Feature: Bumped toc version
+]])
     self:RelNotes(3,2,6,[[
-Fixed: Usage: NewLocale(application, locale[, isDefault[, silent]]): 'silent' must be specified for the first locale registered:
-    AlarArtRemover-3.2.5 37\localization.lua:14: in main chunk
+Fixed: Error in localization
 ]])
     self:RelNotes(3,0,0,[[
 Upgrade: Updated for WotLK
@@ -59,7 +61,7 @@ Upgrade: Now uses Ace3
 Fixed: Art status is now always remember betweeen section
 ]])
     self:RelNotes(1,0,5,[[
-Upgrade: WoW 2.4 
+Upgrade: WoW 2.4
 ]])
     self:RelNotes(1,0,4,[[
 Upgrade: Embedded libraries upgrade
@@ -103,11 +105,11 @@ function addon:Apply(toggle,value)
         for _,f in pairs(work.items) do
             if (not value) then
                 _G[f]:Show()
-            else 
+            else
                 _G[f]:Hide()
-            end             
+            end
         end
-    end 
+    end
 end
 
 function addon:OnDisabled()
