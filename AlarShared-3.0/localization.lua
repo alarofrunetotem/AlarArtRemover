@@ -4,9 +4,9 @@ local MINOR_VERSION = 500 + tonumber(string.sub("$Revision$", 12, -3))
 local lib,old=LibStub:NewLibrary(MAJOR_VERSION,MINOR_VERSION)
 if not lib then return end
 local me, ns = ...
---[===[@debug@
+--@debug@
 print("Loading",__FILE__," inside ",me)
---@end-debug@]===]
+--@end-debug@
 local l=LibStub("AceLocale-3.0")
 local function getLocale(lang,default)
 	local me="AlarShared"

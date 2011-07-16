@@ -14,15 +14,15 @@ Description: Generic library
 Dependencies: Ace3
 License: LGPL v2.1
 --]]
---[===[@debug@
+--@debug@
 print("Loading",__FILE__,"inside", me)
---@end-debug@]===]
+--@end-debug@
 if (LibDebug) then LibDebug() end
 LoadAddOn("Blizzard_DebugTools")
 local function debug (...) 
-	--[===[@debug@
+	--@debug@
 	print(...)
-	--@end-debug@]===]
+	--@end-debug@
 end
 local print=_G.print
 local notify=_G.print
@@ -30,13 +30,13 @@ local error=_G.error
 local function dump() end
 local _,_,_,toc=GetBuildInfo()
 -- End prologue ---------------------------------------------
---[===[@debug@
+--@debug@
 local oprint=print
 if (LibDebug) then LibDebug() end
 local dump=print
 
 if (_G.AlarDebug) then  AlarDebug() end
---@end-debug@]===]
+--@end-debug@
 local lib,old=LibStub:NewLibrary(MAJOR_VERSION,MINOR_VERSION)
 if (not lib) then return end
 local function xformat(fmt,...)

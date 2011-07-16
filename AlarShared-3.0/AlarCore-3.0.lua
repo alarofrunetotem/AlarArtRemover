@@ -15,14 +15,14 @@ Description: Generic library
 Dependencies: Ace3
 License: LGPL v2.1
 --]]
---[===[@debug@
+--@debug@
 print("Loading",__FILE__," inside ",me)
---@end-debug@]===]
+--@end-debug@
 if (LibDebug) then LibDebug() end
 local function debug(...) 
---[===[@debug@
+--@debug@
 	print(...)
---@end-debug@]===]
+--@end-debug@
 end
 local print=_G.print
 local notify=_G.print
@@ -32,10 +32,10 @@ local function debugEnable() end
 if (LibStub("AlarLoader-3.0",true)) then
 	local rc=LibStub("AlarLoader-3.0"):GetPrintFunctions(MAJOR_VERSION)
 	print=rc.print
-	--[===[@debug@
+	--@debug@
 	debug=rc.debug
 	dump=rc.dump
-	--@end-debug@]===]
+	--@end-debug@
 	notify=rc.notify
 	error=rc.error
 	debugEnable=rc.debugEnable
@@ -1319,14 +1319,14 @@ function mix:CancelScheduledEvent(flag)
     self:CancelTimer(h)
 end
 function mix:Trace(...)
---[===[@debug@	
+--@debug@	
 	self:_Trace(false,...)
---@end-debug@]===]	
+--@end-debug@	
 end
 function mix:FullTrace(...)
-	--[===[@debug@	
+	--@debug@	
 	self:_Trace(true,...)
-	--@end-debug@]===]	
+	--@end-debug@	
 end
 function mix:_Trace(ft,fmt,...)
     local stack={strsplit("\n",debugstack(3,5,0))}
