@@ -19,36 +19,36 @@ local function getLocale(lang,default)
 	return L
 end
 local L=getLocale("enUS",true)
---@localization(locale="enUS", format="lua_additive_table" , escape-non-ascii=true, same-key-is-true=true, handle-unlocalized="english" )@
+--@localization(locale="enUS", format="lua_additive_table", namespace="library",  escape-non-ascii=true, same-key-is-true=true, handle-unlocalized="english" )@
 L=getLocale("frFR")
 if (L) then
---@localization(locale="frFR", format="lua_additive_table" , escape-non-ascii=true, same-key-is-true=true, handle-unlocalized="english" )@
+--@localization(locale="frFR", format="lua_additive_table", namespace="library",  escape-non-ascii=true, same-key-is-true=true, handle-unlocalized="english" )@
 end
 L=getLocale("deDE")
 if (L) then
---@localization(locale="deDE", format="lua_additive_table" , escape-non-ascii=true, same-key-is-true=true, handle-unlocalized="english" )@
+--@localization(locale="deDE", format="lua_additive_table", namespace="library",  escape-non-ascii=true, same-key-is-true=true, handle-unlocalized="english" )@
 end
 L=getLocale("koKR")
 if (L) then
---@localization(locale="koKR", format="lua_additive_table" , escape-non-ascii=true, same-key-is-true=true, handle-unlocalized="english" )@
+--@localization(locale="koKR", format="lua_additive_table", namespace="library",  escape-non-ascii=true, same-key-is-true=true, handle-unlocalized="english" )@
 end
 L=getLocale("esMX")
 if (L) then
---@localization(locale="esMX", format="lua_additive_table" , escape-non-ascii=true, same-key-is-true=true, handle-unlocalized="english" )@
+--@localization(locale="esMX", format="lua_additive_table", namespace="library",  escape-non-ascii=true, same-key-is-true=true, handle-unlocalized="english" )@
 end
 L=getLocale("ruRU")
 if (L) then
---@localization(locale="ruRU", format="lua_additive_table" , escape-non-ascii=true, same-key-is-true=true, handle-unlocalized="english" )@
+--@localization(locale="ruRU", format="lua_additive_table", namespace="library",  escape-non-ascii=true, same-key-is-true=true, handle-unlocalized="english" )@
 end
 L=getLocale("zhCN")
 if (L) then
---@localization(locale="zhCN", format="lua_additive_table" , escape-non-ascii=true, same-key-is-true=true, handle-unlocalized="english" )@
+--@localization(locale="zhCN", format="lua_additive_table", namespace="library",  escape-non-ascii=true, same-key-is-true=true, handle-unlocalized="english" )@
 end
 L=getLocale("esES")
 if (L) then
---@localization(locale="esES", format="lua_additive_table" , escape-non-ascii=true, same-key-is-true=true, handle-unlocalized="english" )@
+--@localization(locale="esES", format="lua_additive_table", namespace="library",  escape-non-ascii=true, same-key-is-true=true, handle-unlocalized="english" )@
 end
 L=getLocale("zhTW")
 if (L) then
---@localization(locale="zhTW", format="lua_additive_table" , escape-non-ascii=true, same-key-is-true=true, handle-unlocalized="english" )@
+--@localization(locale="zhTW", format="lua_additive_table", namespace="library",  escape-non-ascii=true, same-key-is-true=true, handle-unlocalized="english" )@
 end

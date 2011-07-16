@@ -448,13 +448,6 @@ local function LoadDefaults(self)
                 desc="configuration switches",
                 guiHidden=true,
                 args={}
-            },
-            commands={
-                type="group",
-                name="commands",
-                desc="command line",
-                hidden=true,
-                args={}
             }
         }
     }
@@ -518,17 +511,17 @@ function mix:OnInitialize(...)
     AceConfigDialog:AddToBlizOptions(main,main )
 
     AceConfig:RegisterOptionsTable(main .. CONFIGURATION,self.OptionsTable,{main,strlower(self.ID)})
-    self.CfgDlg=AceConfigDialog:AddToBlizOptions(main .. CONFIGURATION,L[CONFIGURATION],main)
+    self.CfgDlg=AceConfigDialog:AddToBlizOptions(main .. CONFIGURATION,CONFIGURATION,main)
 
     if (profile) then
         AceConfig:RegisterOptionsTable(profile,self.ProfileOpts)
         AceConfigDialog:AddToBlizOptions(profile,L.Profile,main)
     end
-    self.CfgRel=AceConfigDialog:AddToBlizOptions(main .. RELNOTES,L[RELNOTES],main)
+    self.CfgRel=AceConfigDialog:AddToBlizOptions(main .. RELNOTES,RELNOTES,main)
 
-    AceConfigDialog:AddToBlizOptions(main .. TOGGLES,L[TOGGLES],main)
+    AceConfigDialog:AddToBlizOptions(main .. TOGGLES,TOGGLES,main)
 
-    AceConfigDialog:AddToBlizOptions(main .. LIBRARIES,L[LIBRARIES],main)
+    AceConfigDialog:AddToBlizOptions(main .. LIBRARIES,LIBRARIES,main)
 end
 
 function LoadHelp(self)
@@ -930,7 +923,7 @@ function var:AddOpenCmd(command,method,description,arguments,private)
 	local group=getgroup(self)
 	debug("AddOpenCmd %s for %s (%s)",command,method,description)
 	if (not private) then
-		local command=C('/' .. self.ID .. ' ' .. command .. "(" .. description .. ")" ,'orange')
+		local command=C('/' .. self.ID .. ' ' .. command .. " (" .. description .. ")" ,'orange')
 		local t={
 			name=command,
 			type="description",
@@ -957,7 +950,8 @@ function var:AddOpenCmd(command,method,description,arguments,private)
 		t.values=validate
 		t.type="select"
 	end
-	group.args[command]=t
+	self.OptionsTable.args[command]=t	
+
 	return t
 end
 function var:AddPrivateOpenCmd(command,method,description,arguments)
