@@ -921,7 +921,6 @@ function var:AddOpenCmd(command,method,description,arguments,private)
 	method=method or command
 	description=description or command
 	local group=getgroup(self)
-	debug("AddOpenCmd %s for %s (%s)",command,method,description)
 	if (not private) then
 		local command=C('/' .. self.ID .. ' ' .. command .. " (" .. description .. ")" ,'orange')
 		local t={
@@ -1412,7 +1411,7 @@ function lib:Embed(target)
     -- Setting sensible default for mandatory fields
     target.ID=GetAddOnMetadata(title,"X-ID") or (target.name:gsub("[^%u%d]","") .. "XXXX"):sub(1,3)
     target.DATABASE=GetAddOnMetadata(title,"X-Database") or "db" .. target.ID
-    debug("Info for",target.path,target.ID,target.name,target.DATABASE,GetAddOnMetadata(target.name,"X-Database"))
+    debug("Info for",target.name,'(',target.ID,')',target.DATABASE,GetAddOnMetadata(target.name,"X-Database"))
     -- Standard Mixins
     for name,method in pairs(mix) do
         target[name] = method
