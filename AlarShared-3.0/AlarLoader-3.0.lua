@@ -1,11 +1,11 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
 local MAJOR_VERSION = ("AlarLoader-3.0.lua"):gsub(".lua","")
-local MINOR_VERSION = tonumber(string.sub("$Revision: 428 $", 12, -3))
+local MINOR_VERSION = 500 + tonumber(string.sub("$Revision$", 12, -3))
 local me, ns = ...
 local pp=print
 --[[
 Name: AlarLoader-3.0.lua
-Revision: $Rev: 426 $
+Revision: $Rev$
 Author: Alar of Daggerspine
 Email: alar@aspide.it
 Website: http://www.curse.com

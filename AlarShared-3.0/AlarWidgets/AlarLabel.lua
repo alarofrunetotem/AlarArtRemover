@@ -1,6 +1,6 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
 local MAJOR_VERSION = ("AlarLabel.lua"):gsub(".lua","")
-local MINOR_VERSION = tonumber(string.sub("$Revision: 458 $", 12, -3))
+local MINOR_VERSION = 500 + tonumber(string.sub("$Revision$", 12, -3))
 local pp=print
 local Type, Version = "AlarLabel", 23
 

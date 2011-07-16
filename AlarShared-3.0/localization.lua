@@ -1,6 +1,6 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
 local MAJOR_VERSION = ("AlarShared-3.0.localization")
-local MINOR_VERSION = tonumber(string.sub("$Revision: 497 $", 12, -3))
+local MINOR_VERSION = 500 + tonumber(string.sub("$Revision$", 12, -3))
 local lib,old=LibStub:NewLibrary(MAJOR_VERSION,MINOR_VERSION)
 if not lib then return end
 local me, ns = ...

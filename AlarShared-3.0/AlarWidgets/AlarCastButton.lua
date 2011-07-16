@@ -1,11 +1,11 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
 local MAJOR_VERSION = ("AlarCastButton.lua"):gsub(".lua","")
-local MINOR_VERSION = tonumber(string.sub("$Revision: 502 $", 12, -3))
+local MINOR_VERSION = 500 + tonumber(string.sub("$Revision$", 12, -3))
 local pp=print
 local Type,Version,Ancestor='AlarCastButton',8,'AlarCast'
 --[[
 Name: AlarCastButton.lua
-Revision: $Rev: 502 $
+Revision: $Rev$
 Author: Alar of Daggerspine
 Email: alar@aspide.it
 Website: http://www.curse.com

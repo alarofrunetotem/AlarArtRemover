@@ -1,12 +1,12 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
 local MAJOR_VERSION = ("AlarCore-3.0.lua"):gsub(".lua","")
-local MINOR_VERSION = tonumber(string.sub("$Revision: 503 $", 12, -3))
+local MINOR_VERSION = 500 + tonumber(string.sub("$Revision$", 12, -3))
 local pp=print
 local _,_,_,toc=GetBuildInfo()
 local me, ns = ...
 --[[
 Name: AlarCore-3.0.lua
-Revision: $Rev: 503 $
+Revision: $Rev$
 Author: Alar of Daggerspine
 Email: alar@aspide.it
 Website: http://www.curse.com
