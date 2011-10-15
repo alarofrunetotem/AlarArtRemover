@@ -1,0 +1,29 @@
+## Interface: 40200
+## Title: Alar:|c00ff9900ArtRemover|r
+## Notes: Removes Blizzard Art from Action Bars
+## Author: Alar of Daggerspine
+## Version: @project-version@ @project-revision@
+## X-Version: 3.2.8
+## eMail: alar@aspide.it
+## URL: http://wow.aspide.it
+## RequiredDeps: 
+## OptionalDeps: FuBar,Titan,Ace3,LibDebug
+## DefaultState: Enabled
+## LoadOnDemand: 0
+## SavedVariables: dbAAR
+## SavedVariablesPerCharacter: localdbAAR
+## X-ID: AAR
+## X-DATABASE: dbAAR
+## X-RelSite-WoWI: 0
+## X-RelSite-Curse: 9568
+## X-RelSite-WoWUI: 0
+## X-Revision: $Rev: 5 $
+## X-Category: Interface Enhancements
+## X-Website: http://wow.aspide.it
+## X-License: LGPL v2.1
+## X-Donation: http://wow.aspide.it
+## X-eMail: alar@aspide.it
+## X-Date: @project-date-iso@
+embeds.xml
+localization.lua
+AlarArtRemover.lua
