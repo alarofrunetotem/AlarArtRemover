@@ -16,4 +16,4 @@ ignore:
  - unsplit.bat  
  - Ace3.lua
  - Ace3.toc
- - AlarSharedLib
+ - AlarShared-3.0

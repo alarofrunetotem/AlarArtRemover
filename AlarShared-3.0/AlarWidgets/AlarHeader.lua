@@ -132,7 +132,7 @@ do
 		insets = {left = 4, right = 4, top = 4, bottom = 4},
 	}
 	local function Constructor()
-		local frame=CreateFrame("Button",Type..serial,UIParent,"UIPanelButtonTemplate2")
+		local frame=CreateFrame("Button",Type..serial,UIParent,"UIPanelButtonTemplate")
 		serial =serial +1
 		--frame:SetBackdrop(backdrop)
 		--frame:SetBackdropColor(1,0.1,0.1)
