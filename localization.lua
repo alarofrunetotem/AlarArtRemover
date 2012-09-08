@@ -3,7 +3,11 @@ local lang=GetLocale()
 local l=LibStub("AceLocale-3.0")
 local L=l:NewLocale(me,"enUS",true,true)
 --@localization(locale="enUS", format="lua_additive_table" , escape-non-ascii=true, same-key-is-true=true, handle-unlocalized="english" )@
-L=l:NewLocale(me,"frFR",true,true)
+L=l:NewLocale(me,"itIT")
+if (L) then
+--@localization(locale="frFR", format="lua_additive_table" , escape-non-ascii=true, same-key-is-true=true, handle-unlocalized="english" )@
+end
+L=l:NewLocale(me,"frFR")
 if (L) then
 --@localization(locale="frFR", format="lua_additive_table" , escape-non-ascii=true, same-key-is-true=true, handle-unlocalized="english" )@
 end
