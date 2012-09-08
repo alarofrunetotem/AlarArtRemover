@@ -2,7 +2,7 @@ local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
 local MAJOR_VERSION = ("AlarHeader.lua"):gsub(".lua","")
 local MINOR_VERSION = 500 + tonumber(string.sub("$Revision$", 12, -3))
 local pp=print
-local Type,Version,Ancestor = "AlarHeader",5
+local Type,Version,Ancestor = "AlarHeader",6
 --[[
 Name: AlarPanels.lua
 Revision: $Rev$
