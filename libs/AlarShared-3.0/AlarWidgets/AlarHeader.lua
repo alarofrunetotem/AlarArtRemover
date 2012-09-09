@@ -110,7 +110,7 @@ do
 		local self = this.obj
 		self:SaveStatus()
 	end
-	local function tooltipshow(this) 
+	local function tooltipshow(this,r,g,b) 
 		if(this.tooltipText ~= nil) then
 			GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
 			GameTooltip:SetText(this.tooltipText, r or 1, g or 0.82, b or 0);
