@@ -1,9 +1,9 @@
-## Interface: 50001
+## Interface: 50400
 ## Title: Alar:|c00ff9900ArtRemover|r
 ## Notes: Removes Blizzard Art from Action Bars
 ## Author: Alar of Daggerspine
 ## Version: @project-version@ @project-revision@
-## X-Version: 3.3.1
+## X-Version: 3.3.2
 ## eMail: alar@aspide.it
 ## URL: http://wow.aspide.it
 ## RequiredDeps: 
