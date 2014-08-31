@@ -54,6 +54,9 @@ if (not lib) then
 end
 if (old) then
 	debug(format("Upgrading %s from %s to %s",MAJOR_VERSION,old,MINOR_VERSION))
+	lib.list=old.list
+else
+  lib.list = setmetatable({}, {__mode="k"})
 end
 local L=LibStub("AceLocale-3.0"):GetLocale('AlarShared',true)
 debugEnable(true)
@@ -96,7 +99,7 @@ local unpack = unpack
 local geterrorhandler = geterrorhandler
 local new, del
 do
-	local list = setmetatable({}, {__mode="k"})
+  local list=lib.list
 	function new(...)
 		local t = next(list)
 		if t then
@@ -108,9 +111,7 @@ do
 	end
 	function del(t)
 		setmetatable(t, nil)
-		for k in pairs(t) do
-			t[k] = nil
-		end
+		wipe(t)
 		list[t] = true
 	end
 end
@@ -203,7 +204,12 @@ lib.nops={
 'SetVar',
 'AddCmdA',
 }
-
+function mix:NewTable(...)
+  return new(...)
+end
+function mix:DelTable(...)
+  return del(...)
+end
 function mix:VersionCompare(otherversion,strict)
     oterhversion=versiontonumber(otherversion)
     if (strict) then
@@ -1976,13 +1982,158 @@ local function xdump(a,chat)
 		mix:Dump(a)
 	end
 end
-if (LibStub("AceConsole-3.0",true)) then
-	LibStub("AceConsole-3.0"):RegisterChatCommand('xdump',xdump)
+local function xfont(a)
+  if (a) then
+    mix:AlarFonts()
+  else
+    mix:AlarFonts()
+  end
 end
---]]
---@end-do-not-pakacge 
 
+function mix:AlarFonts(close)
+-- Create the parent frame that will contain the inner scroll child,
+-- all font strings, and the scroll bar slider.
+local fp = FPreviewFrame or CreateFrame("ScrollFrame", "FPreviewFrame")
+if (close) then
+  fp:Hide()
+  return
+end
+-- This is a bare-bones frame is used to encapsulate the contents of
+-- the scroll frame.  Each scrollframe can have one scroll child.
+local fpsc = FPreviewSC or CreateFrame("Frame", "FPreviewSC")
+ 
+-- Create the slider that will be used to scroll through the results
+local fpsb = FPreviewScrollBar or CreateFrame("Slider", "FPreviewScrollBar", fp)
+ 
+-- Set up internal textures for the scrollbar, background and thumb texture
+if not fpsb.bg then
+   fpsb.bg = fpsb:CreateTexture(nil, "BACKGROUND")
+   fpsb.bg:SetAllPoints(true)
+   fpsb.bg:SetTexture(0, 0, 0, 0.5)
+end
+ 
+if not fpsb.thumb then
+   fpsb.thumb = fpsb:CreateTexture(nil, "OVERLAY")
+   fpsb.thumb:SetTexture("Interface\\Buttons\\UI-ScrollBar-Knob")
+   fpsb.thumb:SetSize(25, 25)
+   fpsb:SetThumbTexture(fpsb.thumb)
+end
+ 
+local genv = getfenv(0)
+ 
+-- Collect the names of all possible globally defined fonts
+local fonts = {}
+for k, v in pairs(genv) do
+   if type(v) == "table" and type(v.GetObjectType) == "function" then
+    
+      local rc,otype = pcall(v.GetObjectType,v)
+      if (rc) then
+        if otype == "Font" then
+           table.insert(fonts, k)
+        end
+      end
+   end
+end
+ 
+-- Sort the list alphabetically
+table.sort(fonts)
+ 
+-- Create a table that will contain the font strings themselves
+fpsc.fstrings = fpsc.fstrings or {}
+ 
+-- This changes the padding between font strings vertically
+local PADDING = 5
+ 
+-- Store the max width and overall height of the scroll child
+local height = 0
+local width = 0
+local lista=""
+-- Iterate the list of fonts collected
+for idx, fname in ipairs(fonts) do
+   -- If the font string is not created, do so
+   if not fpsc.fstrings[idx] then
+      fpsc.fstrings[idx] = fpsc:CreateFontString("FPreviewFS" .. idx, "OVERLAY")
+   end
+    
+   -- Set the font string to the correct font object, set the text to be the
+   -- name of the font and set the height/width of the font string based on
+   -- the size of the resulting 'string'.
+   local fs = fpsc.fstrings[idx]
+   fs:SetFontObject(genv[fname])
+   fs:SetText(fname)
+   lista=lista .. fname .. ","
+   local fwidth = fs:GetStringWidth()
+   local fheight = fs:GetStringHeight()
+   fs:SetSize(fwidth, fheight)
+    
+   -- Place the font strings in rows starting at the top-left
+   if idx == 1 then
+      fs:SetPoint("TOPLEFT", 0, 0)
+      height = height + fheight
+   else
+      fs:SetPoint("TOPLEFT", fpsc.fstrings[idx - 1], "BOTTOMLEFT", 0, - PADDING)
+      height = height + fheight + PADDING
+   end
+    
+   -- Update the 'max' width of the frame
+   width = (fwidth > width) and fwidth or width
+end
+--[[
+  local gui=LibStub("AceGUI-3.0")
+  local wininfo=gui:Create("Frame")
+  local e=gui:Create("EditBox")
+  wininfo:SetLayout("Fill")
+  e:SetFullWidth(true)
+  e:SetFullHeight(true)
+  e:SetText(lista)
+  wininfo:AddChild(e)
+--]] 
+-- Set the size of the scroll child
+fpsc:SetSize(width, height)
+ 
+-- Size and place the parent frame, and set the scrollchild to be the
+-- frame of font strings we've created
+fp:SetSize(width, 400)
+fp:SetPoint("CENTER", UIParent, 0, 0)
+fp:SetScrollChild(fpsc)
+fp:Show()
+ 
+fpsc:SetSize(width, height)
+ 
+-- Set up the scrollbar to work properly
+local scrollMax = height - 400
+fpsb:SetOrientation("VERTICAL");
+fpsb:SetSize(16, 400)
+fpsb:SetPoint("TOPLEFT", fp, "TOPRIGHT", 0, 0)
+fpsb:SetMinMaxValues(0, scrollMax)
+fpsb:SetValue(0)
+fpsb:SetScript("OnValueChanged", function(self)
+      fp:SetVerticalScroll(self:GetValue())
+end)
+ 
+-- Enable mousewheel scrolling
+fp:EnableMouseWheel(true)
+fp:SetScript("OnMouseWheel", function(self, delta)
+      local current = fpsb:GetValue()
+       
+      if IsShiftKeyDown() and (delta > 0) then
+         fpsb:SetValue(0)
+      elseif IsShiftKeyDown() and (delta < 0) then
+         fpsb:SetValue(scrollMax)
+      elseif (delta < 0) and (current < scrollMax) then
+         fpsb:SetValue(current + 20)
+      elseif (delta > 0) and (current > 1) then
+         fpsb:SetValue(current - 20)
+      end
+end)
+end
+if (LibStub("AceConsole-3.0",true)) then
+  LibStub("AceConsole-3.0"):RegisterChatCommand('xdump',xdump)
+  LibStub("AceConsole-3.0"):RegisterChatCommand('xfont',xfont)
+end
+--@end-do-not-package@
 --- reembed routine
 for target,_ in pairs(lib.mixinTargets) do
 lib:Embed(target)
 end
+

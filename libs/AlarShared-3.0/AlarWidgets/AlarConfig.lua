@@ -50,7 +50,13 @@ local AWG=LibStub("AlarWidgets-3.0")
 local AceGUI=LibStub("AceGUI-3.0")
 local InjectStandardMethods=AWG.InjectStandardMethods
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
-local methods={}
+local methods={} --#methods
+function methods:SetStatusText(text)
+  self.statustext:SetText(text)
+end
+function methods:SetStatusFormattedText(format,...)
+  self.statustext:SetFormattedText(format,...)
+end
 --[[
 	Pannello di configurazione
 	Ha una casella di stato e un pulsante save
@@ -77,6 +83,7 @@ do
 		self.type=Type
 		local frame=self.frame
 		self:SetCallback("OnClose",OnCancel)
+    InjectStandardMethods(self)
 		self:Inject(methods,ancestor)
 		-- Save button 
 		local closebutton = CreateFrame("Button",nil,frame,"UIPanelButtonTemplate")
@@ -103,7 +110,6 @@ do
 		statustext:SetHeight(20)
 		statustext:SetJustifyH("LEFT")
 		statustext:SetText("")
-		self.SetStatusText=mx.SetStatusText
 		return self
 	
 	end

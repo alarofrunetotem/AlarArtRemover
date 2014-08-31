@@ -45,7 +45,7 @@ local _,_,_,toc=GetBuildInfo()
 if (not LibStub) then
     error("Couldn't find LibStub. Please reinstall " .. MAJOR_VERSION )
 end
-local lib,old=LibStub:NewLibrary(MAJOR_VERSION,MINOR_VERSION)
+local lib,old=LibStub:NewLibrary(MAJOR_VERSION,MINOR_VERSION) --#AWG
 if (not lib) then
     debug("Already loaded a newer or equal version of " .. MAJOR_VERSION)
     return -- Already loaded
@@ -67,7 +67,7 @@ function lib:IterateWidgets() return pairs(self.widgets) end
 -- Main Frame --
 ----------------
 do
-	local proto={}
+	local proto={} --#proto
 	local meta1={
 		__call=function(...)
 			print("Funzione",...)
