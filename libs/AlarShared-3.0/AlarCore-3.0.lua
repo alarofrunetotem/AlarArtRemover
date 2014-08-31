@@ -114,16 +114,14 @@ do
 		list[t] = true
 	end
 end
-
-
 lib.mix=lib.mix or {}
-local mix=lib.mix
-lib.hlp=lib.hlp or {}
-local hlp=lib.hlp
-lib.var=lib.var or {}
-local var=lib.var
-lib.virt=lib.virt or {}
-local virt=lib.virt
+local mix=lib.mix --#mix 
+lib.hlp=lib.hlp or {} 
+local hlp=lib.hlp --#hlp
+lib.var=lib.var or {} 
+local var=lib.var --#vars
+lib.virt=lib.virt or {} 
+local virt=lib.virt --#virt
 lib.mixinTargets=lib.mixinTargets or {}
 lib.frame=lib.frame or CreateFrame("Frame")
 lib.combatSchedules = lib.combatSchedules or {}
@@ -1288,9 +1286,14 @@ function var:ApplySettings()
         end
     end
 end
+local neveropened=true
 function mix:Gui(info)
-    if (AceConfigDialog and AceGUI) then 
-            InterfaceOptionsFrame_OpenToCategory(self.CfgDlg)
+    if (AceConfigDialog and AceGUI) then
+      if (neveropened) then
+        InterfaceAddOnsList_Update()
+        neveropened=false
+      end
+      InterfaceOptionsFrame_OpenToCategory(self.CfgDlg)
     else
         self:Print("No GUI available")
     end
