@@ -65,8 +65,8 @@ end
 		OnCancel
 --]]
 do
-	local function OnCancel(this)
-		this.obj:Fire("OnCancel")
+	local function OnCancel(obj)
+		obj:Fire("OnCancel")
 	end
 	local function OnSave(this)
 		this.obj:Fire("OnSave")
@@ -91,7 +91,7 @@ do
 		closebutton:SetPoint("BOTTOMRIGHT",frame,"BOTTOMRIGHT",-27,17)
 		closebutton:SetHeight(20)
 		closebutton:SetWidth(100)
-		closebutton:SetText("Save")
+		closebutton:SetText(L["Save"])
 		self.closebutton = closebutton
 		closebutton.obj = self
 		--Status 

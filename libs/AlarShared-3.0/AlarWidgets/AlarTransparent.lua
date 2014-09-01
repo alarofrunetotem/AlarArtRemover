@@ -52,7 +52,7 @@ local InjectStandardMethods=AWG.InjectStandardMethods
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 local methods={}
 	function methods:OnAcquire()
-		self:Parent(Ancestor,'OnAcquire')
+		self:Parent(ancestor,'OnAcquire')
 		self.frame:SetFrameStrata("HIGH")	
 		self.frame:SetClampedToScreen(true)	
 		self:ApplyStatus()
