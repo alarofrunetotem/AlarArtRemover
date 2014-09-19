@@ -54,7 +54,6 @@ if (not lib) then
 end
 if (old) then
 	debug(format("Upgrading %s from %s to %s",MAJOR_VERSION,old,MINOR_VERSION))
-	lib.list=old.list
 else
   lib.list = setmetatable({}, {__mode="k"})
 end

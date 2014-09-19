@@ -265,8 +265,8 @@ do
 		button:SetHighlightTexture(t)
 		button:SetHeight(33)
 		button:SetWidth(33)
-		button:SetMovable(1)
-		button:EnableMouse(1)
+		button:SetMovable(true)
+		button:EnableMouse(true)
 		button:SetPoint("TOPLEFT",Minimap,"CENTER",0,0)
 		button:RegisterForClicks("LeftButtonUp","RightButtonUp")
 		button:SetScript("OnEnter",mx.buttonOnEnter)
@@ -288,8 +288,8 @@ do
 		t:SetPoint("TOPLEFT")
 		self.border=t
 		local dragger=CreateFrame("Frame",nil,frame)
-		dragger:EnableMouse(1)
-		dragger:SetMovable(1)
+		dragger:EnableMouse(true)
+		dragger:SetMovable(true)
 		dragger:SetScript("OnDragStop",mx.buttonOnDragStart)
 		dragger:Hide()
 		dragger.obj=self

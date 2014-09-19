@@ -87,7 +87,7 @@ do
 		--self.closebutton:Hide()
 		frame:SetWidth(100)
 		frame:SetHeight(30)
-		frame:EnableMouse()
+		frame:EnableMouse(true)
 		frame:SetMovable(true)
 		return self	
 	end

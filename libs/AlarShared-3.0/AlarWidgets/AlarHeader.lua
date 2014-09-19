@@ -159,7 +159,6 @@ do
 		widget.localstatus = {}
 		frame:SetWidth(100)
 		frame:SetHeight(20)
-		frame:EnableMouse()
 		frame:SetMovable(true)
 		widget:Show()
 		return AceGUI:RegisterAsContainer(widget)		

@@ -60,7 +60,7 @@ It mirrors cooldown and effect , but if you click it the spell doesn not fire
 --]]
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 do
-	local cc={}
+	local cc={} --#Control
 	function cc:OnAcquire()
 		self.LockedImage=nil
 		self.texture=nil
@@ -359,7 +359,7 @@ do
     end
 
 	local Serial=0    
-	local function Constructor()
+	local function Constructor() 
 		Serial=Serial+1
 		local self={}
 		self.type=Type

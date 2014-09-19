@@ -50,7 +50,7 @@ local AWG=LibStub("AlarWidgets-3.0")
 local AceGUI=LibStub("AceGUI-3.0")
 local InjectStandardMethods=AWG.InjectStandardMethods
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
-local methods={}
+local methods={} --#Control
 
 
 function methods:SetIcon(texture)

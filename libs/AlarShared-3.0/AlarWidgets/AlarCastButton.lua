@@ -50,7 +50,7 @@ local AWG=LibStub("AlarWidgets-3.0")
 local AceGUI=LibStub("AceGUI-3.0")
 local InjectStandardMethods=AWG.InjectStandardMethods
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
-local methods={}
+local methods={} --# Control
 function methods:OnAcquire()
 	self:Parent(Ancestor,"OnAcquire")
 	self.active=true
@@ -85,31 +85,31 @@ do
 		self:ApplyStatus()
 		local frame=self.frame
 		frame.obj=self
-	    local title=CreateFrame("Button",nil,frame,"SecureActionButtonTemplate")
-	    title.obj=self
-	    title:EnableMouse(true)
-        title:RegisterForClicks("AnyDown")	    
-	    title:SetHeight(16)
-	    title:SetWidth(200)
-	    title:SetPoint("TOPLEFT",frame,"TOPRIGHT",10,0)
-	    title:SetPoint("BOTTOMLEFT",frame,"BOTTOMRIGHT",10,0)
-        title:SetAttribute("useparent-unit", true)
+    local title=CreateFrame("Button",nil,frame,"SecureActionButtonTemplate")
+    title.obj=self
+    title:EnableMouse(true)
+    title:RegisterForClicks("AnyDown")	    
+    title:SetHeight(16)
+    title:SetWidth(200)
+    title:SetPoint("TOPLEFT",frame,"TOPRIGHT",10,0)
+    title:SetPoint("BOTTOMLEFT",frame,"BOTTOMRIGHT",10,0)
+    title:SetAttribute("useparent-unit", true)
 		local highlight = title:CreateTexture(nil, "HIGHLIGHT")
 		highlight:SetTexture("Interface\\QuestFrame\\UI-QuestTitleHighlight")
 		highlight:SetBlendMode("ADD")
 		highlight:SetAllPoints(title)	    
-        local text = title:CreateFontString(nil,"OVERLAY","GameFontNormal")
-        text:SetAllPoints(title)
-        text:SetJustifyV("CENTER")
-        text:SetJustifyH("LEFT")
-        title.text=text
+    local text = title:CreateFontString(nil,"OVERLAY","GameFontNormal")
+    text:SetAllPoints(title)
+    text:SetJustifyV("CENTER")
+    text:SetJustifyH("LEFT")
+    title.text=text
 		title:SetAttribute("type","click")
 		title:SetAttribute("clickbutton",self:GetButton())
 		title:SetScript("PostClick",function(this,...) this.obj:Fire("OnClick",...) end)
-        self.title=title
-        self.text=text
-        self.label=title
-        self:SetTitle('')
+    self.title=title
+    self.text=text
+    self.label=title
+    self:SetTitle('')
 		return AceGUI:RegisterAsWidget(self)	    
 	end
 	AceGUI:RegisterWidgetType(Type,Constructor,Version)
