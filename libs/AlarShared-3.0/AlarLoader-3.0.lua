@@ -19,7 +19,7 @@ print("Loading",__FILE__,"inside", me)
 --@end-debug@
 if (LibDebug) then LibDebug() end
 LoadAddOn("Blizzard_DebugTools")
-local function debug (...) 
+local function debug (...)
 	--@debug@
 	print(...)
 	--@end-debug@
@@ -28,7 +28,7 @@ local print=_G.print
 local notify=_G.print
 local error=_G.error
 local function dump() end
-local _,_,_,toc=GetBuildInfo()
+local toc=select(4,GetBuildInfo())
 -- End prologue ---------------------------------------------
 --@debug@
 local oprint=print
@@ -64,7 +64,7 @@ function lib:GetPrintFunctions(caller,skip)
 	local result={}
 	do
 		local c=GetChatFrame
-		local caller=tostring(caller) or '' 
+		local caller=tostring(caller) or ''
 		local skip=tonumber(skip) or 1
 		local prefixp=caller .. ':|r|cff20ff20'
 		local prefixp=caller .. ':|r|cff20ff20'
@@ -82,21 +82,21 @@ function lib:GetPrintFunctions(caller,skip)
 				value=desc
 				desc="Data dump"
 			end
-			if (debugs[caller]) then 
+			if (debugs[caller]) then
 				oprint(prefixp ,desc)
-				DevTools_Dump(value) 
+				DevTools_Dump(value)
 				if (_G.DOVEDIAVOLOSTA) then
 					oprint(tostring(debugstack(2,1,0)))
-				end			
-			end 
+				end
+			end
 		end
-		function result.debug(...) 
-			if (debugs[caller]) then 
+		function result.debug(...)
+			if (debugs[caller]) then
 				c("ADebug"):AddMessage(strjoin(' ',date("%X"),prefixd,xformat(select(skip,...))))
 				if (_G.DOVEDIAVOLOSTA) then
 					c("ADebug"):AddMessage(tostring(debugstack(2,1,0)))
 				end
-			end 
+			end
 		end
 		function result.notify(...) oprint(prefixn,xformat(select(skip,...))) end
 		function result.error(...) oprint(prefixe,xformat(select(skip,...))) end
@@ -104,26 +104,36 @@ function lib:GetPrintFunctions(caller,skip)
 	end
 	return result
 end
-function lib:CreateAddon(addon,force,...)
+function lib:CreateAddon(name,force,...)
     local stub
     if type(force)~="boolean" then force = true end
     if (force) then
-    	stub=LibStub("AlarAddon-3.0"):new(addon,...)
+      local mixins={}
+      for i,k in  LibStub:IterateLibraries() do
+          if (i:match("Ace%w*-3%.0") and k.Embed) then
+              table.insert(mixins,i)
+          end
+      end
+      table.insert(mixins,"AlarCore-3.0")
+      for i=1,select('#',...) do
+          table.insert(mixins,(select(i,...)))
+      end
+      stub=LibStub("AceAddon-3.0"):NewAddon(name,unpack(mixins))
     else
-    	stub=LibStub("AceAddon-3.0"):NewAddon(addon,...)
+    	stub=LibStub("AceAddon-3.0"):NewAddon(name,...)
     end
     if (stub) then
-    	self.debugs[addon]=false
+    	self.debugs[name]=false
     	do
     		local debugs=self.debugs
-    		local addon=addon
+    		local addon=name
     		function stub:EnableDebug(status)
     			debugs[addon]=status
     		end
-    		
+
     	end
         return stub
-    else 
+    else
     	error("Unable to create stub")
     end
 end

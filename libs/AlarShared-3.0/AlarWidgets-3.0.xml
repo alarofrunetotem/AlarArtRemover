@@ -10,6 +10,7 @@
 <Script file="AlarWidgets\AlarConfig.lua"/>
 <Script file="AlarWidgets\AlarTransparent.lua"/>
 <Script file="AlarWidgets\AlarHeader.lua"/>
+<Script file="AlarWidgets\AlarCastHeader.lua"/>
 <Script file="AlarWidgets\AlarMinimapButton.lua"/>
 <Script file="AlarWidgets\AlarLabel.lua"/>
 <Script file="AlarWidgets\AlarInteractiveLabel.lua"/>

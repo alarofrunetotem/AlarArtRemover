@@ -1,6 +1,6 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
 local MAJOR_VERSION = ("AlarCore-3.0.lua"):gsub(".lua","")
-local MINOR_VERSION = 500 + tonumber(string.sub("$Revision$", 12, -3))
+local MINOR_VERSION = 501 + tonumber(string.sub("$Revision$", 12, -3))
 local pp=print
 local _,_,_,toc=GetBuildInfo()
 local me, ns = ...
@@ -19,7 +19,7 @@ License: LGPL v2.1
 print("Loading",__FILE__," inside ",me)
 --@end-debug@
 if (LibDebug) then LibDebug() end
-local function debug(...) 
+local function debug(...)
 --@debug@
 	print(...)
 --@end-debug@
@@ -55,7 +55,7 @@ end
 if (old) then
 	debug(format("Upgrading %s from %s to %s",MAJOR_VERSION,old,MINOR_VERSION))
 else
-  lib.list = setmetatable({}, {__mode="k"})
+	lib.list = setmetatable({}, {__mode="k"})
 end
 local L=LibStub("AceLocale-3.0"):GetLocale('AlarShared',true)
 debugEnable(true)
@@ -75,12 +75,12 @@ local CONFIGURATION=L["Configuration"]
 local HELPSECTIONS={DESCRIPTION,RELNOTES,CONFIGURATION,TOGGLES,LIBRARIES}
 -- Checks for ACE3 availability
 if (not LibStub("AceAddon-3.0",true)) then
-    EnableAddOn("Ace3")
-    if (IsAddOnLoadOnDemand("Ace3")) then
-        LoadAddOn("Ace3")
-    else
-        error(L["Ace 3 required. Trying to enable it for next reload"])
-    end
+		EnableAddOn("Ace3")
+		if (IsAddOnLoadOnDemand("Ace3")) then
+				LoadAddOn("Ace3")
+		else
+				error(L["Ace 3 required. Trying to enable it for next reload"])
+		end
 end
 
 local AceConfig = LibStub("AceConfig-3.0",true) or debug("Missing AceConfig-3.0")
@@ -98,7 +98,7 @@ local unpack = unpack
 local geterrorhandler = geterrorhandler
 local new, del
 do
-  local list=lib.list
+	local list=lib.list
 	function new(...)
 		local t = next(list)
 		if t then
@@ -115,12 +115,12 @@ do
 	end
 end
 lib.mix=lib.mix or {}
-local mix=lib.mix --#mix 
-lib.hlp=lib.hlp or {} 
+local mix=lib.mix --#mix
+lib.hlp=lib.hlp or {}
 local hlp=lib.hlp --#hlp
-lib.var=lib.var or {} 
+lib.var=lib.var or {}
 local var=lib.var --#vars
-lib.virt=lib.virt or {} 
+lib.virt=lib.virt or {}
 local virt=lib.virt --#virt
 lib.mixinTargets=lib.mixinTargets or {}
 lib.frame=lib.frame or CreateFrame("Frame")
@@ -135,7 +135,7 @@ local combatSchedules = lib.combatSchedules
 
 local function nop(self,...)
 	if (_G.ALARDEVELOPMENTPC) then
-    	--self:Print('nop',...)
+			--self:Print('nop',...)
 	end
 end
 
@@ -143,46 +143,46 @@ end
 local varmeta={}
 do
 	local nop=nop
-    local function f1(self,flag,value)
-        return self:Apply(flag,value)
-    end
-    local function f2(self,flag,value)
-        return self['Apply' .. flag](self,value)
-    end
-    varmeta={
-            __index = 
-            function(table,cmd)
-                local self=rawget(table,'_handler')
-                if (type(self["Apply" .. cmd]) =='function') then
-                    rawset(table,cmd,f2)
-                elseif (type(self.Apply)=='function') then
-                    rawset(table,cmd,f1)
-                else 
-                    rawset(table,cmd,function(...) nop(self,'cmd=',cmd,'args=',...) end)
-                end
-                return rawget(table,cmd)
-            end
-        }
+		local function f1(self,flag,value)
+				return self:Apply(flag,value)
+		end
+		local function f2(self,flag,value)
+				return self['Apply' .. flag](self,value)
+		end
+		varmeta={
+						__index =
+						function(table,cmd)
+								local self=rawget(table,'_handler')
+								if (type(self["Apply" .. cmd]) =='function') then
+										rawset(table,cmd,f2)
+								elseif (type(self.Apply)=='function') then
+										rawset(table,cmd,f1)
+								else
+										rawset(table,cmd,function(...) nop(self,'cmd=',cmd,'args=',...) end)
+								end
+								return rawget(table,cmd)
+						end
+				}
 end
 
 mix.C=C
 local function versiontonumber(version)
-    if (type(version)=="number") then
-        return version
-    end
-    local s,e,svn=version:find("$Rev%D*(%d+)%D*%$")
-    version=version:gsub("$Rev%D*(%d+)%D*%$","")
-    local res=0
-    local fractpart=0
-    local mult=1
-    for i in version:gmatch("%d+") do
-        local n=tonumber(i) or 0
-        if (n < 1000) then
-            res=res*1000
-            res=res+n
-        end
-    end
-    return tonumber(res .. '.' .. (svn or '0'))
+		if (type(version)=="number") then
+				return version
+		end
+		local s,e,svn=version:find("$Rev%D*(%d+)%D*%$")
+		version=version:gsub("$Rev%D*(%d+)%D*%$","")
+		local res=0
+		local fractpart=0
+		local mult=1
+		for i in version:gmatch("%d+") do
+				local n=tonumber(i) or 0
+				if (n < 1000) then
+						res=res*1000
+						res=res+n
+				end
+		end
+		return tonumber(res .. '.' .. (svn or '0'))
 end
 
 lib.nops={
@@ -204,46 +204,45 @@ lib.nops={
 'AddCmdA',
 }
 function mix:NewTable(...)
-  return new(...)
+	return new(...)
 end
 function mix:DelTable(...)
-  return del(...)
+	return del(...)
 end
 function mix:VersionCompare(otherversion,strict)
-    oterhversion=versiontonumber(otherversion)
-    if (strict) then
-        return self.numericversion-otherversion
-    else
-        return floor(self.numericversion - otherversion)
-    end
+		oterhversion=versiontonumber(otherversion)
+		if (strict) then
+				return self.numericversion-otherversion
+		else
+				return floor(self.numericversion - otherversion)
+		end
 end
 local Myclass
 function mix:Is(class,target)
-    target=target or "player"
-    if (target == "player") then
-        if (not Myclass) then
-        	local _
-            _,Myclass=UnitClass('player')
-        end
-        return Myclass==strupper(class)
-    else
-        local    rc,_,unitclass=pcall(UnitClass,target)
-        if (rc) then
-            return unitclass==strupper(class)
-        else
-            return false
-        end
-    end
+		target=target or "player"
+		if (target == "player") then
+				if (not Myclass) then
+					Myclass=select(2,UnitClass('player'))
+				end
+				return Myclass==strupper(class)
+		else
+				local    rc,_,unitclass=pcall(UnitClass,target)
+				if (rc) then
+						return unitclass==strupper(class)
+				else
+						return false
+				end
+		end
 end
 function mix:Parse(msg,skipcommand)
-    if (not msg) then
-        return nil
-    end
-    if (type(msg) == 'table' and msg.input ) then msg=msg.input end
-    if (type(msg) ~= 'string') then return end
-    local cmd,subcmd,param = strsplit(" ",msg,3)
-    local _,fullarg=strsplit(" ",msg,2)
-    return cmd,subcmd,param,fullarg
+		if (not msg) then
+				return nil
+		end
+		if (type(msg) == 'table' and msg.input ) then msg=msg.input end
+		if (type(msg) ~= 'string') then return end
+		local cmd,subcmd,param = strsplit(" ",msg,3)
+		local _,fullarg=strsplit(" ",msg,2)
+		return cmd,subcmd,param,fullarg
 end
 --[[
 index is index in GetItemInfo result -1 is a special case to match just itemid
@@ -284,33 +283,33 @@ function mix:GetArg(msg,arg)
 	return select(arg+1,strsplit(" ",msg))
 end
 function mix:Health(unit)
-    local totale=UnitHealthMax(unit) or 1
-    local corrente=UnitHealth(unit) or 1
-    if (corrente == 0) then corrente =1 end
-    if (totale==0) then totale = corrente end
-    local life=corrente/totale*100
-    return math.ceil(life)
+		local totale=UnitHealthMax(unit) or 1
+		local corrente=UnitHealth(unit) or 1
+		if (corrente == 0) then corrente =1 end
+		if (totale==0) then totale = corrente end
+		local life=corrente/totale*100
+		return math.ceil(life)
 end
 function mix:Age(secs)
-    return self:TimeToStr(GetTime() - secs)
+		return self:TimeToStr(GetTime() - secs)
 end
 function mix:Mana(unit)
-    local totale=UnitManaMax(unit) or 1
-    local corrente=UnitMana(unit) or 1
-    if (corrente == 0) then corrente =1 end
-    if (totale==0) then totale = corrente end
-    local life=corrente/totale*100
-    return math.ceil(life)
+		local totale=UnitManaMax(unit) or 1
+		local corrente=UnitMana(unit) or 1
+		if (corrente == 0) then corrente =1 end
+		if (totale==0) then totale = corrente end
+		local life=corrente/totale*100
+		return math.ceil(life)
 end
 function mix:IsFriend(player)
-    local i
-    for i =1,GetNumFriends() do
-        local name,_,_,_,_ =GetFriendInfo(i)
-        if (name == player) then
-            return true
-        end
-    end
-    return false
+		local i
+		for i =1,GetNumFriends() do
+				local name,_,_,_,_ =GetFriendInfo(i)
+				if (name == player) then
+						return true
+				end
+		end
+		return false
 end
 function mix:GetDistanceFromMe(unit)
 	if not unit then return 99999 end
@@ -318,73 +317,73 @@ function mix:GetDistanceFromMe(unit)
 	return self:GetUnitDistance(x,y)
 end
 function mix:GetUnitDistance(x,y,unit)
-    unit=unit or "player"
-    local from={}
-    local to={}
-    from.x,from.y=GetPlayerMapPosition(unit)
-    to.x=x
-    to.y=y
-    return self:GetDistance(from,to) * 10000
+		unit=unit or "player"
+		local from={}
+		local to={}
+		from.x,from.y=GetPlayerMapPosition(unit)
+		to.x=x
+		to.y=y
+		return self:GetDistance(from,to) * 10000
 end
 function mix:GetDistance(a,b)
 --------------
 -- Calculates distance betweeb 2 points given as
 -- a.x,a.y and b.x,b.y
-	 local x=b.x - a.x
-	 local y=b.y -a.y
-	 local d=x*x + y* y
-	 local rc,distance=pcall(math.sqrt,d)
-	 if (rc) then
-        return distance
-    else
-        return 99999
-    end
+	local x=b.x - a.x
+	local y=b.y -a.y
+	local d=x*x + y* y
+	local rc,distance=pcall(math.sqrt,d)
+	if (rc) then
+				return distance
+		else
+				return 99999
+		end
 end
 function mix:LoadEvents(events)
-    for k,v in pairs(events) do
-        self.registry.events[k]=v
-    end
+		for k,v in pairs(events) do
+				self.registry.events[k]=v
+		end
 end
 function mix:LoadHooks(hooks)
-    for k,v in pairs(hooks) do
-        if (not (type(self.org[v]) ~= 'function')) then
-            self.org[v]=getglobal(v)
-        end
-        self.registry.hooks[k]=v
-    end
+		for k,v in pairs(hooks) do
+				if (not (type(self.org[v]) ~= 'function')) then
+						self.org[v]=getglobal(v)
+				end
+				self.registry.hooks[k]=v
+		end
 end
 --[[
- Optional compatibility function. Registers methods with magic names
- hook* go to hooks' registry
- evt* go to events' registry
- wakeupEvent define an event to not be disabled by evtstop
-  Not really needed
+Optional compatibility function. Registers methods with magic names
+hook* go to hooks' registry
+evt* go to events' registry
+wakeupEvent define an event to not be disabled by evtstop
+	Not really needed
 --]]
 function mix:Register(wakeupEvent)
-    debug("INVOKED REGISTER",self.name)
-    local s,e,prefix,name    
-    self.registry=self.registry or {}
-    self.registry.wakeup=wakeupEvent
-    self.registry.hooks=self.registry.hooks or {}
-    self.registry.events=self.registry.events or {}
-    self.org=self.org or {}
-    for k,v in pairs(self) do
-        s,e,prefix,name=k:find("(Hook)(.+)")
-        if (s) then
-            self.registry.hooks[name]=false
-            self.org[name] = _G[name]
-        end
-        s,e,prefix,name=k:find("(Evt)(.+)")
-        if (s) then
-            self.registry.events[name]=0
-        end
-    end
-    debug("REGISTER DONE",self.name)
+		debug("INVOKED REGISTER",self.name)
+		local s,e,prefix,name
+		self.registry=self.registry or {}
+		self.registry.wakeup=wakeupEvent
+		self.registry.hooks=self.registry.hooks or {}
+		self.registry.events=self.registry.events or {}
+		self.org=self.org or {}
+		for k,v in pairs(self) do
+				s,e,prefix,name=k:find("(Hook)(.+)")
+				if (s) then
+						self.registry.hooks[name]=false
+						self.org[name] = _G[name]
+				end
+				s,e,prefix,name=k:find("(Evt)(.+)")
+				if (s) then
+						self.registry.events[name]=0
+				end
+		end
+		debug("REGISTER DONE",self.name)
 end
 function mix:ThrottleEvent(event,delay)
-    self.registry=self.registry or {}
-    self.registry.events=self.registry.events or {}
-    self.registry.events[event]=delay
+		self.registry=self.registry or {}
+		self.registry.events=self.registry.events or {}
+		self.registry.events[event]=delay
 end
 local function _DebugEnable(info)
 	local self=info.handler
@@ -393,276 +392,276 @@ local function _DebugEnable(info)
 	self:EnableDebug(status)
 end
 local function LoadDefaults(self)
-    self.OptionsTable={
-        handler=self,
-        type="group",
-        childGroups="tab",
-        name=self.title,
-        desc=self.notes,
-        args={
-           gui = {
-                name="GUI",
-                desc="Activates gui",
-                type="execute",
-                func="Gui",
-                guiHidden=true,
-            },
-           help = {
-                name="HELP",
-                desc="Show help",
-                type="execute",
-                func="Help",
-                guiHidden=true,
-            },
-            on = {
-                name="On",
-                desc="Activates " .. self.title,
-                type="execute",
-                func="Enable",
-                guiHidden=true,
-            },
-            off = {
-                name="Off",
-                desc="Deactivates " .. self.title,
-                type="execute",
-                func="Disable",
-                guiHidden=true,
-                arg='Active'
-            },
-            debug ={
-                name="debug",
-                desc="Toggles debug for " .. self.title,
-                type="input",
-                set="_SwitchDebug",
-                hidden=true
-            },
-            standby = {
-                name="Enabled",
-                desc="Toggle " .. self.title .. " status",
-                type="toggle",
-                get="IsEnabled",
-                set="Toggle",
-                cmdHidden=true,
-                arg='Active'
-            },
-            toggle={
-                type="group",
-                name="toggle",
-                desc="configuration switches",
-                guiHidden=true,
-                args={}
-            }
-        }
-    }
-    self.DbDefaults={
-        global={
-            currentversion=self.version,
-            firstrun=true,
-            lastversion=0,
-            lastinterface=20300,
-            
-        },
-        profile={
-            toggles={
-                Active=true,
-            },
-            ["*"]={},
-        }
-    }
-    self.MenuLevels={"root"}
-    self.ItemOrder=setmetatable({},{__index=function(table,key) rawset(table,key,1)
-    return 1
-    end})
-    local AceDB  = LibStub("AceDB-3.0",true) or debug("Missing AceDB-3.0")
-    if (AceDB and not self.db) then
-        self.db=AceDB:New(self.DATABASE)
-        --self.localdb=self.db:RegisterNamespace(self.name)
-    end
-    self.db:RegisterDefaults(self.DbDefaults)
-    self:SetEnabledState(self:GetBoolean("Active"))
-    -- I have for sure some library that needs to be intialized Before the addon
-    for _,library in self:IterateEmbeds(self) do
-        local lib=LibStub(library)
-        if (lib.OnEmbedPreInitialize) then
-            lib:OnEmbedPreInitialize(self) 
-         end
-    end   
+		self.OptionsTable={
+				handler=self,
+				type="group",
+				childGroups="tab",
+				name=self.title,
+				desc=self.notes,
+				args={
+					gui = {
+								name="GUI",
+								desc="Activates gui",
+								type="execute",
+								func="Gui",
+								guiHidden=true,
+						},
+					help = {
+								name="HELP",
+								desc="Show help",
+								type="execute",
+								func="Help",
+								guiHidden=true,
+						},
+						on = {
+								name="On",
+								desc="Activates " .. self.title,
+								type="execute",
+								func="Enable",
+								guiHidden=true,
+						},
+						off = {
+								name="Off",
+								desc="Deactivates " .. self.title,
+								type="execute",
+								func="Disable",
+								guiHidden=true,
+								arg='Active'
+						},
+						debug ={
+								name="debug",
+								desc="Toggles debug for " .. self.title,
+								type="input",
+								set="_SwitchDebug",
+								hidden=true
+						},
+						standby = {
+								name="Enabled",
+								desc="Toggle " .. self.title .. " status",
+								type="toggle",
+								get="IsEnabled",
+								set="Toggle",
+								cmdHidden=true,
+								arg='Active'
+						},
+						toggle={
+								type="group",
+								name="toggle",
+								desc="configuration switches",
+								guiHidden=true,
+								args={}
+						}
+				}
+		}
+		self.DbDefaults={
+				global={
+						currentversion=self.version,
+						firstrun=true,
+						lastversion=0,
+						lastinterface=20300,
+
+				},
+				profile={
+						toggles={
+								Active=true,
+						},
+						["*"]={},
+				}
+		}
+		self.MenuLevels={"root"}
+		self.ItemOrder=setmetatable({},{__index=function(table,key) rawset(table,key,1)
+		return 1
+		end})
+		local AceDB  = LibStub("AceDB-3.0",true) or debug("Missing AceDB-3.0")
+		if (AceDB and not self.db) then
+				self.db=AceDB:New(self.DATABASE)
+				--self.localdb=self.db:RegisterNamespace(self.name)
+		end
+		self.db:RegisterDefaults(self.DbDefaults)
+		self:SetEnabledState(self:GetBoolean("Active"))
+		-- I have for sure some library that needs to be intialized Before the addon
+		for _,library in self:IterateEmbeds(self) do
+				local lib=LibStub(library)
+				if (lib.OnEmbedPreInitialize) then
+						lib:OnEmbedPreInitialize(self)
+				end
+		end
 end
 local LoadHelp
 function mix:OnInitialize(...)
 	if (tonumber(self.revision)< 1) then
-		self.revision='Alpha' 
+		self.revision='Alpha'
 	end
-    self:Print("Version %s %s loaded" ,self:Colorize(self.version,'green'),self:Colorize(format("(Revision: %s)",self.revision),"silver"))
-    LoadDefaults(self) 
-    self.help=setmetatable(
-        {},
-        {__index=function(table,key) 
-            rawset(table,key,"") 
-            return rawget(table,key) 
-            end
-        }
-    )   
-    self:OnInitialized(...)
-    local main=self.name
-    local profile
-    if (AceDBOptions) then
-        self.ProfileOpts=AceDBOptions:GetOptionsTable(self.db)
-        profile=main .. 'profile'
-    end
-    LoadHelp(self)
-    AceConfigDialog:AddToBlizOptions(main,main )
+		self:Print("Version %s %s loaded" ,self:Colorize(self.version,'green'),self:Colorize(format("(Revision: %s)",self.revision),"silver"))
+		LoadDefaults(self)
+		self.help=setmetatable(
+				{},
+				{__index=function(table,key)
+						rawset(table,key,"")
+						return rawget(table,key)
+						end
+				}
+		)
+		self:OnInitialized(...)
+		local main=self.name
+		local profile
+		if (AceDBOptions) then
+				self.ProfileOpts=AceDBOptions:GetOptionsTable(self.db)
+				profile=main .. 'profile'
+		end
+		LoadHelp(self)
+		AceConfigDialog:AddToBlizOptions(main,main )
 
-    AceConfig:RegisterOptionsTable(main .. CONFIGURATION,self.OptionsTable,{main,strlower(self.ID)})
-    self.CfgDlg=AceConfigDialog:AddToBlizOptions(main .. CONFIGURATION,CONFIGURATION,main)
+		AceConfig:RegisterOptionsTable(main .. CONFIGURATION,self.OptionsTable,{main,strlower(self.ID)})
+		self.CfgDlg=AceConfigDialog:AddToBlizOptions(main .. CONFIGURATION,CONFIGURATION,main)
 
-    if (profile) then
-        AceConfig:RegisterOptionsTable(profile,self.ProfileOpts)
-        AceConfigDialog:AddToBlizOptions(profile,L.Profile,main)
-    end
-    self.CfgRel=AceConfigDialog:AddToBlizOptions(main .. RELNOTES,RELNOTES,main)
+		if (profile) then
+				AceConfig:RegisterOptionsTable(profile,self.ProfileOpts)
+				AceConfigDialog:AddToBlizOptions(profile,L.Profile,main)
+		end
+		self.CfgRel=AceConfigDialog:AddToBlizOptions(main .. RELNOTES,RELNOTES,main)
 
-    AceConfigDialog:AddToBlizOptions(main .. TOGGLES,TOGGLES,main)
+		AceConfigDialog:AddToBlizOptions(main .. TOGGLES,TOGGLES,main)
 
-    AceConfigDialog:AddToBlizOptions(main .. LIBRARIES,LIBRARIES,main)
+		AceConfigDialog:AddToBlizOptions(main .. LIBRARIES,LIBRARIES,main)
 end
 
 function LoadHelp(self)
-    local main=self.name
-    for libname,k in LibStub:IterateLibraries() do
-        if (libname:match("Ace%w*-3%.0")) then
-            self:HF_Lib(libname,'yellow')
-        elseif (libname:match("Ace%w*-2%.0")) then
-            self:HF_Lib(libname,'yellow')
-        elseif (libname:match("Alar%w*-3%.0")) then
-            self:HF_Lib(libname,'green')
-        else
-            self:HF_Lib(libname,'gray')
-        end
-        if (libname:match("Alar%w*-3%.0")) then
-        end
-    end
-    for _,section in ipairs(HELPSECTIONS) do
-        if (section == DESCRIPTION) then
-            self:HF_Load(section,main,' ' .. tostring(self.version) .. ' (r:' .. tostring(self.revision) ..')')
-        else
-            self:HF_Load(section,main .. section,'')
-        end
-    end
+		local main=self.name
+		for libname,k in LibStub:IterateLibraries() do
+				if (libname:match("Ace%w*-3%.0")) then
+						self:HF_Lib(libname,'yellow')
+				elseif (libname:match("Ace%w*-2%.0")) then
+						self:HF_Lib(libname,'yellow')
+				elseif (libname:match("Alar%w*-3%.0")) then
+						self:HF_Lib(libname,'green')
+				else
+						self:HF_Lib(libname,'gray')
+				end
+				if (libname:match("Alar%w*-3%.0")) then
+				end
+		end
+		for _,section in ipairs(HELPSECTIONS) do
+				if (section == DESCRIPTION) then
+						self:HF_Load(section,main,' ' .. tostring(self.version) .. ' (r:' .. tostring(self.revision) ..')')
+				else
+						self:HF_Load(section,main .. section,'')
+				end
+		end
 end
 function mix:GetAceOptionsTable(configtype)
-    configtype=configtype or 'dropdown'
-    if (AceRegistry) then
-        return AceRegistry:GetOptionsTable(AAU.name,configtype,MAJOR_VERSION)
-    else
-        return self.OptionsTable
-    end
+		configtype=configtype or 'dropdown'
+		if (AceRegistry) then
+				return AceRegistry:GetOptionsTable(AAU.name,configtype,MAJOR_VERSION)
+		else
+				return self.OptionsTable
+		end
 end
 
 -- help related functions
 function hlp:HF_Push(section,text)
-    section=section or self.lastsection or DESCRIPTION
-    self.lastsection=section
-    self.help[section]=self.help[section]  .. '\n' .. text
+		section=section or self.lastsection or DESCRIPTION
+		self.lastsection=section
+		self.help[section]=self.help[section]  .. '\n' .. text
 end
 local getlibs
 do
 	local libs={}
-    function hlp:HF_Lib(libname)
-        local o,minor=LibStub(libname,true)
-        if (o and libs) then
-            if (not libs[o] or libs[o] <minor) then
-                libs[libname]=minor
-            end
-        end
-    end
-    function getlibs(self)
-        local appo={}
-        if (not libs) then return end
-        for i,_ in pairs(libs) do
-            table.insert(appo,i)
-        end
-        table.sort(appo)
-        for _,libname in pairs(appo) do
-            local minor=libs[libname]
-            self:HF_Pre(format("%s release: %s",self:Colorize(libname,'green'),self:Colorize(minor,'orange')),LIBRARIES)
-        end
-        libs=nil
-    end
+		function hlp:HF_Lib(libname)
+				local o,minor=LibStub(libname,true)
+				if (o and libs) then
+						if (not libs[o] or libs[o] <minor) then
+								libs[libname]=minor
+						end
+				end
+		end
+		function getlibs(self)
+				local appo={}
+				if (not libs) then return end
+				for i,_ in pairs(libs) do
+						table.insert(appo,i)
+				end
+				table.sort(appo)
+				for _,libname in pairs(appo) do
+						local minor=libs[libname]
+						self:HF_Pre(format("%s release: %s",self:Colorize(libname,'green'),self:Colorize(minor,'orange')),LIBRARIES)
+				end
+				libs=nil
+		end
 end
 
 function hlp:HF_Toggle(flag,description)
-    flag=C(format("/%s toggle %s: ",strlower(self.ID),flag),'orange') ..C(description,'white')
-    self:HF_Push(TOGGLES,"\n" .. C(flag,'orange'))
+		flag=C(format("/%s toggle %s: ",strlower(self.ID),flag),'orange') ..C(description,'white')
+		self:HF_Push(TOGGLES,"\n" .. C(flag,'orange'))
 end
 
 
 
 function hlp:HF_Title(text,section)
-    self:HF_Push(section,C(text or '','yellow') .. "\n")
+		self:HF_Push(section,C(text or '','yellow') .. "\n")
 end
 
 function hlp:HF_Paragraph(text,section)
-    self:HF_Push(section,"\n"..C(text,'green'))
+		self:HF_Push(section,"\n"..C(text,'green'))
 end
 function hlp:HF_CmdA(command,description,tooltip)
-    self:HF_Push(nil,
-    C('/' .. command,'orange') .. ' : ' .. (description or '') .. '\n' .. C(tooltip or '','yellow'))
+		self:HF_Push(nil,
+		C('/' .. command,'orange') .. ' : ' .. (description or '') .. '\n' .. C(tooltip or '','yellow'))
 end
 function hlp:HF_Cmd(command,description,tooltip)
-    command=self.ID .. ' ' .. command
-    self:HF_CmdA(command,description,tooltip)
+		command=self.ID .. ' ' .. command
+		self:HF_CmdA(command,description,tooltip)
 end
 function hlp:HF_Pre(testo,section)
-    self:HF_Push(section,testo)
+		self:HF_Push(section,testo)
 end
 
 function hlp:RelNotes(major,minor,revision,t)
-    local fmt=self:Colorize("Release note for %d.%d.%s",'Yellow') .."\n%s"
-    local lines={}
-    local spacer=""
-    local maxpanlen=70
-    lines={strsplit("\n",t)}
-    for i,tt in ipairs(lines) do
-        local prefix,text=tt:match("^(Fixed):(.*)")
-        if (prefix == "Fixed") then
-            prefix=self:Colorize("Fixed: ",'Red')
-            spacer=           "       "
-        else
-            prefix,text=tt:match("^(Feature):(.*)")
-            if (prefix == "Feature") then
-                prefix=self:Colorize("Feature: ",'Green')
-                spacer=             "         "
-            else
-                text=tt
-                prefix=spacer
-            end
-        end
-        local tta=""
-        tt=text
-        while (tt:len() > maxpanlen)  do
-            local p=tt:find("[%s%p]",maxpanlen -10) or maxpanlen
-            tta=tta..prefix..tt:sub(1,p) .. "\n"
-            prefix=spacer
-            tt=tt:sub(p+1)
-        end
-        tta=tta..prefix..tt
-        tta=tta:gsub("Upgrade:",self:Colorize("Upgrade:",'Azure'))
-        lines[i]=tta:gsub("Example:",self:Colorize("Example:",'Orange'))
-    end
-    self:HF_Push(RELNOTES,fmt:format(major,minor,revision,strjoin("\n",unpack(lines))))
+		local fmt=self:Colorize("Release note for %d.%d.%s",'Yellow') .."\n%s"
+		local lines={}
+		local spacer=""
+		local maxpanlen=70
+		lines={strsplit("\n",t)}
+		for i,tt in ipairs(lines) do
+				local prefix,text=tt:match("^(Fixed):(.*)")
+				if (prefix == "Fixed") then
+						prefix=self:Colorize("Fixed: ",'Red')
+						spacer=           "       "
+				else
+						prefix,text=tt:match("^(Feature):(.*)")
+						if (prefix == "Feature") then
+								prefix=self:Colorize("Feature: ",'Green')
+								spacer=             "         "
+						else
+								text=tt
+								prefix=spacer
+						end
+				end
+				local tta=""
+				tt=text
+				while (tt:len() > maxpanlen)  do
+						local p=tt:find("[%s%p]",maxpanlen -10) or maxpanlen
+						tta=tta..prefix..tt:sub(1,p) .. "\n"
+						prefix=spacer
+						tt=tt:sub(p+1)
+				end
+				tta=tta..prefix..tt
+				tta=tta:gsub("Upgrade:",self:Colorize("Upgrade:",'Azure'))
+				lines[i]=tta:gsub("Example:",self:Colorize("Example:",'Orange'))
+		end
+		self:HF_Push(RELNOTES,fmt:format(major,minor,revision,strjoin("\n",unpack(lines))))
 end
 
 function hlp:HF_Load(section,optionname,versione)
 -- Creazione pannello di help
 -- Livello due del
-    if (section == LIBRARIES) then
-        getlibs(self)
-    end
-    local testo =self.help[section] or 'No text available'
-    --debug(section)
-    --debug(optionname)
-    --debug(self.title)
+		if (section == LIBRARIES) then
+				getlibs(self)
+		end
+		local testo =self.help[section] or 'No text available'
+		--debug(section)
+		--debug(optionname)
+		--debug(self.title)
 	AceConfig:RegisterOptionsTable(optionname, {
 		name = self.title .. (versione or ""),
 		type = "group",
@@ -677,122 +676,122 @@ function hlp:HF_Load(section,optionname,versione)
 end
 
 function virt:Localize(...)
-    return
+		return
 end
 function virt:OnInitialized(...)
-    return
+		return
 end
 function virt:OnEnabled(...)
-    return
+		return
 end
 function virt:OnDisabled(...)
-    return
+		return
 end
 -- var area
 local function getgroup(self)
-    local group=self.OptionsTable
-    local m=self.MenuLevels
-    for i=2,#m do
-        group=group.args[self.MenuLevels[i]]
-    end
-    if (type(group) ~= "table") then
-        group={}
-    end
-    return group
+		local group=self.OptionsTable
+		local m=self.MenuLevels
+		for i=2,#m do
+				group=group.args[self.MenuLevels[i]]
+		end
+		if (type(group) ~= "table") then
+				group={}
+		end
+		return group
 end
 local function getorder(self,group)
-    local i=self.ItemOrder[group.name]+1
-    self.ItemOrder[group.name]=i
-    return i
+		local i=self.ItemOrder[group.name]+1
+		self.ItemOrder[group.name]=i
+		return i
 end
 local function toflag(...)
 	local appo=''
 	for i=1,select("#",...) do
 		appo=appo .. tostring(select(i,...))
 	end
-    return appo:gsub("%W",'')
+		return appo:gsub("%W",'')
 end
 function var:EndLabel()
-    local m=self.MenuLevels
-    if (#m > 1) then
-        table.remove(m)
-    end
-end    
+		local m=self.MenuLevels
+		if (#m > 1) then
+				table.remove(m)
+		end
+end
 
 --self:AddLabel("General","General Options",C.Green)
 function var:AddLabel(title,description,stringcolor)
-    self:EndLabel()
-    description=description or title
-    stringcolor=stringcolor or C.yellow
-    local t=self:AddSubLabel(title,description,stringcolor)
-    t.childGroups="tab"
-    self:AddSeparator(description)
-    return t
-        
+		self:EndLabel()
+		description=description or title
+		stringcolor=stringcolor or C.yellow
+		local t=self:AddSubLabel(title,description,stringcolor)
+		t.childGroups="tab"
+		self:AddSeparator(description)
+		return t
+
 end
 --self:AddSubLabel("Local","Local Options",C.Green)
 function var:AddSubLabel(title,description,stringcolor)
-    local m=self.MenuLevels
-    description=description or title
-    stringcolor=stringcolor or C.orange
-    local group=getgroup(self)
-    local flag=toflag(group.name,title)
-    group.args[flag]={
-        name="|cff" .. stringcolor .. title .. "|r",
-        desc=description,
-        type="group",
-        cmdHidden=true,
-        args={},
-        order=getorder(self,group),
-    }
-    table.insert(m,flag)
-    return group.args[flag]
+		local m=self.MenuLevels
+		description=description or title
+		stringcolor=stringcolor or C.orange
+		local group=getgroup(self)
+		local flag=toflag(group.name,title)
+		group.args[flag]={
+				name="|cff" .. stringcolor .. title .. "|r",
+				desc=description,
+				type="group",
+				cmdHidden=true,
+				args={},
+				order=getorder(self,group),
+		}
+		table.insert(m,flag)
+		return group.args[flag]
 end
 
 --self:AddText("Testo"[,texture[,height[,width[,texcoords]]]])
 function var:AddText(text,image,imageHeight,imageWidth,imageCoords)
-    local group=getgroup(self)
-    local flag=toflag(group.name,text)
-    local t={
-        name=text,
-        type="description",
-        image=image,
-        imageHeight=imageHeight,
-        imageWidth=imageWidth,
-        imageCoords=imageCoords,
-        desc=text,
-        order=getorder(self,group),
-        
-    }
-    group.args[flag]=t
-    return t
+		local group=getgroup(self)
+		local flag=toflag(group.name,text)
+		local t={
+				name=text,
+				type="description",
+				image=image,
+				imageHeight=imageHeight,
+				imageWidth=imageWidth,
+				imageCoords=imageCoords,
+				desc=text,
+				order=getorder(self,group),
+
+		}
+		group.args[flag]=t
+		return t
 end
 
 --self:AddToggle("AUTOLEAVE",true,"Quick Battlefield Leave","Alt-Click on hide button in battlefield alert leaves the queue")
 function var:AddBoolean(flag,defaultvalue,name,description)
-    description=description or name
-    local group=getgroup(self)
-    local t={
-        name=name,
-        type="toggle",
-        get="OptToggleGet",
-        set="OptToggleSet",
-        desc=description,
-        arg=flag,
-        order=getorder(self,group),
-        
-    }
-    group.args[flag]=t
-    if (self.db.profile.toggles[flag]== nil) then
-        self.db.profile.toggles[flag]=defaultvalue
-    end
-    self.OptionsTable.args.toggle.args[flag]=t
-    return t
+		description=description or name
+		local group=getgroup(self)
+		local t={
+				name=name,
+				type="toggle",
+				get="OptToggleGet",
+				set="OptToggleSet",
+				desc=description,
+				arg=flag,
+				order=getorder(self,group),
+
+		}
+		group.args[flag]=t
+		if (self.db.profile.toggles[flag]== nil) then
+				self.db.profile.toggles[flag]=defaultvalue
+		end
+		self.OptionsTable.args.toggle.args[flag]=t
+		return t
 end
 function var:AddToggle(flag,defaultvalue,name,description)
-    description=description or name
-    self:HF_Toggle(flag,description)
-    return self:AddBoolean(flag,defaultvalue,name,description)
+		description=description or name
+		self:HF_Toggle(flag,description)
+		return self:AddBoolean(flag,defaultvalue,name,description)
 end
 --self:AddSlider("RESTIMER",5,1,10,"Enable res timer","Shows a timer for battlefield resser",1)
 function var:AddSlider(flag,defaultvalue,min,max,name,description,step)
@@ -828,59 +827,59 @@ function var:AddSlider(flag,defaultvalue,min,max,name,description,step)
 end
 -- self:AddEdit("REFLECTTO","","Whisper reflection receiver:","All your whispers will be forwarded to this guy","How to use it")
 function var:AddEdit(flag,defaultvalue,name,description,usage)
-    description=description or name
-    usage = usage or description
-    local group=getgroup(self)
-    local t={
-        name=name,
-        type="input",
-        get="OptToggleGet",
-        set="OptToggleSet",
-        desc=description,
-        arg=flag,
-        usage=usage,
-        order=getorder(self,group),
-        
-    }
-    group.args[flag]=t
-    if (self.db.profile.toggles[flag]== nil) then
-        self.db.profile.toggles[flag]=defaultvalue
-    end
-    return t
+		description=description or name
+		usage = usage or description
+		local group=getgroup(self)
+		local t={
+				name=name,
+				type="input",
+				get="OptToggleGet",
+				set="OptToggleSet",
+				desc=description,
+				arg=flag,
+				usage=usage,
+				order=getorder(self,group),
+
+		}
+		group.args[flag]=t
+		if (self.db.profile.toggles[flag]== nil) then
+				self.db.profile.toggles[flag]=defaultvalue
+		end
+		return t
 end
 -- self:AddEdit("REFLECTTO",1,{a=1,b=2},"Whisper reflection receiver:","All your whispers will be forwarded to this guy")
 function var:AddSelect(flag,defaultvalue,values,name,description)
-    description=description or name
-    local group=getgroup(self)
-    local t={
-        name=name,
-        type="select",
-        get="OptToggleGet",
-        set="OptToggleSet",
-        desc=description,
-        values=values,
-        arg=flag,
-        order=getorder(self,group)
-    }
-    group.args[flag]=t
-    if (self.db.profile.toggles[flag]== nil) then
-        self.db.profile.toggles[flag]=defaultvalue
-    end
-    return t
+		description=description or name
+		local group=getgroup(self)
+		local t={
+				name=name,
+				type="select",
+				get="OptToggleGet",
+				set="OptToggleSet",
+				desc=description,
+				values=values,
+				arg=flag,
+				order=getorder(self,group)
+		}
+		group.args[flag]=t
+		if (self.db.profile.toggles[flag]== nil) then
+				self.db.profile.toggles[flag]=defaultvalue
+		end
+		return t
 end
 
 -- self:AddAction(["btopenspells",]"openSpells","Opens spell panel","You can choose yoru spells in spell panel")
 function var:AddAction(method,label,description,private)
 	label=label or method
 	description=description or label
-    local group=getgroup(self)
-    if type(self[method]) ~="function" and type(self[label])=="function" then
-    	local appo=method
-    	method=label
-    	label=appo
-    	appo=nil
-    end
-    local t={
+		local group=getgroup(self)
+		if type(self[method]) ~="function" and type(self[label])=="function" then
+			local appo=method
+			method=label
+			label=appo
+			appo=nil
+		end
+		local t={
 			func=method,
 			name=label,
 			type="execute",
@@ -889,8 +888,8 @@ function var:AddAction(method,label,description,private)
 			order=getorder(self,group)
 		}
 	if (private) then t.hidden=true end
-    group.args[strlower(label)]=t
-    return t
+		group.args[strlower(label)]=t
+		return t
 end
 
 function var:AddPrivateAction(method,name,description)
@@ -898,23 +897,23 @@ function var:AddPrivateAction(method,name,description)
 end
 function var:AddKeyBinding(flag,name,description)
 	name=name or strlower(name)
-    description=description or name
-    local group=getgroup(self)
-    local t={
-	    name=name,
-	    type="keybinding",
-	    get="OptToggleGet",
-	    set="OptToggleSet",
-	    desc=description,
-	    arg=flag,
-	    order=getorder(self,group)
-    }
-    group.args[flag]=t
-    return t
+		description=description or name
+		local group=getgroup(self)
+		local t={
+			name=name,
+			type="keybinding",
+			get="OptToggleGet",
+			set="OptToggleSet",
+			desc=description,
+			arg=flag,
+			order=getorder(self,group)
+		}
+		group.args[flag]=t
+		return t
 end
 function var:AddTable(flag,table)
-    local group=getgroup(self)
-    group.args[flag]=table
+		local group=getgroup(self)
+		group.args[flag]=table
 end
 function var:_OpenCmd(info,args)
 	local method=info.arg
@@ -930,9 +929,11 @@ function var:AddOpenCmd(command,method,description,arguments,private)
 			name=command,
 			type="description",
 			order=getorder(self,group),
+			fontSize='medium',
+			width='full'
 		}
 		group.args[command .. 'title']=t
-	end	
+	end
 	local t={
 		name=command,
 		type="input",
@@ -952,7 +953,7 @@ function var:AddOpenCmd(command,method,description,arguments,private)
 		t.values=validate
 		t.type="select"
 	end
-	self.OptionsTable.args[command]=t	
+	self.OptionsTable.args[command]=t
 
 	return t
 end
@@ -985,34 +986,36 @@ end
 
 --self:AddCmd(flag,method,name,description)
 function var:AddChatCmd(flag,method,name,description)
-    self:RegisterChatCommand(flag,method)
-    name=name or flag
-    description=description or name
+		self:RegisterChatCommand(flag,method)
+		name=name or flag
+		description=description or name
 
-    local group=getgroup(self)
-    local t={
-        name=C('/' .. flag ..  " (" .. description .. ")",'orange'),
-        type="description",
-        order=getorder(self,group),
-    }
-    group.args[flag .. 'title']=t
-    return t
+		local group=getgroup(self)
+		local t={
+				name=C('/' .. flag ..  " (" .. description .. ")",'orange'),
+				type="description",
+				order=getorder(self,group),
+				fontSize="medium",
+				width="full"
+		}
+		group.args[flag .. 'title']=t
+		return t
 end
 
 --self:AddSeparator(text)
 
 function var:AddSeparator(text)
-    local group=getgroup(self)
-    local i=getorder(self,group)
-    local flag=group.name .. i
-    flag=flag:gsub('%W','')
-    local t={
-        name=text,
-        type="header",
-        order=i,
-    }
-    group.args[flag]=t
-    return t
+		local group=getgroup(self)
+		local i=getorder(self,group)
+		local flag=group.name .. i
+		flag=flag:gsub('%W','')
+		local t={
+				name=text,
+				type="header",
+				order=i,
+		}
+		group.args[flag]=t
+		return t
 end
 --self:AddCmd(flagname,method,label,description)
 function var:AddCmd(flag,method,name,description)
@@ -1058,13 +1061,13 @@ local function str2num(versione)
 	end
 end
 --[[
-        global={
-        currentversion=self.version,
-        firstrun=true,
-        lastversion=0,
-        lastinterface=20300,
-        
-        },
+				global={
+				currentversion=self.version,
+				firstrun=true,
+				lastversion=0,
+				lastinterface=20300,
+
+				},
 --]]
 function mix:UpdateVersion()
 	if (type(self.db.char) == "table") then
@@ -1084,91 +1087,91 @@ function mix:VersionIsAtLeast(compareto)
 end
 
 function mix:OnEnable(...)
-    self:Print(C("enabled",'green'))
-    self:ApplySettings()
-    self:OnEnabled(...)
+		self:Print(C("enabled",'green'))
+		self:ApplySettings()
+		self:OnEnabled(...)
 end
 function mix:OnDisable(...)
-    self:Print(C("disabled",'red'))
-    self:OnDisabled(...)
+		self:Print(C("disabled",'red'))
+		self:OnDisabled(...)
 end
-local _GetMethod 
+local _GetMethod
 function _GetMethod(target,prefix,func)
-    if (func == 'Start' or func == 'Stop') then return end
-    local method=prefix .. func
-    if (type(target[method])== "function") then
-        return method
-    elseif (type(target["_" .. prefix])) then
-        return "_" .. prefix
-    end
-end 
+		if (func == 'Start' or func == 'Stop') then return end
+		local method=prefix .. func
+		if (type(target[method])== "function") then
+				return method
+		elseif (type(target["_" .. prefix])) then
+				return "_" .. prefix
+		end
+end
 function mix:HookStart(hooks)
-    hooks=hooks or self.registry.hooks
-    for hook,security in pairs(hooks) do
-        local hooked=_G[hook]
-        if (hooked) then
-            local method=_GetMethod(self,"Hook",hook)
-            if (method) then
-                debug("Hooking " .. hook .. ' to ' .. tostring(method) .. ' Security:' .. tostring(security))
-                if (not self:IsHooked(hook)) then
-                    if (not type(self.org[hook]) ~= 'function') then
-                        self.org[hook]=hooked
-                    end
-                    if (security=='RAW') then
-                        self:RawHook(hook,method,true)
-                    elseif (security=='SECURE') then
-                        self:SecureHook(hook,method)
-                    else
-                        self:Hook(hook,method)
-                    end
-                end
-            end
-        else
-            hooks[hook]=nil
-        end
-    end
+		hooks=hooks or self.registry.hooks
+		for hook,security in pairs(hooks) do
+				local hooked=_G[hook]
+				if (hooked) then
+						local method=_GetMethod(self,"Hook",hook)
+						if (method) then
+								debug("Hooking " .. hook .. ' to ' .. tostring(method) .. ' Security:' .. tostring(security))
+								if (not self:IsHooked(hook)) then
+										if (not type(self.org[hook]) ~= 'function') then
+												self.org[hook]=hooked
+										end
+										if (security=='RAW') then
+												self:RawHook(hook,method,true)
+										elseif (security=='SECURE') then
+												self:SecureHook(hook,method)
+										else
+												self:Hook(hook,method)
+										end
+								end
+						end
+				else
+						hooks[hook]=nil
+				end
+		end
 end
 function mix:HookStop(hooks)
-    hooks=hooks or self.registry.hooks
-    for hook,level in pairs(hooks) do
-        if (self:IsHooked(hook)) then
-            debug("UnHooking " .. hook)
-            self:Unhook(hook)
-        end
-    end
+		hooks=hooks or self.registry.hooks
+		for hook,level in pairs(hooks) do
+				if (self:IsHooked(hook)) then
+						debug("UnHooking " .. hook)
+						self:Unhook(hook)
+				end
+		end
 end
 function mix:EvtStart(events)
-    events=events or self.registry.events
-    for evt,delay in pairs(events) do
-        local method=_GetMethod(self,"Evt",evt)
-        if (method) then
-            --debug("Observing " .. evt .. ' with ' .. tostring(method))
-            if (tonumber(delay)) then
-                if (delay>0) then
-                    self:RegisterBucketEvent(evt,delay,method)
-                else
-                    self:RegisterEvent(evt,method)
-                end
-            else
-                self:RegisterEvent(evt,method)
-            end
-        end
-    end
+		events=events or self.registry.events
+		for evt,delay in pairs(events) do
+				local method=_GetMethod(self,"Evt",evt)
+				if (method) then
+						--debug("Observing " .. evt .. ' with ' .. tostring(method))
+						if (tonumber(delay)) then
+								if (delay>0) then
+										self:RegisterBucketEvent(evt,delay,method)
+								else
+										self:RegisterEvent(evt,method)
+								end
+						else
+								self:RegisterEvent(evt,method)
+						end
+				end
+		end
 end
 function mix:EvtStop(events,wakeup)
-    events=events or self.registry.events
-    wakeup=wakeup or self.registry.wakeup
-    for evt,delay in pairs(events) do
-    	if (wakeup and wakeup~=evt) then
-	        if (tonumber(delay)) then
-	            if (delay>0) then
-	                self:UnregisterBucketEvent(evt)
-	            else
-	                self:UnregisterEvent(evt)
-	            end
-	        end
-        end
-    end
+		events=events or self.registry.events
+		wakeup=wakeup or self.registry.wakeup
+		for evt,delay in pairs(events) do
+			if (wakeup and wakeup~=evt) then
+					if (tonumber(delay)) then
+							if (delay>0) then
+									self:UnregisterBucketEvent(evt)
+							else
+									self:UnregisterEvent(evt)
+							end
+					end
+				end
+		end
 end
 --[[
 function mix:Notify(...)
@@ -1191,36 +1194,36 @@ end
 --alias
 
 function mix:Colorize(stringa,colore)
-    return C(stringa,colore) .. "|r"
+		return C(stringa,colore) .. "|r"
 end
 function mix:GetTocVersion()
 	return tonumber(wow.TocVersion) or 0
 end
 function mix:Toggle()
-    if (self:IsEnabled()) then
-        self:Disable()
-    else
-        self:Enable()
-    end
+		if (self:IsEnabled()) then
+				self:Disable()
+		else
+				self:Enable()
+		end
 end
 function var:Vars()
-    return pairs(self.db.profile.toggles)
+		return pairs(self.db.profile.toggles)
 end
 function var:SetBoolean(flag,value)
-    if (value) then
-        value=true
-    else
-        value=false
-    end
-    self.db.profile.toggles[flag]=value  
-    return not value
+		if (value) then
+				value=true
+		else
+				value=false
+		end
+		self.db.profile.toggles[flag]=value
+		return not value
 end
 function var:GetBoolean(flag)
-    if (self.db.profile.toggles[flag]) then
-        return true
-    else
-        return false
-    end  
+		if (self.db.profile.toggles[flag]) then
+				return true
+		else
+				return false
+		end
 end
 var.GetToggle=var.GetBoolean -- alias
 function var:GetNumber(flag,default)
@@ -1231,27 +1234,27 @@ function var:GetString(flag,default)
 end
 
 do
-    local CLOSE=_G.FONT_COLOR_CODE_CLOSE or '|r'   
-    local off=(_G.RED_FONT_COLOR_CODE or '|cffff0000') .. 'Off' ..  CLOSE
-    local on=(_G.GREEN_FONT_COLOR_CODE or '|cff00ff00') .. 'On' ..  CLOSE
-    function var:PrintBoolean(flag)
-        if (type(flag) == "string") then
-            flag=self:GetBoolean(flag)
-        end
-        if (flag) then
-            return on
-        else
-            return off
-        end            
-    end
+		local CLOSE=_G.FONT_COLOR_CODE_CLOSE or '|r'
+		local off=(_G.RED_FONT_COLOR_CODE or '|cffff0000') .. 'Off' ..  CLOSE
+		local on=(_G.GREEN_FONT_COLOR_CODE or '|cff00ff00') .. 'On' ..  CLOSE
+		function var:PrintBoolean(flag)
+				if (type(flag) == "string") then
+						flag=self:GetBoolean(flag)
+				end
+				if (flag) then
+						return on
+				else
+						return off
+				end
+		end
 end
 function var:GetSet(...)
-    local flag,value=select(1,...)
-    if (select('#',...) == 2) then
-        self.db.profile.toggles[flag]=value
-    else
-        return self.db.profile.toggles[flag]
-    end  
+		local flag,value=select(1,...)
+		if (select('#',...) == 2) then
+				self.db.profile.toggles[flag]=value
+		else
+				return self.db.profile.toggles[flag]
+		end
 end
 function var:GetVar(flag)
 	return self:GetSet(flag)
@@ -1260,98 +1263,98 @@ function var:SetVar(flag,value)
 	return self:GetSet(flag,value)
 end
 function var:OptToggleSet(info,value)
-    local flag=info.option.arg
-    local tipo=info.option.type
-    --self:SendMessage(self.ID .. "_UPDATECONFIG",flag,tipo)
-    
-    if (tipo=="toggle") then
-        self:SetBoolean(flag,value)
-    else
-        self:GetSet(flag,value)
-    end  
-    if (self:IsEnabled()) then
-        self._Apply[flag](self,flag,value)
-    end
+		local flag=info.option.arg
+		local tipo=info.option.type
+		--self:SendMessage(self.ID .. "_UPDATECONFIG",flag,tipo)
+
+		if (tipo=="toggle") then
+				self:SetBoolean(flag,value)
+		else
+				self:GetSet(flag,value)
+		end
+		if (self:IsEnabled()) then
+				self._Apply[flag](self,flag,value)
+		end
 end
 function var:OptToggleGet(info)
-    local flag=info.option.arg
-    local tipo=info.option.type
-    if (tipo=="toggle") then
-        return self:GetBoolean(flag)
-    else
-        return self:GetSet(flag)
-    end  
+		local flag=info.option.arg
+		local tipo=info.option.type
+		if (tipo=="toggle") then
+				return self:GetBoolean(flag)
+		else
+				return self:GetSet(flag)
+		end
 end
 function var:ApplySettings()
-    if (type(self.ApplyAll)=="function") then
-        self:ApplyAll()
-    else
-        for i,v in self:Vars() do
-            self._Apply[i](self,i,v)
-        end
-    end
+		if (type(self.ApplyAll)=="function") then
+				self:ApplyAll()
+		else
+				for i,v in self:Vars() do
+						self._Apply[i](self,i,v)
+				end
+		end
 end
 local neveropened=true
 function mix:Gui(info)
-    if (AceConfigDialog and AceGUI) then
-      if (neveropened) then
-        InterfaceAddOnsList_Update()
-        neveropened=false
-      end
-      InterfaceOptionsFrame_OpenToCategory(self.CfgDlg)
-    else
-        self:Print("No GUI available")
-    end
-        
+		if (AceConfigDialog and AceGUI) then
+			if (neveropened) then
+				InterfaceAddOnsList_Update()
+				neveropened=false
+			end
+			InterfaceOptionsFrame_OpenToCategory(self.CfgDlg)
+		else
+				self:Print("No GUI available")
+		end
+
 end
 function mix:Help(info)
-    if (AceConfigDialog and AceGUI) then 
-        InterfaceOptionsFrame_OpenToCategory(self.CfgRel)
-    else
-        self:Print("No GUI available")
-    end
-        
+		if (AceConfigDialog and AceGUI) then
+				InterfaceOptionsFrame_OpenToCategory(self.CfgRel)
+		else
+				self:Print("No GUI available")
+		end
+
 end
 function mix:IsEventScheduled(flag)
-    lib.timerhandles=lib.timerhandles or {}
+		lib.timerhandles=lib.timerhandles or {}
 	return lib.timerhandles[flag]
 end
 function mix:ScheduleRepeatingEvent(flag,...)
-    lib.timerhandles=lib.timerhandles or {}
-    lib.timerhandles[flag]=self:ScheduleRepeatingTimer(...)
+		lib.timerhandles=lib.timerhandles or {}
+		lib.timerhandles[flag]=self:ScheduleRepeatingTimer(...)
 end
 function mix:CancelScheduledEvent(flag)
-    lib.timerhandles=lib.timerhandles or {}
-    local h=lib.timerhandles[flag]
-    self:CancelTimer(h)
+		lib.timerhandles=lib.timerhandles or {}
+		local h=lib.timerhandles[flag]
+		self:CancelTimer(h)
 end
 function mix:Trace(...)
---@debug@	
+--@debug@
 	self:_Trace(false,...)
---@end-debug@	
+--@end-debug@
 end
 function mix:FullTrace(...)
-	--@debug@	
+	--@debug@
 	self:_Trace(true,...)
-	--@end-debug@	
+	--@end-debug@
 end
 function mix:_Trace(ft,fmt,...)
-    local stack={strsplit("\n",debugstack(3,5,0))}
+		local stack={strsplit("\n",debugstack(3,5,0))}
 	local info=stack[1]
-    local file,line,func=tostringall(strsplit(":",info))
-    
-    local r,g,b=C.Yellow()
-    _G.DEFAULT_CHAT_FRAME:AddMessage(
-    	format("Trace\nWhere: %s:%s%s",self:Colorize(file,'azure'),self:Colorize(line,'red'),self:Colorize(func,'orange')) ..
-    	format("\nWhat: "..fmt,tostringall(...)),
-    	r,g,b)
+		local file,line,func=tostringall(strsplit(":",info))
+
+		local r,g,b=C.Yellow()
+		_G.DEFAULT_CHAT_FRAME:AddMessage(
+			format("Trace\nWhere: %s:%s%s",self:Colorize(file,'azure'),self:Colorize(line,'red'),self:Colorize(func,'orange')) ..
+			format("\nWhat: "..fmt,tostringall(...)),
+			r,g,b)
 	if (ft) then
 		print "Full stack dump"
-    	for i,info in ipairs(stack) do
-    		print (format("Stack: %d. %s",i,self:Colorize(info,'green')))
-    	end
-    	print("--------------")
-    end
+			for i,info in ipairs(stack) do
+				print (format("Stack: %d. %s",i,self:Colorize(info,'green')))
+			end
+			print("--------------")
+		end
 end
 
 
@@ -1397,106 +1400,106 @@ end
 -- This function get called on addon creation
 -- Anything I define here is immediately available to addon code
 function lib:Embed(target)
-    debug("Embedding " .. MAJOR_VERSION .. "." .. MINOR_VERSION .. " into " .. target.name)
-    -- Info from TOC
-    local v=GetAddOnMetadata(tostring(target),"version")
-    v=v or '0'
-    target.tocversion=v
-    local version,revision=v:match("([^$ ]*) *(.*)")
-    target.version=version or "0"
-    local title=target.name or target.fullname
-    if (target.version == '@'..'project-version@' and title) then
-        target.version=GetAddOnMetadata(title,'X-Version')
-    end
-    if (target.revision == '@'..'project-revision@' and title) then
-        target.revision=GetAddOnMetadata(title,'X-Revision')
-    end
-    target.revision=revision:match("%d+") or "0"
-    target.prettyversion=format("%s (Revision: %s)",tostringall(target.version,target.revision))
-    target.numericversion=versiontonumber(v)
-    target.title=GetAddOnMetadata(tostring(target),"title") or 'No title'
-    target.notes=GetAddOnMetadata(tostring(target),"notes") or 'No notes'
-    -- Setting sensible default for mandatory fields
-    target.ID=GetAddOnMetadata(title,"X-ID") or (target.name:gsub("[^%u%d]","") .. "XXXX"):sub(1,3)
-    target.DATABASE=GetAddOnMetadata(title,"X-Database") or "db" .. target.ID
-    debug("Info for",target.name,'(',target.ID,')',target.DATABASE,GetAddOnMetadata(target.name,"X-Database"))
-    -- Standard Mixins
-    for name,method in pairs(mix) do
-        target[name] = method
-    end
-    -- Printing func
-    local rc=LibStub("AlarLoader-3.0"):GetPrintFunctions(target:GetName(),2)
-    for name,func in pairs(rc) do
-    	target[name]=func
-    	target[name:capitalize()]=func
-    end
-    -- Help system mixins
-    for name,method in pairs(hlp) do
-        target[name] = method
-    end
-    -- var management mixins
-    for name,method in pairs(var) do
-        target[name] = method
-    end
-    target._Apply=target._Apply or {}
-    target._Apply._handler=target
-    setmetatable(target._Apply,varmeta)
-    -- virtual methods, they can be ovverriden
-    -- versioning is not important, because virtual methods are always nop
-    for name,_ in pairs(virt) do
-        target[name]=target[name] or nop
-    end
-    -- nops, placeholders. To be removed when done with porting
-    for _,name in pairs(lib.nops) do
-        target[name]=target[name] or nop
-    end
-    
-    target.registry=target.registry or {}
-    local r=target.registry
-    for _,subtable in pairs{'events','hooks','commands','options','icommands'} do
-        r[subtable]=r[subtable] or {}
-    end
-    target.org=target.org or {}
-    target.coroutines=target.coroutines or {}
-    lib.mixinTargets[target] = true
-    if (me == "AlarShared") then
-    	local as=LibStub("AceAddon-3.0"):GetAddon("AlarShared",true)
-    	if (as) then as:LoadOptions() end
-    end
+		debug("Embedding " .. MAJOR_VERSION .. "." .. MINOR_VERSION .. " into " .. target.name)
+		-- Info from TOC
+		local v=GetAddOnMetadata(tostring(target),"version")
+		v=v or '0'
+		target.tocversion=v
+		local version,revision=v:match("([^$ ]*) *(.*)")
+		target.version=version or "0"
+		local title=target.name or target.fullname
+		if (target.version == '@'..'project-version@' and title) then
+				target.version=GetAddOnMetadata(title,'X-Version')
+		end
+		if (target.revision == '@'..'project-revision@' and title) then
+				target.revision=GetAddOnMetadata(title,'X-Revision')
+		end
+		target.revision=revision:match("%d+") or "0"
+		target.prettyversion=format("%s (Revision: %s)",tostringall(target.version,target.revision))
+		target.numericversion=versiontonumber(v)
+		target.title=GetAddOnMetadata(tostring(target),"title") or 'No title'
+		target.notes=GetAddOnMetadata(tostring(target),"notes") or 'No notes'
+		-- Setting sensible default for mandatory fields
+		target.ID=GetAddOnMetadata(title,"X-ID") or (target.name:gsub("[^%u%d]","") .. "XXXX"):sub(1,3)
+		target.DATABASE=GetAddOnMetadata(title,"X-Database") or "db" .. target.ID
+		debug("Info for",target.name,'(',target.ID,')',target.DATABASE,GetAddOnMetadata(target.name,"X-Database"))
+		-- Standard Mixins
+		for name,method in pairs(mix) do
+				target[name] = method
+		end
+		-- Printing func
+		local rc=LibStub("AlarLoader-3.0"):GetPrintFunctions(target:GetName(),2)
+		for name,func in pairs(rc) do
+			target[name]=func
+			target[name:capitalize()]=func
+		end
+		-- Help system mixins
+		for name,method in pairs(hlp) do
+				target[name] = method
+		end
+		-- var management mixins
+		for name,method in pairs(var) do
+				target[name] = method
+		end
+		target._Apply=target._Apply or {}
+		target._Apply._handler=target
+		setmetatable(target._Apply,varmeta)
+		-- virtual methods, they can be ovverriden
+		-- versioning is not important, because virtual methods are always nop
+		for name,_ in pairs(virt) do
+				target[name]=target[name] or nop
+		end
+		-- nops, placeholders. To be removed when done with porting
+		for _,name in pairs(lib.nops) do
+				target[name]=target[name] or nop
+		end
+
+		target.registry=target.registry or {}
+		local r=target.registry
+		for _,subtable in pairs{'events','hooks','commands','options','icommands'} do
+				r[subtable]=r[subtable] or {}
+		end
+		target.org=target.org or {}
+		target.coroutines=target.coroutines or {}
+		lib.mixinTargets[target] = true
+		if (me == "AlarShared") then
+			local as=LibStub("AceAddon-3.0"):GetAddon("AlarShared",true)
+			if (as) then as:LoadOptions() end
+		end
 end
 
 
 ----- New Global Function, I check if someone already defined then
 if (not string.capitalize) then
-    function string.capitalize(stringa)
-        return string.gsub(strlower(stringa),
-                "%w",function (s) return strupper(s) end,1)
-    end
+		function string.capitalize(stringa)
+				return string.gsub(strlower(stringa),
+								"%w",function (s) return strupper(s) end,1)
+		end
 end
 if (not _G.capitalize) then
-    _G.capitalize=string.capitalize
+		_G.capitalize=string.capitalize
 end
 if (not _G.table.kpairs) then
-    function _G.table.kpairs(t,f)
-      local a = {}
-      for n in pairs(t) do table.insert(a, n) end
-      table.sort(a, f)
-      local i = 0      -- iterator variable
-      local iter = function ()   -- iterator function
-        i = i + 1
-        if a[i] == nil then
-            return nil
-        else
-            local k=a[i]
-            a[i]=nil -- Should optimize memory usage
-            return k, t[k]
-        end
-      end
-      return iter
-    end
+		function _G.table.kpairs(t,f)
+			local a = {}
+			for n in pairs(t) do table.insert(a, n) end
+			table.sort(a, f)
+			local i = 0      -- iterator variable
+			local iter = function ()   -- iterator function
+				i = i + 1
+				if a[i] == nil then
+						return nil
+				else
+						local k=a[i]
+						a[i]=nil -- Should optimize memory usage
+						return k, t[k]
+				end
+			end
+			return iter
+		end
 end
 if (not _G.kpairs) then
-    _G.kpairs=table.kpairs
+		_G.kpairs=table.kpairs
 end
 -------------------------------------------------------------------------------
 -- ScheduleLeaveCombatAction Port
@@ -1548,7 +1551,7 @@ do
 	end
 	lib.frame:SetScript("OnEvent",nil)
 	lib.frame:RegisterEvent("PLAYER_REGEN_ENABLED")
-    lib.frame:SetScript("OnEvent",doaftercombataction)
+		lib.frame:SetScript("OnEvent",doaftercombataction)
 end
 
 function mix:ScheduleLeaveCombatAction(method, ...)
@@ -1561,7 +1564,7 @@ function mix:ScheduleLeaveCombatAction(method, ...)
 			debug("Cannot schedule a combat action to method %q, it does not exist", func)
 		end
 	end
-	
+
 	if not InCombatLockdown() then
 		local success, err
 		if type(method) == "function" then
@@ -1595,7 +1598,7 @@ function mix:ScheduleLeaveCombatAction(method, ...)
 	table.insert(combatSchedules, t)
 end
 function mix:_iCmd(info,args)
-	
+
 end
 function mix:_SwitchDebug(info,p)
 	local p=p or ''
@@ -1609,7 +1612,7 @@ function mix:_SwitchDebug(info,p)
 	if (p=='on' or p =='off') then
 		self:Print("Debug was",self:PrintBoolean(a:GetDebug(target)))
 		a:SetDebug(target,status)
-	end 
+	end
 	self:Print("Debug is",self:PrintBoolean(a:GetDebug(target)))
 end
 function mix:Void(...)
@@ -1621,7 +1624,7 @@ function mix:Test(...)
 end
 local function Sink(durata)
 	for i=1,durata do
-		
+
 	end
 end
 local function coclear(rc,...)
@@ -1982,11 +1985,11 @@ local function xdump(a,chat)
 	end
 end
 local function xfont(a)
-  if (a) then
-    mix:AlarFonts()
-  else
-    mix:AlarFonts()
-  end
+	if (a) then
+		mix:AlarFonts()
+	else
+		mix:AlarFonts()
+	end
 end
 
 function mix:AlarFonts(close)
@@ -1994,111 +1997,111 @@ function mix:AlarFonts(close)
 -- all font strings, and the scroll bar slider.
 local fp = FPreviewFrame or CreateFrame("ScrollFrame", "FPreviewFrame")
 if (close) then
-  fp:Hide()
-  return
+	fp:Hide()
+	return
 end
 -- This is a bare-bones frame is used to encapsulate the contents of
 -- the scroll frame.  Each scrollframe can have one scroll child.
 local fpsc = FPreviewSC or CreateFrame("Frame", "FPreviewSC")
- 
+
 -- Create the slider that will be used to scroll through the results
 local fpsb = FPreviewScrollBar or CreateFrame("Slider", "FPreviewScrollBar", fp)
- 
+
 -- Set up internal textures for the scrollbar, background and thumb texture
 if not fpsb.bg then
-   fpsb.bg = fpsb:CreateTexture(nil, "BACKGROUND")
-   fpsb.bg:SetAllPoints(true)
-   fpsb.bg:SetTexture(0, 0, 0, 0.5)
+	fpsb.bg = fpsb:CreateTexture(nil, "BACKGROUND")
+	fpsb.bg:SetAllPoints(true)
+	fpsb.bg:SetTexture(0, 0, 0, 0.5)
 end
- 
+
 if not fpsb.thumb then
-   fpsb.thumb = fpsb:CreateTexture(nil, "OVERLAY")
-   fpsb.thumb:SetTexture("Interface\\Buttons\\UI-ScrollBar-Knob")
-   fpsb.thumb:SetSize(25, 25)
-   fpsb:SetThumbTexture(fpsb.thumb)
+	fpsb.thumb = fpsb:CreateTexture(nil, "OVERLAY")
+	fpsb.thumb:SetTexture("Interface\\Buttons\\UI-ScrollBar-Knob")
+	fpsb.thumb:SetSize(25, 25)
+	fpsb:SetThumbTexture(fpsb.thumb)
 end
- 
+
 local genv = getfenv(0)
- 
+
 -- Collect the names of all possible globally defined fonts
 local fonts = {}
 for k, v in pairs(genv) do
-   if type(v) == "table" and type(v.GetObjectType) == "function" then
-    
-      local rc,otype = pcall(v.GetObjectType,v)
-      if (rc) then
-        if otype == "Font" then
-           table.insert(fonts, k)
-        end
-      end
-   end
+	if type(v) == "table" and type(v.GetObjectType) == "function" then
+
+			local rc,otype = pcall(v.GetObjectType,v)
+			if (rc) then
+				if otype == "Font" then
+					table.insert(fonts, k)
+				end
+			end
+	end
 end
- 
+
 -- Sort the list alphabetically
 table.sort(fonts)
- 
+
 -- Create a table that will contain the font strings themselves
 fpsc.fstrings = fpsc.fstrings or {}
- 
+
 -- This changes the padding between font strings vertically
 local PADDING = 5
- 
+
 -- Store the max width and overall height of the scroll child
 local height = 0
 local width = 0
 local lista=""
 -- Iterate the list of fonts collected
 for idx, fname in ipairs(fonts) do
-   -- If the font string is not created, do so
-   if not fpsc.fstrings[idx] then
-      fpsc.fstrings[idx] = fpsc:CreateFontString("FPreviewFS" .. idx, "OVERLAY")
-   end
-    
-   -- Set the font string to the correct font object, set the text to be the
-   -- name of the font and set the height/width of the font string based on
-   -- the size of the resulting 'string'.
-   local fs = fpsc.fstrings[idx]
-   fs:SetFontObject(genv[fname])
-   fs:SetText(fname)
-   lista=lista .. fname .. ","
-   local fwidth = fs:GetStringWidth()
-   local fheight = fs:GetStringHeight()
-   fs:SetSize(fwidth, fheight)
-    
-   -- Place the font strings in rows starting at the top-left
-   if idx == 1 then
-      fs:SetPoint("TOPLEFT", 0, 0)
-      height = height + fheight
-   else
-      fs:SetPoint("TOPLEFT", fpsc.fstrings[idx - 1], "BOTTOMLEFT", 0, - PADDING)
-      height = height + fheight + PADDING
-   end
-    
-   -- Update the 'max' width of the frame
-   width = (fwidth > width) and fwidth or width
+	-- If the font string is not created, do so
+	if not fpsc.fstrings[idx] then
+			fpsc.fstrings[idx] = fpsc:CreateFontString("FPreviewFS" .. idx, "OVERLAY")
+	end
+
+	-- Set the font string to the correct font object, set the text to be the
+	-- name of the font and set the height/width of the font string based on
+	-- the size of the resulting 'string'.
+	local fs = fpsc.fstrings[idx]
+	fs:SetFontObject(genv[fname])
+	fs:SetText(fname)
+	lista=lista .. fname .. ","
+	local fwidth = fs:GetStringWidth()
+	local fheight = fs:GetStringHeight()
+	fs:SetSize(fwidth, fheight)
+
+	-- Place the font strings in rows starting at the top-left
+	if idx == 1 then
+			fs:SetPoint("TOPLEFT", 0, 0)
+			height = height + fheight
+	else
+			fs:SetPoint("TOPLEFT", fpsc.fstrings[idx - 1], "BOTTOMLEFT", 0, - PADDING)
+			height = height + fheight + PADDING
+	end
+
+	-- Update the 'max' width of the frame
+	width = (fwidth > width) and fwidth or width
 end
 --[[
-  local gui=LibStub("AceGUI-3.0")
-  local wininfo=gui:Create("Frame")
-  local e=gui:Create("EditBox")
-  wininfo:SetLayout("Fill")
-  e:SetFullWidth(true)
-  e:SetFullHeight(true)
-  e:SetText(lista)
-  wininfo:AddChild(e)
---]] 
+	local gui=LibStub("AceGUI-3.0")
+	local wininfo=gui:Create("Frame")
+	local e=gui:Create("EditBox")
+	wininfo:SetLayout("Fill")
+	e:SetFullWidth(true)
+	e:SetFullHeight(true)
+	e:SetText(lista)
+	wininfo:AddChild(e)
+--]]
 -- Set the size of the scroll child
 fpsc:SetSize(width, height)
- 
+
 -- Size and place the parent frame, and set the scrollchild to be the
 -- frame of font strings we've created
 fp:SetSize(width, 400)
 fp:SetPoint("CENTER", UIParent, 0, 0)
 fp:SetScrollChild(fpsc)
 fp:Show()
- 
+
 fpsc:SetSize(width, height)
- 
+
 -- Set up the scrollbar to work properly
 local scrollMax = height - 400
 fpsb:SetOrientation("VERTICAL");
@@ -2107,28 +2110,28 @@ fpsb:SetPoint("TOPLEFT", fp, "TOPRIGHT", 0, 0)
 fpsb:SetMinMaxValues(0, scrollMax)
 fpsb:SetValue(0)
 fpsb:SetScript("OnValueChanged", function(self)
-      fp:SetVerticalScroll(self:GetValue())
+			fp:SetVerticalScroll(self:GetValue())
 end)
- 
+
 -- Enable mousewheel scrolling
 fp:EnableMouseWheel(true)
 fp:SetScript("OnMouseWheel", function(self, delta)
-      local current = fpsb:GetValue()
-       
-      if IsShiftKeyDown() and (delta > 0) then
-         fpsb:SetValue(0)
-      elseif IsShiftKeyDown() and (delta < 0) then
-         fpsb:SetValue(scrollMax)
-      elseif (delta < 0) and (current < scrollMax) then
-         fpsb:SetValue(current + 20)
-      elseif (delta > 0) and (current > 1) then
-         fpsb:SetValue(current - 20)
-      end
+			local current = fpsb:GetValue()
+
+			if IsShiftKeyDown() and (delta > 0) then
+				fpsb:SetValue(0)
+			elseif IsShiftKeyDown() and (delta < 0) then
+				fpsb:SetValue(scrollMax)
+			elseif (delta < 0) and (current < scrollMax) then
+				fpsb:SetValue(current + 20)
+			elseif (delta > 0) and (current > 1) then
+				fpsb:SetValue(current - 20)
+			end
 end)
 end
 if (LibStub("AceConsole-3.0",true)) then
-  LibStub("AceConsole-3.0"):RegisterChatCommand('xdump',xdump)
-  LibStub("AceConsole-3.0"):RegisterChatCommand('xfont',xfont)
+	LibStub("AceConsole-3.0"):RegisterChatCommand('xdump',xdump)
+	LibStub("AceConsole-3.0"):RegisterChatCommand('xfont',xfont)
 end
 --@end-do-not-package@
 --- reembed routine

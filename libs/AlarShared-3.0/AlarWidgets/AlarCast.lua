@@ -137,9 +137,9 @@ do
 		local attribute=actiontype
 		if (actiontype=="macrotext") then actiontype ="macro" end
 		frame:SetAttribute(modifier .. "type" .. button,actiontype)
-		debug("SetAttribute",modifier .. "type" .. button,actiontype)
+		print("SetAttribute",modifier .. "type" .. button,actiontype)
 		frame:SetAttribute(modifier .. attribute .. button,value)
-		debug("SetAttribute",modifier .. attribute .. button,value)
+		print("SetAttribute",modifier .. attribute .. button,value)
 	end
 	function cc:SetUnit(unit,modifier,button)
 		modifier=modifier or ''

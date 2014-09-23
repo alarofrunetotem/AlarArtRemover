@@ -1,3 +1,4 @@
+if true then return end
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
 local MAJOR_VERSION = ("AlarAddon-3.0.lua"):gsub(".lua","")
 local MINOR_VERSION = 500 + tonumber(string.sub("$Revision$", 12, -3))
@@ -18,7 +19,7 @@ local me, ns = ...
 print("Loading",__FILE__," inside ",me)
 --@end-debug@
 if (LibDebug) then LibDebug() end
-local function debug(...) 
+local function debug(...)
 --@debug@
 	print(...)
 --@end-debug@
@@ -41,7 +42,7 @@ if (LibStub("AlarLoader-3.0",true)) then
 else
 	debug("Missing AlarLoader-3.0")
 end
-local _,_,_,toc=GetBuildInfo()
+local toc=select(4,GetBuildInfo())
 if (not LibStub) then
     error("Couldn't find LibStub. Please reinstall " .. MAJOR_VERSION )
 end
@@ -75,5 +76,5 @@ function lib:new(name,...)
         table.insert(mixins,(select(i,...)))
     end
     return LibStub("AceAddon-3.0"):NewAddon(name,unpack(mixins))
-    
+
 end

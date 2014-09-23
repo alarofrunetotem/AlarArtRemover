@@ -4,7 +4,7 @@
 <!-- $Id$ -->
 <Script file="localization.lua"/>
 <Script file="AlarLoader-3.0.lua"/>
-<Script file="AlarAddon-3.0.lua"/>
+<!--  Script file="AlarAddon-3.0.lua"/-->
 <Script file="AlarCrayon-3.0.lua"/>
 <Script file="AlarCore-3.0.lua"/>
 </Ui>
