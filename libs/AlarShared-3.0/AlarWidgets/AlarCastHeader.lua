@@ -1,7 +1,7 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
 local MAJOR_VERSION = ("AlarCastHeader.lua"):gsub(".lua","")
 local MINOR_VERSION = 500 + tonumber(string.sub("$Revision: 85 $", 12, -3))
-local Type,Version,Ancestor = "AlarCastHeader",1
+local Type,Version,Ancestor = "AlarCastHeader",2
 --[[
 Name: AlarPanels.lua
 Revision: $Rev: 85 $
@@ -50,15 +50,13 @@ local AceGUI=LibStub("AceGUI-3.0")
 local C=LibStub("AlarCrayon-3.0"):GetColorTable()
 local InjectStandardMethods=AWG.InjectStandardMethods
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
-local methods={}
+local methods={} --# Control
 function methods:SetBackdrop(backdrop)
 	self.frame:SetBackdrop(backdrop)
 end
 function methods:OnAcquire()
 	self:Parent(Ancestor,"OnAcquire")
-	self.frame.tooltipText=C(L["Drag with Shift button to move"],"yellow") ..
-								"\n" .. C(L["Left Click Cast Mend/Revive Pet"],"green") ..
-								"\n" .. C(L["Right Click Cast Misdirection"],"green")
+	self.frame.tooltipText=C(L["Drag with Shift button to move"],"yellow")
 	self.content:Show()
 end
 function methods:Append(frame)
@@ -67,6 +65,12 @@ function methods:Append(frame)
 end
 function methods:SetTitle(...)
 	self.frame:SetText(...)
+end
+function methods:SetTooltipText(text)
+	self.frame.tooltipText=C(L["Drag with Shift button to move"],"yellow") .. "\n" .. text
+end
+function methods:SetOnAttributeChanged(snippet)
+	self.frame:SetAttribute('_onattributechanged',snippet)
 end
 function methods:ApplyStatus()
 	local status = self:Status()
@@ -89,6 +93,7 @@ end
 do
 	local serial=0
 	local function tooltipshow(this,r,g,b)
+		if InCombatLockdown() then return end
 		if(this.tooltipText ~= nil) then
 			GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
 			GameTooltip:SetText(this.tooltipText, r or 1, g or 0.82, b or 0);
@@ -104,7 +109,7 @@ do
 			end
 	end
 	local function Constructor()
-		local frame=CreateFrame("Button",Type..serial,UIParent,"UIPanelButtonTemplate,SecureActionButtonTemplate")
+		local frame=CreateFrame("Button",Type..serial,UIParent,"UIPanelButtonTemplate,SecureActionButtonTemplate,SecureHandlerAttributeTemplate")
 		serial =serial +1
 		local widget={frame=frame}
 		frame.obj=widget
