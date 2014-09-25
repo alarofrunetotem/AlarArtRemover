@@ -19,7 +19,7 @@ local me, ns = ...
 print("Loading",__FILE__," inside ",me)
 --@end-debug@
 if (LibDebug) then LibDebug() end
-local function debug(...) 
+local function debug(...)
 --@debug@
 	print(...)
 --@end-debug@
@@ -76,7 +76,7 @@ do
 	end
 	function cc:SetAlpha(...)
 		self.frame:SetAlpha(...)
-	end		
+	end
 	function cc:BindToKey(key)
 		local oldkey=self.keybinding
 		if (key) then
@@ -112,7 +112,7 @@ do
 		self.spell=nil
 		if (self.active) then self:SetCast(nil,nil,modifier,button) end
 		self:Update()
-	end	
+	end
 	function cc:SetCast(actionType,action,modifier,button)
 		actionType=actionType or self.actionType
 		action=action or self.action
@@ -185,7 +185,7 @@ do
 		else
 			icon:SetVertexColor(0.4, 0.4, 0.4)
 			normalTexture:SetVertexColor(1.0, 1.0, 1.0)
-		end	
+		end
 	end
 	function cc:UpdateCooldown(frame)
 		local cooldown = self.Cooldown
@@ -193,7 +193,7 @@ do
 		local rc,start, duration, enable = pcall(GetSpellCooldown,self.spell)
 		if (rc) then
 			CooldownFrame_SetTimer(cooldown, start, duration, enable)
-		end	
+		end
 	end
 	function cc:UpdateFlash(frame)
 		--not really needed
@@ -241,7 +241,7 @@ do
 			end
 		end
 		return self.actionType,texture
-	
+
 	end
 	function cc:Update ()
 		local frame=self.frame
@@ -277,7 +277,7 @@ do
 				buttonCooldown:Hide();
 			end
 		end
-		
+
 		-- We can set a colored border
 		--[[
 		local border = self.border
@@ -297,7 +297,7 @@ do
 			actionName:SetText("")
 		end
 		--]]
-		
+
 		-- Update icon and hotkey text
 		if ( type(texture)~="boolean" ) then
 			icon:SetTexture(texture);
@@ -321,13 +321,13 @@ do
 			end
 		end
 		--ActionButton_UpdateCount(frame);	-- not really needed
-		
+
 		-- Update tooltip
 		if ( GameTooltip:GetOwner() == frame ) then
 			self:SetTooltip(frame);
 		end
-		
-	end	
+
+	end
 
 	function cc:SetEmpty()
 		local frame=self.frame
@@ -335,31 +335,31 @@ do
 		status.type="empty"
 	end
 
-    function cc:ShowAtMouse()
-	    local frame=self.frame
-	    local scale=UIParent:GetScale()
-	    local x,y=GetCursorPosition()
-	    frame:SetPoint("CENTER",UIParent,"BOTTOMLEFT",x/scale + 10/scale,y/scale)
-	    self:Show()
-    end
-    function cc:ShowAtCenter(offset)
-    	offset=offset or 10
-	    local frame=self.frame
-	    frame:ClearAllPoints()
-	    frame:SetPoint("CENTER",UIParent,"CENTER",offset,0)
-	    self:Show()
-    end	
-    local function OnEvent(self,event,...)
-    	--debug(event,self.spell,':',...)
-    	if (event == "ACTIONBAR_UPDATE_USABLE") then
-    		self.obj:UpdateUsable(self)
-    	elseif (event == "ACTIONBAR_UPDATE_COOLDOWN") then
-    		self.obj:UpdateCooldown(self)
-    	end
-    end
+		function cc:ShowAtMouse()
+			local frame=self.frame
+			local scale=UIParent:GetScale()
+			local x,y=GetCursorPosition()
+			frame:SetPoint("CENTER",UIParent,"BOTTOMLEFT",x/scale + 10/scale,y/scale)
+			self:Show()
+		end
+		function cc:ShowAtCenter(offset)
+			offset=offset or 10
+			local frame=self.frame
+			frame:ClearAllPoints()
+			frame:SetPoint("CENTER",UIParent,"CENTER",offset,0)
+			self:Show()
+		end
+		local function OnEvent(self,event,...)
+			--debug(event,self.spell,':',...)
+			if (event == "ACTIONBAR_UPDATE_USABLE") then
+				self.obj:UpdateUsable(self)
+			elseif (event == "ACTIONBAR_UPDATE_COOLDOWN") then
+				self.obj:UpdateCooldown(self)
+			end
+		end
 
-	local Serial=0    
-	local function Constructor() 
+	local Serial=0
+	local function Constructor()
 		Serial=Serial+1
 		local self={}
 		self.type=Type
@@ -378,12 +378,12 @@ do
 		self.Border=_G[name..'Border']
 		self.frame.obj=self
 		local frame=self.frame
-        frame:SetAttribute("useparent-unit", true);		
+		frame:SetAttribute("useparent-unit", true);
 		frame:SetScript("PostClick",function(self,...) self:SetChecked(0) self.obj:Fire("OnClick",...) end)
 		frame:SetScript("OnUpdate",ActionButton_OnUpdate)
 		frame:SetScript("OnEvent",OnEvent)
-		return AceGUI:RegisterAsWidget(self)		  		
+		return AceGUI:RegisterAsWidget(self)
 	end
-	AWG.widgets[Type]=Version  
+	AWG.widgets[Type]=Version
 	AceGUI:RegisterWidgetType(Type,Constructor,Version)
-end	
+end
