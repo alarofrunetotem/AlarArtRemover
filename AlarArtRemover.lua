@@ -51,7 +51,7 @@ local function help(self)
 		self:HF_Paragraph("Description")
 		self:HF_Pre("Hides gryphons and artwork from blzzard main actionbar")
 		self:RelNotes(3,2,7,[[
-Feature: Bumped toc version
+Upgrade: Updated to 5.4.8
 ]])
 		self:RelNotes(3,2,6,[[
 Fixed: Error in localization
