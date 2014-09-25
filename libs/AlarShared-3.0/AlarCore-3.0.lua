@@ -1,6 +1,6 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
 local MAJOR_VERSION = ("AlarCore-3.0.lua"):gsub(".lua","")
-local MINOR_VERSION = 501 + tonumber(string.sub("$Revision$", 12, -3))
+local MINOR_VERSION = 502 + tonumber(string.sub("$Revision$", 12, -3))
 local pp=print
 local _,_,_,toc=GetBuildInfo()
 local me, ns = ...
@@ -487,7 +487,31 @@ local function LoadDefaults(self)
 				end
 		end
 end
-local LoadHelp
+local function LoadHelp(self)
+		local main=self.name
+--@debug@
+		for libname,k in LibStub:IterateLibraries() do
+				if (libname:match("Ace%w*-3%.0")) then
+						self:HF_Lib(libname,'yellow')
+				elseif (libname:match("Ace%w*-2%.0")) then
+						self:HF_Lib(libname,'yellow')
+				elseif (libname:match("Alar%w*-3%.0")) then
+						self:HF_Lib(libname,'green')
+				else
+						self:HF_Lib(libname,'gray')
+				end
+				if (libname:match("Alar%w*-3%.0")) then
+				end
+		end
+--@end-debug@
+		for _,section in ipairs(HELPSECTIONS) do
+				if (section == DESCRIPTION) then
+						self:HF_Load(section,main,' ' .. tostring(self.version) .. ' (r:' .. tostring(self.revision) ..')')
+				else
+						self:HF_Load(section,main .. section,'')
+				end
+		end
+end
 function mix:OnInitialize(...)
 	if (tonumber(self.revision)< 1) then
 		self.revision='Alpha'
@@ -502,7 +526,7 @@ function mix:OnInitialize(...)
 						end
 				}
 		)
-		self:OnInitialized(...)
+		local ignoreProfile=self:OnInitialized(...)
 		local main=self.name
 		local profile
 		if (AceDBOptions) then
@@ -515,40 +539,21 @@ function mix:OnInitialize(...)
 		AceConfig:RegisterOptionsTable(main .. CONFIGURATION,self.OptionsTable,{main,strlower(self.ID)})
 		self.CfgDlg=AceConfigDialog:AddToBlizOptions(main .. CONFIGURATION,CONFIGURATION,main)
 
-		if (profile) then
+		if (profile and not ignoreProfile) then
 				AceConfig:RegisterOptionsTable(profile,self.ProfileOpts)
 				AceConfigDialog:AddToBlizOptions(profile,L.Profile,main)
 		end
-		self.CfgRel=AceConfigDialog:AddToBlizOptions(main .. RELNOTES,RELNOTES,main)
-
-		AceConfigDialog:AddToBlizOptions(main .. TOGGLES,TOGGLES,main)
-
-		AceConfigDialog:AddToBlizOptions(main .. LIBRARIES,LIBRARIES,main)
-end
-
-function LoadHelp(self)
-		local main=self.name
-		for libname,k in LibStub:IterateLibraries() do
-				if (libname:match("Ace%w*-3%.0")) then
-						self:HF_Lib(libname,'yellow')
-				elseif (libname:match("Ace%w*-2%.0")) then
-						self:HF_Lib(libname,'yellow')
-				elseif (libname:match("Alar%w*-3%.0")) then
-						self:HF_Lib(libname,'green')
-				else
-						self:HF_Lib(libname,'gray')
-				end
-				if (libname:match("Alar%w*-3%.0")) then
-				end
+		if (self.help[RELNOTES]~='') then
+			self.CfgRel=AceConfigDialog:AddToBlizOptions(main .. RELNOTES,RELNOTES,main)
 		end
-		for _,section in ipairs(HELPSECTIONS) do
-				if (section == DESCRIPTION) then
-						self:HF_Load(section,main,' ' .. tostring(self.version) .. ' (r:' .. tostring(self.revision) ..')')
-				else
-						self:HF_Load(section,main .. section,'')
-				end
+		if (self.help[TOGGLES]~='') then
+			AceConfigDialog:AddToBlizOptions(main .. TOGGLES,TOGGLES,main)
+		end
+		if (self.help[LIBRARIES]~='') then
+			AceConfigDialog:AddToBlizOptions(main .. LIBRARIES,LIBRARIES,main)
 		end
 end
+
 function mix:GetAceOptionsTable(configtype)
 		configtype=configtype or 'dropdown'
 		if (AceRegistry) then
@@ -658,21 +663,24 @@ function hlp:HF_Load(section,optionname,versione)
 		if (section == LIBRARIES) then
 				getlibs(self)
 		end
-		local testo =self.help[section] or 'No text available'
+		local testo =self.help[section]
 		--debug(section)
 		--debug(optionname)
 		--debug(self.title)
-	AceConfig:RegisterOptionsTable(optionname, {
-		name = self.title .. (versione or ""),
-		type = "group",
-		args = {
-			help = {
-				type = "description",
-				name = testo,
-			},
-		},
-	})
-	AceConfigDialog:SetDefaultSize(optionname, 600, 400)
+		if (testo ~= '') then
+			AceConfig:RegisterOptionsTable(optionname, {
+				name = self.title .. (versione or ""),
+				type = "group",
+				args = {
+					help = {
+						type = "description",
+						name = testo,
+						fontSize='medium',
+					},
+				},
+			})
+			AceConfigDialog:SetDefaultSize(optionname, 600, 400)
+		end
 end
 
 function virt:Localize(...)
