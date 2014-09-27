@@ -26,8 +26,6 @@ local notify=_G.print
 local error=_G.error
 local function dump() end
 local function debugEnable() end
-local t=getfenv(1)
-t.prova="12"
 if (LibStub("AlarLoader-3.0",true)) then
 	local rc=LibStub("AlarLoader-3.0"):GetPrintFunctions(me)
 	print=rc.print

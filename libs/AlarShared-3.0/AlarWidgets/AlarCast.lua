@@ -122,7 +122,7 @@ do
 		local frame=self.frame
 		self:SetModifiedCast(frame,modifier,actionType,button,action)
 		local label=self.label
-		if (label_nonesiste) then
+		if (label) then
 			self:SetModifiedCast(label,modifier,actionType,button,action)
 		end
 	end
