@@ -16,10 +16,10 @@ License: LGPL v2.1
 --]]
 local me, ns = ...
 --@debug@
-print("Loading",__FILE__," inside ",me)
+LibStub("AlarLoader-3.0"):loadingList(__FILE__,me)
 --@end-debug@
 if (LibDebug) then LibDebug() end
-local function debug(...) 
+local function debug(...)
 --@debug@
 	print(...)
 --@end-debug@
@@ -52,10 +52,10 @@ local InjectStandardMethods=AWG.InjectStandardMethods
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 local methods={} --#methods
 function methods:SetStatusText(text)
-  self.statustext:SetText(text)
+	self.statustext:SetText(text)
 end
 function methods:SetStatusFormattedText(format,...)
-  self.statustext:SetFormattedText(format,...)
+	self.statustext:SetFormattedText(format,...)
 end
 --[[
 	Pannello di configurazione
@@ -76,16 +76,16 @@ do
 		edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
 		tile = true, tileSize = 16, edgeSize = 16,
 		insets = { left = 3, right = 3, top = 5, bottom = 3 }
-	}	
-		
+	}
+
 	local function Constructor()
 		local self=AceGUI:Create(ancestor)
 		self.type=Type
 		local frame=self.frame
 		self:SetCallback("OnClose",OnCancel)
-    InjectStandardMethods(self)
+		InjectStandardMethods(self)
 		self:Inject(methods,ancestor)
-		-- Save button 
+		-- Save button
 		local closebutton = CreateFrame("Button",nil,frame,"UIPanelButtonTemplate")
 		closebutton:SetScript("OnClick", OnSave)
 		closebutton:SetPoint("BOTTOMRIGHT",frame,"BOTTOMRIGHT",-27,17)
@@ -94,7 +94,7 @@ do
 		closebutton:SetText(L["Save"])
 		self.closebutton = closebutton
 		closebutton.obj = self
-		--Status 
+		--Status
 		local statusbg = CreateFrame("Frame",nil,frame)
 		statusbg:SetPoint("BOTTOMLEFT",frame,"BOTTOMLEFT",15,15)
 		statusbg:SetPoint("BOTTOMRIGHT",frame,"BOTTOMRIGHT",-132,15)
@@ -111,10 +111,10 @@ do
 		statustext:SetJustifyH("LEFT")
 		statustext:SetText("")
 		return self
-	
+
 	end
 	AceGUI:RegisterWidgetType(Type,Constructor,Version)
 	AWG.widgets[Type]=Version
 end
-		
+
 

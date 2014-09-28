@@ -1,8 +1,10 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
 local MAJOR_VERSION = ("AlarLabel.lua"):gsub(".lua","")
 local MINOR_VERSION = 500 + tonumber(string.sub("$Revision$", 12, -3))
+local me,ns=...
 local pp=print
 local Type, Version = "AlarLabel", 23
+LibStub("AlarLoader-3.0"):loadingList(__FILE__,me)
 
 --[[-----------------------------------------------------------------------------
 Label Widget
@@ -74,7 +76,7 @@ local function UpdateImageAnchor(self)
 		label:SetWidth(width)
 		height = label:GetHeight()
 	end
-	
+
 	self.resizing = true
 	frame:SetHeight(height)
 	frame.height = height
@@ -132,7 +134,7 @@ local methods = {
 	["SetImage"] = function(self, path, ...)
 		local image = self.image
 		image:SetTexture(path)
-		
+
 		if image:GetTexture() then
 			self.imageshown = true
 			local n = select("#", ...)

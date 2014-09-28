@@ -16,10 +16,12 @@ License: LGPL v2.1
 --]]
 local me, ns = ...
 --@debug@
-print("Loading",__FILE__," inside ",me)
+--print("Loading",__FILE__," inside ",me)
+LibStub("AlarLoader-3.0"):loadingList(__FILE__,me)
+
 --@end-debug@
 if (LibDebug) then LibDebug() end
-local function debug(...) 
+local function debug(...)
 --@debug@
 	print(...)
 --@end-debug@
@@ -73,11 +75,11 @@ function methods:SetTitleColor(...)
 	local text=self.text
 	self.text:SetVertexColor(...)
 end
-do	
+do
 	local Serial=0
 	local function Constructor()
 		local self=AceGUI:Create(Ancestor)
-		self:Inject(methods,Ancestor)		
+		self:Inject(methods,Ancestor)
 		self.active=true
 		self.type=Type
 		Serial=Serial+1
@@ -85,33 +87,33 @@ do
 		self:ApplyStatus()
 		local frame=self.frame
 		frame.obj=self
-    local title=CreateFrame("Button",nil,frame,"SecureActionButtonTemplate")
-    title.obj=self
-    title:EnableMouse(true)
-    title:RegisterForClicks("AnyDown")	    
-    title:SetHeight(16)
-    title:SetWidth(200)
-    title:SetPoint("TOPLEFT",frame,"TOPRIGHT",10,0)
-    title:SetPoint("BOTTOMLEFT",frame,"BOTTOMRIGHT",10,0)
-    title:SetAttribute("useparent-unit", true)
+		local title=CreateFrame("Button",nil,frame,"SecureActionButtonTemplate")
+		title.obj=self
+		title:EnableMouse(true)
+		title:RegisterForClicks("AnyDown")
+		title:SetHeight(16)
+		title:SetWidth(200)
+		title:SetPoint("TOPLEFT",frame,"TOPRIGHT",10,0)
+		title:SetPoint("BOTTOMLEFT",frame,"BOTTOMRIGHT",10,0)
+		title:SetAttribute("useparent-unit", true)
 		local highlight = title:CreateTexture(nil, "HIGHLIGHT")
 		highlight:SetTexture("Interface\\QuestFrame\\UI-QuestTitleHighlight")
 		highlight:SetBlendMode("ADD")
-		highlight:SetAllPoints(title)	    
-    local text = title:CreateFontString(nil,"OVERLAY","GameFontNormal")
-    text:SetAllPoints(title)
-    text:SetJustifyV("CENTER")
-    text:SetJustifyH("LEFT")
-    title.text=text
+		highlight:SetAllPoints(title)
+		local text = title:CreateFontString(nil,"OVERLAY","GameFontNormal")
+		text:SetAllPoints(title)
+		text:SetJustifyV("CENTER")
+		text:SetJustifyH("LEFT")
+		title.text=text
 		title:SetAttribute("type","click")
 		title:SetAttribute("clickbutton",self:GetButton())
 		title:SetScript("PostClick",function(this,...) this.obj:Fire("OnClick",...) end)
-    self.title=title
-    self.text=text
-    self.label=title
-    self:SetTitle('')
-		return AceGUI:RegisterAsWidget(self)	    
+		self.title=title
+		self.text=text
+		self.label=title
+		self:SetTitle('')
+		return AceGUI:RegisterAsWidget(self)
 	end
 	AceGUI:RegisterWidgetType(Type,Constructor,Version)
-	AWG.widgets[Type]=Version    
+	AWG.widgets[Type]=Version
 end

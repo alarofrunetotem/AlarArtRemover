@@ -16,10 +16,11 @@ License: LGPL v2.1
 --]]
 local me, ns = ...
 --@debug@
-print("Loading",__FILE__," inside ",me)
+LibStub("AlarLoader-3.0"):loadingList(__FILE__,me)
+
 --@end-debug@
 if (LibDebug) then LibDebug() end
-local function debug(...) 
+local function debug(...)
 --@debug@
 	print(...)
 --@end-debug@
@@ -50,7 +51,7 @@ local AWG=LibStub("AlarWidgets-3.0")
 local AceGUI=LibStub("AceGUI-3.0")
 local InjectStandardMethods=AWG.InjectStandardMethods
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
-local C=LibStub("AlarCrayon-3.0"):GetColorTable() 
+local C=LibStub("AlarCrayon-3.0"):GetColorTable()
 local Backdrops={
 	FrameBackdrop = {
 		bgFile = "Interface\\Tooltips\\ChatBubble-Background",
@@ -80,13 +81,13 @@ local function OnClose(this)
 end
 local function OnEnter(this)
 	if (this.tooltipText) then
-		GameTooltip_AddNewbieTip(this, this.tooltipText, 1.0, 1.0, 1.0);	
+		GameTooltip_AddNewbieTip(this, this.tooltipText, 1.0, 1.0, 1.0);
 	end
 	this.obj:Fire("OnEnter")
 end
 local function OnLeave(this)
 	if (this.tooltipText) then
-		GameTooltip:Hide()	
+		GameTooltip:Hide()
 	end
 	this.obj:Fire("OnLeave")
 end
@@ -103,11 +104,11 @@ function methods:LayoutFinished(w,h)
 	self:Fire("OnResize")
 end
 function methods:SetBackdrop(backdrop)
-    if (type("backdrop" == "string")) then
-       self.frame:SetBackdrop(Backdrops[backdrop])
-    else
-       self.frame:SetBackdrop(backdrop)
-    end
+		if (type("backdrop" == "string")) then
+			 self.frame:SetBackdrop(Backdrops[backdrop])
+		else
+			 self.frame:SetBackdrop(backdrop)
+		end
 end
 
 function methods:SetStatusText(text)
@@ -160,7 +161,7 @@ function methods:SetMinResize(w,h)
 end
 function methods:OnAcquire()
 	self:Parent(Ancestor,'OnAcquire')
-	self.frame:SetFrameStrata("HIGH")	
+	self.frame:SetFrameStrata("HIGH")
 	self.frame:SetClampedToScreen(true)
 	self.title.tooltipText=C(L["Drag to move"],"yellow") .. "\n" .. C(L["RightClick to rescale"],"green")
 end
@@ -226,7 +227,7 @@ local function mktitle(title,frame)
 	htexture:SetBlendMode("ADD")
 	htexture:SetAllPoints(title)
 end
-do	
+do
 -- Scripts
 	local function Constructor()
 		local self=AceGUI:Create(Ancestor)
@@ -234,9 +235,9 @@ do
 		self.type = Type
 		InjectStandardMethods(self)
 		self:Inject(methods,Ancestor)
-		
+
 		self.localstatus = {}
-		
+
 		frame.obj = self
 		frame:SetMinResize(100,100)
 		frame:SetToplevel(true)
@@ -253,7 +254,7 @@ do
 		self.frame:SetScript("OnHide",OnClose)
 		self.title:SetScript("OnEnter",OnEnter)
 		self.title:SetScript("OnLeave",OnLeave)
-		return self	
+		return self
 	end
 	AceGUI:RegisterWidgetType(Type,Constructor,Version)
 	AWG.widgets.AlarPanel=Version

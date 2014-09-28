@@ -5,7 +5,7 @@ local lib,old=LibStub:NewLibrary(MAJOR_VERSION,MINOR_VERSION)
 if not lib then return end
 local me, ns = ...
 --@debug@
-print("Loading",__FILE__," inside ",me)
+LibStub("AlarLoader-3.0"):loadingList(__FILE__,me)
 --@end-debug@
 local l=LibStub("AceLocale-3.0")
 local function getLocale(lang,default)

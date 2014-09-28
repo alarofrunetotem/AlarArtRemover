@@ -15,7 +15,7 @@ License: LGPL v2.1
 --]]
 local me, ns = ...
 --@debug@
-print("Loading",__FILE__," inside ",me)
+LibStub("AlarLoader-3.0"):loadingList(__FILE__,me)
 --@end-debug@
 if (LibDebug) then LibDebug() end
 local function debug(...)

@@ -16,10 +16,10 @@ License: LGPL v2.1
 --]]
 local me, ns = ...
 --@debug@
-print("Loading",__FILE__," inside ",me)
+LibStub("AlarLoader-3.0"):loadingList(__FILE__,me)
 --@end-debug@
 if (LibDebug) then LibDebug() end
-local function debug(...) 
+local function debug(...)
 --@debug@
 	print(...)
 --@end-debug@
@@ -61,55 +61,55 @@ function methods:HideOnClick()
 	debug("HideOnCLick to be implemented")
 end
 function methods:Pop(duration,speed)
-    local status = self.status or self.localstatus
-    local frame = self.frame
-    local offset=AWG:Pop(self,status.size or 32)
-    frame:ClearAllPoints()
-    frame:SetPoint("CENTER",UIParent,"CENTER",offset,0)
-    self:Show()
-    debug ("Popping",self.spell,duration,speed)
-    if (type(duration) == 'number') then
-	    speed=5
-	    self:FadeOut()
-    end	
+		local status = self.status or self.localstatus
+		local frame = self.frame
+		local offset=AWG:Pop(self,status.size or 32)
+		frame:ClearAllPoints()
+		frame:SetPoint("CENTER",UIParent,"CENTER",offset,0)
+		self:Show()
+		debug ("Popping",self.spell,duration,speed)
+		if (type(duration) == 'number') then
+			speed=5
+			self:FadeOut()
+		end
 end
 function methods:FadeOut(speed,delay)
 	debug("FadeOut invoked")
-    local fade=self.fade
-    local animation=self.animation
-    local frame=self.frame
-    self.faded=true
-    if (not frame:IsShown() or frame:GetAlpha()==0) then return end
-    delay=delay or 5
-    speed=speed or 25
-    fade:SetChange(-1)
-    fade:SetStartDelay(delay)
-    fade:SetDuration(speed)
+		local fade=self.fade
+		local animation=self.animation
+		local frame=self.frame
+		self.faded=true
+		if (not frame:IsShown() or frame:GetAlpha()==0) then return end
+		delay=delay or 5
+		speed=speed or 25
+		fade:SetChange(-1)
+		fade:SetStartDelay(delay)
+		fade:SetDuration(speed)
 	debug("Fade started",delay,speed)
-    animation:Play()
+		animation:Play()
 end
 function methods:FadeStop()
-    local animation=self.animation
-    animation:Stop()
+		local animation=self.animation
+		animation:Stop()
 end
 function methods:FadeIn(speed,delay)
-    local fade=self.fade
-    local frame=self.frame
-    local animation=self.animation
-    self.faded=false
-    if (frame:IsShown() and frame:GetAlpha()==1) then return end
-    if (not frame:IsShown()) then
-	    frame:SetAlpha(0)
-	    if (not InCombatLockdown()) then
-	    	frame:Show()
-	    end
-    end
-    delay=delay or 5
-    speed=speed or 25
-    fade:SetChange(1)
-    fade:SetStartDelay(delay)
-    fade:SetDuration(speed)
-    animation:Play()
+		local fade=self.fade
+		local frame=self.frame
+		local animation=self.animation
+		self.faded=false
+		if (frame:IsShown() and frame:GetAlpha()==1) then return end
+		if (not frame:IsShown()) then
+			frame:SetAlpha(0)
+			if (not InCombatLockdown()) then
+				frame:Show()
+			end
+		end
+		delay=delay or 5
+		speed=speed or 25
+		fade:SetChange(1)
+		fade:SetStartDelay(delay)
+		fade:SetDuration(speed)
+		animation:Play()
 end
 
 do
@@ -129,19 +129,19 @@ do
 	end
 	local Serial=0
 	local function Constructor()
- 		local self=AceGUI:Create(ancestor)
+		local self=AceGUI:Create(ancestor)
 		self.standalone=true
 		self.active=true
 		self:Inject(methods,ancestor)
 		local frame=self.frame
-	    local fname=frame:GetName() .. "XButton"
-	    local b=CreateFrame("Button",fname,frame,"UIPanelCloseButton")
-	    b:SetHeight(16)
-	    b:SetWidth(16)
-	    b:SetPoint("TOPRIGHT",frame,"TOPRIGHT",0,0)
-	    b:SetFrameLevel(10)
-	    b.obj=self
-	    b:SetScript("PostClick",function(this)  this.obj:Fire("OnClose") end )
+			local fname=frame:GetName() .. "XButton"
+			local b=CreateFrame("Button",fname,frame,"UIPanelCloseButton")
+			b:SetHeight(16)
+			b:SetWidth(16)
+			b:SetPoint("TOPRIGHT",frame,"TOPRIGHT",0,0)
+			b:SetFrameLevel(10)
+			b.obj=self
+			b:SetScript("PostClick",function(this)  this.obj:Fire("OnClose") end )
 		local ag=frame:CreateAnimationGroup(frame:GetName()..'fade')
 		local fade=ag:CreateAnimation('Alpha')
 		fade:SetChange(-1)
@@ -152,10 +152,10 @@ do
 		fade.obj=self
 		self.fade=fade
 		self.animation=ag
-	    self.xbutton=b
+			self.xbutton=b
 		return self
-		
+
 	end
 	AceGUI:RegisterWidgetType(Type,Constructor,Version)
-	AWG.widgets[Type]=Version    
+	AWG.widgets[Type]=Version
 end

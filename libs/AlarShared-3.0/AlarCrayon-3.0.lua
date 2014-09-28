@@ -1,6 +1,6 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
-local MAJOR_VERSION = ("AlarCrayon-3.0.lua"):gsub(".lua","")
-local MINOR_VERSION = 500 + tonumber(string.sub("$Revision$", 12, -3))
+local MAJOR_VERSION = "AlarCrayon-3.0"
+local MINOR_VERSION = 1000
 local _,_,_,toc=GetBuildInfo()
 local pp=print
 --[[
@@ -16,10 +16,12 @@ License: LGPL v2.1
 --]]
 local me, ns = ...
 --@debug@
-print("Loading",__FILE__," inside ",me)
+--print("Loading",__FILE__," inside ",me)
+LibStub("AlarLoader-3.0"):loadingList(__FILE__,me)
+
 --@end-debug@
 if (LibDebug) then LibDebug() end
-local function debug(...) 
+local function debug(...)
 --@debug@
 	print(...)
 --@end-debug@
@@ -117,16 +119,16 @@ if (_G.RAID_CLASS_COLORS) then
 		lib.colors[strlower(class)]=color
 	end
 end
-	
+
 local ChatTypeInfo=ChatTypeInfo or {}
 local format=format
 setmetatable(lib.colors,
-    {__index=
-        function(table,key)
-	        local color
-	        local okey=key
-	        if (key=='horde' or key== "chat_msg_bg_system_horde") then
-	        	color = ChatTypeInfo["BG_SYSTEM_HORDE"]
+		{__index=
+				function(table,key)
+					local color
+					local okey=key
+					if (key=='horde' or key== "chat_msg_bg_system_horde") then
+						color = ChatTypeInfo["BG_SYSTEM_HORDE"]
 				if type(color) == "table" and color.r and color.g and color.b then
 					local r, g, b = color.r, color.g, color.b
 					color=format("%02X%02X%02X", 255*r, 255*g, 255*b)
@@ -134,73 +136,73 @@ setmetatable(lib.colors,
 					key='azure'
 				end
 			end
-	        if (key=='alliance' or key=='ally' or key== "chat_msg_bg_system_alliance") then
-	        	color = ChatTypeInfo["BG_SYSTEM_ALLIANCE"]
-	        	if type(color) == "table" and color.r and color.g and color.b then
-	        		local r, g, b = color.r, color.g, color.b
-	        		color=format("%02X%02X%02X", 255*r, 255*g, 255*b)
-	        	else
-	    			key='red'
-	    		end
-	    	end
-	        if (key=='neutral' or key== "chat_msg_bg_system_neutral") then
-		        color = ChatTypeInfo["BG_SYSTEM_NEUTRAL"]
-		        if type(color) == "table" and color.r and color.g and color.b then
-			        local r, g, b = color.r, color.g, color.b
-			        color=format("%02X%02X%02X", 255*r, 255*g, 255*b)
-		        else
-		        	key='yellow'
-		        end
-	        end
-	    	if (not color) then color=rawget(table,key) or table.default end
-	    	rawset(table,okey,color)
-	        return color
-    	end 
-    }
+					if (key=='alliance' or key=='ally' or key== "chat_msg_bg_system_alliance") then
+						color = ChatTypeInfo["BG_SYSTEM_ALLIANCE"]
+						if type(color) == "table" and color.r and color.g and color.b then
+							local r, g, b = color.r, color.g, color.b
+							color=format("%02X%02X%02X", 255*r, 255*g, 255*b)
+						else
+						key='red'
+					end
+				end
+					if (key=='neutral' or key== "chat_msg_bg_system_neutral") then
+						color = ChatTypeInfo["BG_SYSTEM_NEUTRAL"]
+						if type(color) == "table" and color.r and color.g and color.b then
+							local r, g, b = color.r, color.g, color.b
+							color=format("%02X%02X%02X", 255*r, 255*g, 255*b)
+						else
+							key='yellow'
+						end
+					end
+				if (not color) then color=rawget(table,key) or table.default end
+				rawset(table,okey,color)
+					return color
+			end
+		}
 )
 
 do
-    local function colorize(stringa,colore,dummy)
-        -- Crayon compatibility
-        if (type(stringa)=="table") then
-            stringa=dummy
-        end
-        if (colore:match("^%x+$")) then
-            return "|cff" .. colore .. tostring(stringa) .. "|r"
-        else
-            return "|cff" .. C[colore] .. tostring(stringa) .. "|r"
-        end 
-    end    
-    local colors=lib.colors
-    local map={r=1,g=2,b=3,c=4}
-    local mt={
-        __index=function(table,key)
-            return rawget(table,map[key])
-        end,
-        __tostring=function(table)
-            return rawget(table,4)
-        end,
-        __concat=function(t1,t2)
-            return tostring(t1) .. tostring(t2)
-        end,
-        __call=function(table,...)
-            return unpack(table)
-        end
-        
-    }
-    C=setmetatable({},{
-            __index=function(table,key)
-            	key=strlower(tostring(key))
-                local c=colors[key]
-                local r,g,b=tonumber(c:sub(1,2),16)/255,tonumber(c:sub(3,4),16)/255,tonumber(c:sub(5,6),16)/255
-                rawset(table,key,setmetatable({r,g,b,c},mt))
-                return  rawget(table,key)
-            end,
-            __call = function(table,...)
-                    return colorize(...)
-            end
-        }
-    )
+		local function colorize(stringa,colore,dummy)
+				-- Crayon compatibility
+				if (type(stringa)=="table") then
+						stringa=dummy
+				end
+				if (colore:match("^%x+$")) then
+						return "|cff" .. colore .. tostring(stringa) .. "|r"
+				else
+						return "|cff" .. C[colore] .. tostring(stringa) .. "|r"
+				end
+		end
+		local colors=lib.colors
+		local map={r=1,g=2,b=3,c=4}
+		local mt={
+				__index=function(table,key)
+						return rawget(table,map[key])
+				end,
+				__tostring=function(table)
+						return rawget(table,4)
+				end,
+				__concat=function(t1,t2)
+						return tostring(t1) .. tostring(t2)
+				end,
+				__call=function(table,...)
+						return unpack(table)
+				end
+
+		}
+		C=setmetatable({},{
+						__index=function(table,key)
+							key=strlower(tostring(key))
+								local c=colors[key]
+								local r,g,b=tonumber(c:sub(1,2),16)/255,tonumber(c:sub(3,4),16)/255,tonumber(c:sub(5,6),16)/255
+								rawset(table,key,setmetatable({r,g,b,c},mt))
+								return  rawget(table,key)
+						end,
+						__call = function(table,...)
+										return colorize(...)
+						end
+				}
+		)
 end
 function lib:GetColorTable()
 	return C

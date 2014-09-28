@@ -16,10 +16,10 @@ License: LGPL v2.1
 --]]
 local me, ns = ...
 --@debug@
-print("Loading",__FILE__," inside ",me)
+LibStub("AlarLoader-3.0"):loadingList(__FILE__,me)
 --@end-debug@
 if (LibDebug) then LibDebug() end
-local function debug(...) 
+local function debug(...)
 --@debug@
 	print(...)
 --@end-debug@
@@ -110,7 +110,7 @@ do
 		local self = this.obj
 		self:SaveStatus()
 	end
-	local function tooltipshow(this,r,g,b) 
+	local function tooltipshow(this,r,g,b)
 		if(this.tooltipText ~= nil) then
 			GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
 			GameTooltip:SetText(this.tooltipText, r or 1, g or 0.82, b or 0);
@@ -121,7 +121,7 @@ do
 		end
 	end
 	local function tooltiphide(this)
-			if(this.tooltipText ~= nil) then 
+			if(this.tooltipText ~= nil) then
 			GameTooltip:Hide();
 			end
 	end
@@ -129,7 +129,7 @@ do
 		local frame=CreateFrame("Button",Type..serial,UIParent,"UIPanelButtonTemplate")
 		serial =serial +1
 		local widget={frame=frame}
-		frame.obj=widget		
+		frame.obj=widget
 		frame:SetClampedToScreen(true)
 		frame:SetScript("OnMouseDown",frameOnMouseDown)
 		frame:SetScript("OnMouseUp", frameOnMouseUp)
@@ -142,7 +142,7 @@ do
 		content.obj = widget
 		content:SetPoint("TOPLEFT",frame,"TOPLEFT",12,-20)
 		content:SetPoint("BOTTOMRIGHT",frame,"BOTTOMRIGHT",-12,13)
-		
+
 		widget.type = Type
 		InjectStandardMethods(widget)
 		widget:Inject(methods,Ancestor)
@@ -151,7 +151,7 @@ do
 		frame:SetHeight(20)
 		frame:SetMovable(true)
 		widget:Show()
-		return AceGUI:RegisterAsContainer(widget)		
+		return AceGUI:RegisterAsContainer(widget)
 	end
 	AceGUI:RegisterWidgetType(Type,Constructor,Version)
 	AWG.widgets[Type]=Version

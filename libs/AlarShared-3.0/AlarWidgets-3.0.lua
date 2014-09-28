@@ -1,6 +1,6 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
-local MAJOR_VERSION = ("AlarWidgets-3.0.lua"):gsub(".lua","")
-local MINOR_VERSION = 500 + tonumber(string.sub("$Revision$", 12, -3))
+local MAJOR_VERSION = "AlarWidgets-3.0"
+local MINOR_VERSION = 1000
 local pp=print
 --[[
 Name: AlarWidgets-3.0.lua
@@ -15,10 +15,11 @@ License: LGPL v2.1
 --]]
 local me, ns = ...
 --@debug@
-print("Loading",__FILE__," inside ",me)
+--print("Loading",__FILE__," inside ",me)
+LibStub("AlarLoader-3.0"):loadingList(__FILE__,me)
 --@end-debug@
 if (LibDebug) then LibDebug() end
-local function debug(...) 
+local function debug(...)
 --@debug@
 	print(...)
 --@end-debug@
@@ -43,15 +44,15 @@ else
 end
 local _,_,_,toc=GetBuildInfo()
 if (not LibStub) then
-    error("Couldn't find LibStub. Please reinstall " .. MAJOR_VERSION )
+		error("Couldn't find LibStub. Please reinstall " .. MAJOR_VERSION )
 end
 local lib,old=LibStub:NewLibrary(MAJOR_VERSION,MINOR_VERSION) --#AWG
 if (not lib) then
-    debug("Already loaded a newer or equal version of " .. MAJOR_VERSION)
-    return -- Already loaded
+		debug("Already loaded a newer or equal version of " .. MAJOR_VERSION)
+		return -- Already loaded
 end
 if (old) then
-    debug(format("Upgrading %s from %s to %s",MAJOR_VERSION,old,MINOR_VERSION))
+		debug(format("Upgrading %s from %s to %s",MAJOR_VERSION,old,MINOR_VERSION))
 end
 debugEnable(false)
 local L=LibStub("AceLocale-3.0"):GetLocale('AlarShared',true)
@@ -73,23 +74,23 @@ do
 			print("Funzione",...)
 		end
 	}
-		   
+
 local meta=
 {
 __index=function(table,key)
-		return function() end 
+		return function() end
 	end
 }
 	function proto:OnAcquire()
 		self:ApplyStatus()
-	end	
+	end
 
 	function proto:OnRelease()
 		self.status = nil
 		for k in pairs(self.localstatus) do
 			self.localstatus[k] = nil
 		end
-	end	
+	end
 	function proto:ApplyStatus(this)
 		return
 	end
@@ -107,7 +108,7 @@ __index=function(table,key)
 		local frame=self.frame
 		if (frame:IsProtected() and InCombatLockdown()) then return end
 		if (frame.fade) then frame.fade.Stop() end
-		frame:SetAlpha(1.0) 
+		frame:SetAlpha(1.0)
 		frame:Show()
 	end
 	function proto:Hide()
@@ -117,9 +118,9 @@ __index=function(table,key)
 		if (not InCombatLockdown()) then
 			frame:Hide()
 		end
-		frame:SetAlpha(1.0) 
+		frame:SetAlpha(1.0)
 	end
-	
+
 	function proto:SetLocked(lock)
 		local status = self:Status()
 		local old=status.locked
@@ -140,9 +141,9 @@ __index=function(table,key)
 		local frame=self.frame
 		if (frame:IsShown()) then
 			frame:SetAlpha(to)
-		else 
-        	UIFrameFadeIn(frame,delay,from,to)
-        end
+		else
+					UIFrameFadeIn(frame,delay,from,to)
+				end
 	end
 	function proto:FadeOut(delay,from,to)
 		local frame=self.frame
@@ -153,7 +154,7 @@ __index=function(table,key)
 		local frame=self.frame
 			if (not frame:IsShown()) then
 			frame:SetAlpha(to)
-		else 
+		else
 			UIFrameFadeOut(frame,delay,from,to)
 		end
 	end
@@ -207,25 +208,25 @@ __index=function(table,key)
 		assert(type(status) == "table")
 		self.status = status
 		self:ApplyStatus()
-	end	
+	end
 	function proto:SaveStatus()
 		local status = self:Status()
 		local this=self.frame
 		status.width = this:GetWidth()
 		status.height = this:GetHeight()
 		status.top = this:GetTop()
-		status.left = this:GetLeft()	
+		status.left = this:GetLeft()
 	end
 	function proto:Super()
 		return proto
 	end
 	function lib.InjectStandardMethods(target)
-	    for k,v in pairs(proto) do
+			for k,v in pairs(proto) do
 			target[k]=target[k] or v
-	    end
-	    if (not target.localstatus) then
-	    	target.localstatus={}
-	    end
+			end
+			if (not target.localstatus) then
+				target.localstatus={}
+			end
 	end
 	function lib:RescaleXY(x,y,from,to)
 		local sfrom=from:GetEffectiveScale()
@@ -233,8 +234,8 @@ __index=function(table,key)
 		return x*sfrom/sto,y*sfrom/sto
 	end
 	function proto:Parent(ancestor,method,...)
-	   	local f=self.parents[ancestor]
-	   	if (type(f)=="table" and method) then 
+			local f=self.parents[ancestor]
+			if (type(f)=="table" and method) then
 			if type(f[method])=="function" then
 				return f[method](self,...)
 			end
@@ -251,21 +252,21 @@ __index=function(table,key)
 	end
 end
 function lib:CreatePanel()
-    AceGUI:Create('AlarPanel')
+		AceGUI:Create('AlarPanel')
 end
 function lib:CreateConfig()
-    AceGUI:Create('AlarConfig')
+		AceGUI:Create('AlarConfig')
 end
 function lib:CreateMiniMap()
-    AceGUI:Create('AlarMinimapButton')
+		AceGUI:Create('AlarMinimapButton')
 end
 function lib:CreateCastButton()
-    AceGUI:Create('AlarCastButton')
+		AceGUI:Create('AlarCastButton')
 end
 lib.panels=lib.panels or {}
-do 
+do
 	local panels=lib.panels
-	
+
 function lib:Pop(widget,offset)
 	debug('Popping',widget.frame:GetName())
 	offset=offset or 48

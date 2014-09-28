@@ -1,6 +1,6 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
-local MAJOR_VERSION = ("AlarFrames-3.0.lua"):gsub(".lua","")
-local MINOR_VERSION = 501 + tonumber(string.sub("$Revision$", 12, -3))
+local MAJOR_VERSION = "AlarFrames-3.0"
+local MINOR_VERSION = 1000
 local me, ns = ...
 local toc=select(4,GetBuildInfo())
 local pp=print
@@ -17,7 +17,8 @@ License: LGPL v2.1
 --]]
 local me, ns = ...
 --@debug@
-print("Loading",__FILE__," inside ",me)
+--print("Loading",__FILE__," inside ",me)
+LibStub("AlarLoader-3.0"):loadingList(__FILE__,me)
 --@end-debug@
 if (LibDebug) then LibDebug() end
 local function debug(...)

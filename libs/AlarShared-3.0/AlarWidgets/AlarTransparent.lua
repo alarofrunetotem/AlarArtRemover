@@ -16,10 +16,11 @@ License: LGPL v2.1
 --]]
 local me, ns = ...
 --@debug@
-print("Loading",__FILE__," inside ",me)
+--print("Loading",__FILE__," inside ",me)
+LibStub("AlarLoader-3.0"):loadingList(__FILE__,me)
 --@end-debug@
 if (LibDebug) then LibDebug() end
-local function debug(...) 
+local function debug(...)
 --@debug@
 	print(...)
 --@end-debug@
@@ -53,8 +54,8 @@ if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 local methods={}
 	function methods:OnAcquire()
 		self:Parent(ancestor,'OnAcquire')
-		self.frame:SetFrameStrata("HIGH")	
-		self.frame:SetClampedToScreen(true)	
+		self.frame:SetFrameStrata("HIGH")
+		self.frame:SetClampedToScreen(true)
 		self:ApplyStatus()
 		self:EnableResize(false)
 		self:SetHeight(20)
@@ -82,14 +83,14 @@ do
 		frame.obj = self
 		for _,f in pairs({frame:GetRegions()}) do
 			if (f:GetObjectType()=="Texture") then f:Hide() end
-		end		
+		end
 		frame:SetBackdrop(backdrop)
 		--self.closebutton:Hide()
 		frame:SetWidth(100)
 		frame:SetHeight(30)
 		frame:EnableMouse(true)
 		frame:SetMovable(true)
-		return self	
+		return self
 	end
 	AceGUI:RegisterWidgetType(Type,Constructor,Version)
 	AWG.widgets[Type]=Version

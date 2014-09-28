@@ -1,6 +1,6 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
-local MAJOR_VERSION = ("AlarCore-3.0.lua"):gsub(".lua","")
-local MINOR_VERSION = 502 + tonumber(string.sub("$Revision$", 12, -3))
+local MAJOR_VERSION = "AlarCore-3.0"
+local MINOR_VERSION = 1000
 local pp=print
 local _,_,_,toc=GetBuildInfo()
 local me, ns = ...
@@ -16,7 +16,8 @@ Dependencies: Ace3
 License: LGPL v2.1
 --]]
 --@debug@
-print("Loading",__FILE__," inside ",me)
+--print("Loading",__FILE__," inside ",me)
+LibStub("AlarLoader-3.0"):loadingList(__FILE__,me)
 --@end-debug@
 if (LibDebug) then LibDebug() end
 local function debug(...)
@@ -1583,7 +1584,7 @@ function mix:ScheduleLeaveCombatAction(method, ...)
 		else
 			success, err = pcall(self[method], self, ...)
 		end
-		if not success then geterrorhandler()(err:find("%.lua:%d+:") and err or (debugstack():match("(.-: )in.-\n") or "") .. err) end
+		if not success then print(method,err) end
 		return
 	end
 	local t

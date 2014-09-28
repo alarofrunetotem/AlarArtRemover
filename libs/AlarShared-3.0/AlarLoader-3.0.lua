@@ -1,44 +1,32 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
-local MAJOR_VERSION = ("AlarLoader-3.0.lua"):gsub(".lua","")
-local MINOR_VERSION = 500 + tonumber(string.sub("$Revision$", 12, -3))
-local me, ns = ...
+local MAJOR_VERSION = "AlarLoader-3.0"
+local MINOR_VERSION = 1000
 local pp=print
---[[
-Name: AlarLoader-3.0.lua
-Revision: $Rev$
-Author: Alar of Daggerspine
-Email: alar@aspide.it
-Website: http://www.curse.com
-SVN: $HeadUrl:$
-Description: Generic library
-Dependencies: Ace3
-License: LGPL v2.1
---]]
---@debug@
-print("Loading",__FILE__,"inside", me)
---@end-debug@
-if (LibDebug) then LibDebug() end
-LoadAddOn("Blizzard_DebugTools")
-local function debug (...)
-	--@debug@
-	print(...)
-	--@end-debug@
-end
-local print=_G.print
-local notify=_G.print
-local error=_G.error
-local function dump() end
-local toc=select(4,GetBuildInfo())
--- End prologue ---------------------------------------------
---@debug@
-local oprint=print
-if (LibDebug) then LibDebug() end
-local dump=print
+local me, ns = ...
+local module,old=LibStub:NewLibrary(MAJOR_VERSION,MINOR_VERSION) --#AlarLoader
+if (not module) then return end
+local lib=module --#AlarLoader
+---@module AlarLoader
+--Inizializza l'ambiente standard di un addon
+--
 
-if (_G.AlarDebug) then  AlarDebug() end
---@end-debug@
-local lib,old=LibStub:NewLibrary(MAJOR_VERSION,MINOR_VERSION)
-if (not lib) then return end
+lib.loadingTable=lib.loadingTable or {}
+lib.progressive=tonumber(lib.progressive) or 1
+---@param #string file filename
+---@param #string name addon name
+function lib:loadingList(file,name)
+	self.loadingTable[self.progressive]=format('%s in %s',file,name)
+	self.progressive=self.progressive+1
+end
+lib:loadingList(__FILE__,me)
+local function dumpdata() end
+if (LibDebug) then
+	LibDebug() -- changes environment in order to hijack print, but I want also my old one
+	dumpdata=print
+else
+	LoadAddOn("Blizzard_DebugTools")
+	dumpdata=DevTools_Dump
+end
 local function xformat(fmt,...)
 		if tostring(fmt):find("%%") and select('#', ...) >= 1 then
 		-- Format string
@@ -67,28 +55,20 @@ function lib:GetPrintFunctions(caller,skip)
 		local caller=tostring(caller) or ''
 		local skip=tonumber(skip) or 1
 		local prefixp=caller .. ':|r|cff20ff20'
-		local prefixp=caller .. ':|r|cff20ff20'
 		local prefixd='|cffff1010DBG:' .. caller .. ':|r|cff00ff00'
 		local prefixn=caller .. ':|r|cffff9900'
 		local prefixe=caller .. '-Error:|r|cffff0000'
 		local xformat=xformat
 		local debugs=self.debugs
-		local oprint = pp
 		debugs[caller]=true
-		function result.print(...) oprint(prefixp,xformat(select(skip,...))) end
-		function result.dump(...)
-			local desc,value=select(skip,...)
-			if (type(value)=="nil")  then
-				value=desc
-				desc="Data dump"
-			end
-			if (debugs[caller]) then
-				oprint(prefixp ,desc)
-				DevTools_Dump(value)
+		function result.print(...) pp(prefixp,xformat(select(skip,...))) end
+		function result.dump(value,desc)
+				desc=desc or "Debug dump"
+				pp(prefixp ,desc)
+				dumpdata(value)
 				if (_G.DOVEDIAVOLOSTA) then
-					oprint(tostring(debugstack(2,1,0)))
+					pp(tostring(debugstack(2,1,0)))
 				end
-			end
 		end
 		function result.debug(...)
 			if (debugs[caller]) then
@@ -98,44 +78,58 @@ function lib:GetPrintFunctions(caller,skip)
 				end
 			end
 		end
-		function result.notify(...) oprint(prefixn,xformat(select(skip,...))) end
-		function result.error(...) oprint(prefixe,xformat(select(skip,...))) end
+		function result.sdebug(...)
+				c("ADebug"):AddMessage(strjoin(' ',date("%X"),prefixd,xformat(select(skip,...))))
+				if (_G.DOVEDIAVOLOSTA) then
+					c("ADebug"):AddMessage(tostring(debugstack(2,1,0)))
+				end
+		end
+		function result.notify(...) pp(prefixn,xformat(select(skip,...))) end
+		function result.error(...) pp(prefixe,xformat(select(skip,...))) end
 		function result.debugEnable(...) if (select(skip,...)) then debugs[caller] = true else debugs[caller] =false end end
 	end
+	if (type(skip)=='table') then
+	pp("Inietto le funzioni")
+		for k,v in pairs(result) do
+			skip[k]=v
+		end
+		result.dump(result)
+	else
 	return result
+	end
 end
 function lib:CreateAddon(name,force,...)
-    local stub
-    if type(force)~="boolean" then force = true end
-    if (force) then
-      local mixins={}
-      for i,k in  LibStub:IterateLibraries() do
-          if (i:match("Ace%w*-3%.0") and k.Embed) then
-              table.insert(mixins,i)
-          end
-      end
-      table.insert(mixins,"AlarCore-3.0")
-      for i=1,select('#',...) do
-          table.insert(mixins,(select(i,...)))
-      end
-      stub=LibStub("AceAddon-3.0"):NewAddon(name,unpack(mixins))
-    else
-    	stub=LibStub("AceAddon-3.0"):NewAddon(name,...)
-    end
-    if (stub) then
-    	self.debugs[name]=false
-    	do
-    		local debugs=self.debugs
-    		local addon=name
-    		function stub:EnableDebug(status)
-    			debugs[addon]=status
-    		end
+		local stub
+		if type(force)~="boolean" then force = true end
+		if (force) then
+			local mixins={}
+			for i,k in  LibStub:IterateLibraries() do
+					if (i:match("Ace%w*-3%.0") and k.Embed) then
+							table.insert(mixins,i)
+					end
+			end
+			table.insert(mixins,"AlarCore-3.0")
+			for i=1,select('#',...) do
+					table.insert(mixins,(select(i,...)))
+			end
+			stub=LibStub("AceAddon-3.0"):NewAddon(name,unpack(mixins))
+		else
+			stub=LibStub("AceAddon-3.0"):NewAddon(name,...)
+		end
+		if (stub) then
+			self.debugs[name]=false
+			do
+				local debugs=self.debugs
+				local addon=name
+				function stub:EnableDebug(status)
+					debugs[addon]=status
+				end
 
-    	end
-        return stub
-    else
-    	error("Unable to create stub")
-    end
+			end
+				return stub
+		else
+			error("Unable to create stub")
+		end
 end
 function lib:SetDebug(addon,status)
 	if (addon=='*') then

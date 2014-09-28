@@ -17,10 +17,10 @@ License: LGPL v2.1
 local me, ns = ...
 --@debug@
 pp=print
-print("Loading",__FILE__," inside ",me)
+LibStub("AlarLoader-3.0"):loadingList(__FILE__,me)
 --@end-debug@
 if (LibDebug) then LibDebug() end
-local function debug(...) 
+local function debug(...)
 --@debug@
 	print(...)
 --@end-debug@
@@ -45,15 +45,15 @@ else
 end
 local _,_,_,toc=GetBuildInfo()
 if (not LibStub) then
-    error("Couldn't find LibStub. Please reinstall " .. MAJOR_VERSION )
+		error("Couldn't find LibStub. Please reinstall " .. MAJOR_VERSION )
 end
 local lib,old=LibStub:NewLibrary(MAJOR_VERSION,MINOR_VERSION)
 if (not lib) then
-    debug("Already loaded a newer or equal version of " .. MAJOR_VERSION)
-    return -- Already loaded
+		debug("Already loaded a newer or equal version of " .. MAJOR_VERSION)
+		return -- Already loaded
 end
 if (old) then
-    debug(format("Upgrading %s from %s to %s",MAJOR_VERSION,old,MINOR_VERSION))
+		debug(format("Upgrading %s from %s to %s",MAJOR_VERSION,old,MINOR_VERSION))
 end
 debugEnable(false)
 local L=LibStub("AceLocale-3.0"):GetLocale('AlarShared',true)
@@ -63,143 +63,143 @@ local AWG=LibStub("AlarWidgets-3.0")
 local AceGUI=AWG.AceGUI
 local InjectStandardMethods=AWG.InjectStandardMethods
 --[[ Mimimap Button Widget
-    Methods
-    :SetImage(texture,texcoords...)
-    :SetClamped(boolean)
-    :GetClamped()
-    :SetLocked(boolean)
-    :GetLocked()
-    :Status(boolean)
-    :SetBorderColor(r,g,b)
-    :SetStatusTable(table)
-    Events
-    OnClick
-    OnEnter
-    OnLeave
+		Methods
+		:SetImage(texture,texcoords...)
+		:SetClamped(boolean)
+		:GetClamped()
+		:SetLocked(boolean)
+		:GetLocked()
+		:Status(boolean)
+		:SetBorderColor(r,g,b)
+		:SetStatusTable(table)
+		Events
+		OnClick
+		OnEnter
+		OnLeave
 --]]
 do
-    local mx={}
-    	-- called to set an external table to store status in
-    function mx:SetStatusTable(status)
+		local mx={}
+			-- called to set an external table to store status in
+		function mx:SetStatusTable(status)
 		assert(type(status) == "table")
 		self.status = status
 		self:ApplyStatus()
-    end
-    function mx.buttonOnEnter(this)
-        local self=this.obj
-        self:Fire("OnEnter",this)
-    end	
-    function mx.buttonOnClick(this,button)
-        local self=this.obj
-        self:Fire("OnClick",this,button)
-        if (button == 'LeftButton') then self:Fire("OnLeftClick",this) end
-        if (button == 'RightButton') then self:Fire("OnRightClick",this) end
-    end	
-    function mx.buttonOnLeave(this)
-        local self=this.obj
-        self:Fire("OnLeave",this)
-    end	
-    function mx.buttonOnDragStop(this)
-        local obj=this.obj
-    	local status=obj.status or obj.localstatus
-    	obj.dragger:Hide()
-    	this:UnlockHighlight()
-    	this:StopMovingOrSizing();
-    	if (not status.clamped) then mx.Move(this) end
-    	pp('button',obj.button)
-    	pp('frame',obj.frame)
-    	pp('dragger',obj.dragger)
-    	pp('this',this)
-    	mx.Reposition(this)
-        pp("dragstop",status.position,this,status.x,status.y)
-        
-    end
-    function mx.buttonOnDragStart(this)
-        local status=this.obj.status or this.obj.localstatus
-        pp("dragstart",status.x,status.y)
-        this:LockHighlight()
-        if (status.clamped) then 
-            pp("Clamped")
-            this.obj.dragger:Show()
-        else
-            pp("Unclamped")
-            this:StartMoving()
-        end    
-    end
-    function mx.Reposition(this)
-    	local status=this.obj.status or this.obj.localstatus
-    	local position=status.position or -90
-    	local x=status.x or 0
-    	local y=status.y or 0
-    	if (status.clamped) then
-            pp ("x,y from position",position,x,y)
-            x=-16-(80*cos(position))
-            y=(80*sin(position))+16
-        end
-        this.obj.frame:ClearAllPoints()
-        this.obj.button:ClearAllPoints()
-        this.obj.frame:SetPoint("TOPLEFT","Minimap","CENTER" ,x,y)
-        this.obj.button:SetPoint("CENTER",this.obj.frame,"CENTER")
-        status.x=x
-        status.y=y
-    	status.position=position
-    end
-    function mx.Move(this,noreposition)
-        local xpos,ypos = GetCursorPosition()
-    	local status=this.obj.status or this.obj.localstatus
-        local xmin,ymin = Minimap:GetLeft(), Minimap:GetTop()
-        if (status.clamped) then
-            local xmin,ymin = Minimap:GetLeft(), Minimap:GetBottom()
-            xpos = xmin-xpos/UIParent:GetScale()+70 
-            ypos = ypos/UIParent:GetScale()-ymin-70
-            status.position=math.deg(math.atan2(ypos,xpos))
-            mx.Reposition(this) 
-        else
-            xpos = xpos/UIParent:GetScale()-xmin - 80
-            ypos = ypos/UIParent:GetScale()-ymin + 80
-            status.x=xpos
-            status.y=ypos
-        end
-    end
-    function mx.Lock(self)
-        local status=self.status or self.localstatus
-        if (status.locked) then
-            self.button:RegisterForDrag(nil)
-        else
-            self.button:RegisterForDrag("leftbutton")
-        end
-    end
-    function mx.Clamp(self)
-        local status=self.status or self.localstatus
-        self.frame:ClearAllPoints()
-        self.frame:SetParent(Minimap)
-        if (status.clamped) then
-            pp("Clamp","Clamping")
-            self.dragger:SetScript("OnUpdate",function(this) mx.Move(this,false) end)
-        else
-            pp("Clamp","UnClamping")
-            self.dragger:SetScript("OnUpdate",nil)
-        end
-        mx.Reposition(self.button)
-    end
-    function mx.SetClamped(self,lock)
-        pp("SetClamped",lock)
-    	local status = self.status or self.localstatus
-    	local old=status.clamped
-    	status.clamped=lock
-    	mx.Clamp(self)
-    	return old
-    end
-    function mx.GetClamped(self)
-    	local status = self.status or self.localstatus
-    	return status.clamped
-    end
-    
+		end
+		function mx.buttonOnEnter(this)
+				local self=this.obj
+				self:Fire("OnEnter",this)
+		end
+		function mx.buttonOnClick(this,button)
+				local self=this.obj
+				self:Fire("OnClick",this,button)
+				if (button == 'LeftButton') then self:Fire("OnLeftClick",this) end
+				if (button == 'RightButton') then self:Fire("OnRightClick",this) end
+		end
+		function mx.buttonOnLeave(this)
+				local self=this.obj
+				self:Fire("OnLeave",this)
+		end
+		function mx.buttonOnDragStop(this)
+				local obj=this.obj
+			local status=obj.status or obj.localstatus
+			obj.dragger:Hide()
+			this:UnlockHighlight()
+			this:StopMovingOrSizing();
+			if (not status.clamped) then mx.Move(this) end
+			pp('button',obj.button)
+			pp('frame',obj.frame)
+			pp('dragger',obj.dragger)
+			pp('this',this)
+			mx.Reposition(this)
+				pp("dragstop",status.position,this,status.x,status.y)
+
+		end
+		function mx.buttonOnDragStart(this)
+				local status=this.obj.status or this.obj.localstatus
+				pp("dragstart",status.x,status.y)
+				this:LockHighlight()
+				if (status.clamped) then
+						pp("Clamped")
+						this.obj.dragger:Show()
+				else
+						pp("Unclamped")
+						this:StartMoving()
+				end
+		end
+		function mx.Reposition(this)
+			local status=this.obj.status or this.obj.localstatus
+			local position=status.position or -90
+			local x=status.x or 0
+			local y=status.y or 0
+			if (status.clamped) then
+						pp ("x,y from position",position,x,y)
+						x=-16-(80*cos(position))
+						y=(80*sin(position))+16
+				end
+				this.obj.frame:ClearAllPoints()
+				this.obj.button:ClearAllPoints()
+				this.obj.frame:SetPoint("TOPLEFT","Minimap","CENTER" ,x,y)
+				this.obj.button:SetPoint("CENTER",this.obj.frame,"CENTER")
+				status.x=x
+				status.y=y
+			status.position=position
+		end
+		function mx.Move(this,noreposition)
+				local xpos,ypos = GetCursorPosition()
+			local status=this.obj.status or this.obj.localstatus
+				local xmin,ymin = Minimap:GetLeft(), Minimap:GetTop()
+				if (status.clamped) then
+						local xmin,ymin = Minimap:GetLeft(), Minimap:GetBottom()
+						xpos = xmin-xpos/UIParent:GetScale()+70
+						ypos = ypos/UIParent:GetScale()-ymin-70
+						status.position=math.deg(math.atan2(ypos,xpos))
+						mx.Reposition(this)
+				else
+						xpos = xpos/UIParent:GetScale()-xmin - 80
+						ypos = ypos/UIParent:GetScale()-ymin + 80
+						status.x=xpos
+						status.y=ypos
+				end
+		end
+		function mx.Lock(self)
+				local status=self.status or self.localstatus
+				if (status.locked) then
+						self.button:RegisterForDrag(nil)
+				else
+						self.button:RegisterForDrag("leftbutton")
+				end
+		end
+		function mx.Clamp(self)
+				local status=self.status or self.localstatus
+				self.frame:ClearAllPoints()
+				self.frame:SetParent(Minimap)
+				if (status.clamped) then
+						pp("Clamp","Clamping")
+						self.dragger:SetScript("OnUpdate",function(this) mx.Move(this,false) end)
+				else
+						pp("Clamp","UnClamping")
+						self.dragger:SetScript("OnUpdate",nil)
+				end
+				mx.Reposition(self.button)
+		end
+		function mx.SetClamped(self,lock)
+				pp("SetClamped",lock)
+			local status = self.status or self.localstatus
+			local old=status.clamped
+			status.clamped=lock
+			mx.Clamp(self)
+			return old
+		end
+		function mx.GetClamped(self)
+			local status = self.status or self.localstatus
+			return status.clamped
+		end
+
 
 	function mx.SetImage(self, path, ...)
 		local image = self.image
 		image:SetTexture(path)
-		
+
 		if image:GetTexture() then
 			self.imageshown = true
 			local n = select('#', ...)
@@ -209,12 +209,12 @@ do
 		else
 			self.imageshown = nil
 		end
-	end	
+	end
 
 	function mx.ApplyStatus(self)
 		local status = self.status or self.localstatus
 		local frame = self.frame
-	    pp("Applystatus",x,y,position)
+			pp("Applystatus",x,y,position)
 		mx.Clamp(self)
 		mx.Lock(self)
 	end
@@ -224,18 +224,18 @@ do
 		self.frame:SetFrameStrata("LOW")
 		--self:ApplyStatus()
 	end
-    
-    function mx.SetBorderColor(self,r,g,b)
-        self.border:SetVertexColor(r,g,b)
-    end        
-    function mx.Status(self,on)
-        if (on) then
-            mx.SetBorderColor(self,0.2,0.9,0.2)
-        else
-            mx.SetBorderColor(self,0.9,0.2,0.2)
-        end
-    end
-    
+
+		function mx.SetBorderColor(self,r,g,b)
+				self.border:SetVertexColor(r,g,b)
+		end
+		function mx.Status(self,on)
+				if (on) then
+						mx.SetBorderColor(self,0.2,0.9,0.2)
+				else
+						mx.SetBorderColor(self,0.9,0.2,0.2)
+				end
+		end
+
 	function mx._Constructor()
 		local frame = CreateFrame("Frame",nil,UIParent)
 		local self = {}
@@ -260,8 +260,8 @@ do
 		self.button=button
 		local t=button:CreateTexture()
 		t:SetTexture("Interface\\Minimap\\UI-Minimap-ZoomButton-Highlight")
-        t:SetBlendMode("ADD")
-        t:SetAllPoints(button)
+				t:SetBlendMode("ADD")
+				t:SetAllPoints(button)
 		button:SetHighlightTexture(t)
 		button:SetHeight(33)
 		button:SetWidth(33)
