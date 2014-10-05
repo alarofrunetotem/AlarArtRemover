@@ -1,19 +1,6 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
-local MAJOR_VERSION = ("AlarCastSingleButton.lua"):gsub(".lua","")
-local MINOR_VERSION = 500 + tonumber(string.sub("$Revision$", 12, -3))
 local pp=print
-local Type,Version,ancestor='AlarCastSingleButton',4,'AlarCastButton'
---[[
-Name: AlarCastButton.lua
-Revision: $Rev$
-Author: Alar of Daggerspine
-Email: alar@aspide.it
-Website: http://www.curse.com
-SVN: $HeadUrl:$
-Description: Generic library
-Dependencies: Ace3
-License: LGPL v2.1
---]]
+local Type,Version,ancestor='AlarCastSingleButton',5,'AlarCastButton'
 local me, ns = ...
 --@debug@
 LibStub("AlarLoader-3.0"):loadingList(__FILE__,me)
@@ -24,43 +11,25 @@ local function debug(...)
 	print(...)
 --@end-debug@
 end
-local print=_G.print
-local notify=_G.print
-local error=_G.error
-local function dump() end
-local function debugEnable() end
-if (LibStub("AlarLoader-3.0",true)) then
-	local rc=LibStub("AlarLoader-3.0"):GetPrintFunctions(MAJOR_VERSION)
-	print=rc.print
-	--@debug@
-	debug=rc.debug
-	dump=rc.dump
-	--@end-debug@
-	notify=rc.notify
-	error=rc.error
-	debugEnable=rc.debugEnable
-else
-	debug("Missing AlarLoader-3.0")
-end
-debugEnable(false)
-local _,_,_,toc=GetBuildInfo()
+local print=pp
+local toc=select(4,GetBuildInfo())
 --[[ Standard prologue end --]]
 local _G=_G
 local AWG=LibStub("AlarWidgets-3.0")
 local AceGUI=LibStub("AceGUI-3.0")
 local InjectStandardMethods=AWG.InjectStandardMethods
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
-local methods={} --#Control
+local cc={} --#Control
 
 
-function methods:SetIcon(texture)
+function cc:SetIcon(texture)
 	self.texture=texture
 	self:Update()
 end
-function methods:HideOnClick()
+function cc:HideOnClick()
 	debug("HideOnCLick to be implemented")
 end
-function methods:Pop(duration,speed)
+function cc:Pop(duration,speed)
 		local status = self.status or self.localstatus
 		local frame = self.frame
 		local offset=AWG:Pop(self,status.size or 32)
@@ -73,7 +42,7 @@ function methods:Pop(duration,speed)
 			self:FadeOut()
 		end
 end
-function methods:FadeOut(speed,delay)
+function cc:FadeOut(speed,delay)
 	debug("FadeOut invoked")
 		local fade=self.fade
 		local animation=self.animation
@@ -88,11 +57,11 @@ function methods:FadeOut(speed,delay)
 	debug("Fade started",delay,speed)
 		animation:Play()
 end
-function methods:FadeStop()
+function cc:FadeStop()
 		local animation=self.animation
 		animation:Stop()
 end
-function methods:FadeIn(speed,delay)
+function cc:FadeIn(speed,delay)
 		local fade=self.fade
 		local frame=self.frame
 		local animation=self.animation
@@ -111,9 +80,18 @@ function methods:FadeIn(speed,delay)
 		fade:SetDuration(speed)
 		animation:Play()
 end
-
+function cc:OnRelase()
+	self.xbutton:SetAttribute("type",nil)
+	self.xbutton:SetAttribute("macrotext",nil)
+	self:Parent(ancestor,'OnRelease')
+end
+function cc:SetCloseMacro(body)
+	self.xbutton:SetAttribute("type","macro")
+	self.xbutton:SetAttribute("macrotext",body)
+end
 do
 	-- Scripts
+	---@function [parent=#Control] _AnimationComplete
 	local function AnimationComplete(this)
 		local i=this:GetChange()
 		local self=this.obj
@@ -128,20 +106,21 @@ do
 		self:SetAlpha(1)
 	end
 	local Serial=0
+	---@function [parent=#Control] _Constructor
 	local function Constructor()
 		local self=AceGUI:Create(ancestor)
 		self.standalone=true
 		self.active=true
-		self:Inject(methods,ancestor)
+		self:Inject(cc,ancestor)
 		local frame=self.frame
-			local fname=frame:GetName() .. "XButton"
-			local b=CreateFrame("Button",fname,frame,"UIPanelCloseButton")
-			b:SetHeight(16)
-			b:SetWidth(16)
-			b:SetPoint("TOPRIGHT",frame,"TOPRIGHT",0,0)
-			b:SetFrameLevel(10)
-			b.obj=self
-			b:SetScript("PostClick",function(this)  this.obj:Fire("OnClose") end )
+		local fname=frame:GetName() .. "XButton"
+		local b=CreateFrame("Button",fname,frame,"UIPanelCloseButton,SecureActionButtonTemplate")
+		b:SetHeight(16)
+		b:SetWidth(16)
+		b:SetPoint("TOPRIGHT",frame,"TOPRIGHT",0,0)
+		b:SetFrameLevel(10)
+		b.obj=self
+		b:SetScript("PostClick",function(this)  this.obj:Fire("OnClose") end )
 		local ag=frame:CreateAnimationGroup(frame:GetName()..'fade')
 		local fade=ag:CreateAnimation('Alpha')
 		fade:SetChange(-1)
@@ -152,7 +131,7 @@ do
 		fade.obj=self
 		self.fade=fade
 		self.animation=ag
-			self.xbutton=b
+		self.xbutton=b
 		return self
 
 	end
