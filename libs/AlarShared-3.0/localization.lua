@@ -1,6 +1,6 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
-local MAJOR_VERSION = ("AlarShared-3.0.localization")
-local MINOR_VERSION = 500 + tonumber(string.sub("$Revision$", 12, -3))
+local MAJOR_VERSION = "AlarShared-3.0.localization"
+local MINOR_VERSION = 1000
 local lib,old=LibStub:NewLibrary(MAJOR_VERSION,MINOR_VERSION)
 if not lib then return end
 local me, ns = ...
@@ -9,14 +9,7 @@ LibStub("AlarLoader-3.0"):loadingList(__FILE__,me)
 --@end-debug@
 local l=LibStub("AceLocale-3.0")
 local function getLocale(lang,default)
-	local me="AlarShared"
-	local L=l:GetLocale(me,lang)
-	if (L) then
-		L=l:NewLocale(me)
-	else
-		L=l:NewLocale(me,lang,default,default)
-	end
-	return L
+	return l:GetLocale("AlarShared",lang) or l:NewLocale("AlarShared",lang,default,default)
 end
 local L=getLocale("enUS",true)
 --@localization(locale="enUS", format="lua_additive_table", namespace="library",  escape-non-ascii=true, same-key-is-true=true, handle-unlocalized="english" )@
@@ -51,4 +44,8 @@ end
 L=getLocale("zhTW")
 if (L) then
 --@localization(locale="zhTW", format="lua_additive_table", namespace="library",  escape-non-ascii=true, same-key-is-true=true, handle-unlocalized="english" )@
+end
+L=getLocale("itIT")
+if (L) then
+--@localization(locale="itIT", format="lua_additive_table", namespace="library",  escape-non-ascii=true, same-key-is-true=true, handle-unlocalized="english" )@
 end

@@ -2,21 +2,9 @@ local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
 local MAJOR_VERSION = "AlarCore-3.0"
 local MINOR_VERSION = 1000
 local pp=print
-local _,_,_,toc=GetBuildInfo()
+local toc=select(4,GetBuildInfo())
 local me, ns = ...
---[[
-Name: AlarCore-3.0.lua
-Revision: $Rev$
-Author: Alar of Daggerspine
-Email: alar@aspide.it
-Website: http://www.curse.com
-SVN: $HeadUrl:$
-Description: Generic library
-Dependencies: Ace3
-License: LGPL v2.1
---]]
 --@debug@
---print("Loading",__FILE__," inside ",me)
 LibStub("AlarLoader-3.0"):loadingList(__FILE__,me)
 --@end-debug@
 if (LibDebug) then LibDebug() end

@@ -1,6 +1,6 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
 local MAJOR_VERSION = "AlarLoader-3.0"
-local MINOR_VERSION = 1000
+local MINOR_VERSION = 1001
 local pp=print
 local me, ns = ...
 local module,old=LibStub:NewLibrary(MAJOR_VERSION,MINOR_VERSION) --#AlarLoader
@@ -9,7 +9,7 @@ local lib=module --#AlarLoader
 ---@module AlarLoader
 --Inizializza l'ambiente standard di un addon
 --
-
+local tab={}
 lib.loadingTable=lib.loadingTable or {}
 lib.progressive=tonumber(lib.progressive) or 1
 ---@param #string file filename
@@ -49,13 +49,15 @@ local function GetChatFrame(chat)
 	return DEFAULT_CHAT_FRAME
 end
 function lib:GetPrintFunctions(caller,skip)
-	local result={}
+	local result
+	if (type(skip)=='table') then result=skip else wipe(tab) result=tab end
 	do
 		local c=GetChatFrame
 		local caller=tostring(caller) or ''
 		local skip=tonumber(skip) or 1
 		local prefixp=caller .. ':|r|cff20ff20'
 		local prefixd='|cffff1010DBG:' .. caller .. ':|r|cff00ff00'
+		local prefixs='|cffff1010DBS:' .. caller .. ':|r|cff00ff00'
 		local prefixn=caller .. ':|r|cffff9900'
 		local prefixe=caller .. '-Error:|r|cffff0000'
 		local xformat=xformat
@@ -72,31 +74,17 @@ function lib:GetPrintFunctions(caller,skip)
 		end
 		function result.debug(...)
 			if (debugs[caller]) then
-				c("ADebug"):AddMessage(strjoin(' ',date("%X"),prefixd,xformat(select(skip,...))))
-				if (_G.DOVEDIAVOLOSTA) then
-					c("ADebug"):AddMessage(tostring(debugstack(2,1,0)))
-				end
+				c("ADebug"):AddMessage(strjoin(' ',date("%X"),prefixd,xformat(select(skip,...))),tostring(debugstack(2,1,0)))
 			end
 		end
 		function result.sdebug(...)
-				c("ADebug"):AddMessage(strjoin(' ',date("%X"),prefixd,xformat(select(skip,...))))
-				if (_G.DOVEDIAVOLOSTA) then
-					c("ADebug"):AddMessage(tostring(debugstack(2,1,0)))
-				end
+				c("ADebug"):AddMessage(strjoin(' ',date("%X"),prefixs,xformat(select(skip,...))),tostring(debugstack(2,1,0)))
 		end
 		function result.notify(...) pp(prefixn,xformat(select(skip,...))) end
 		function result.error(...) pp(prefixe,xformat(select(skip,...))) end
 		function result.debugEnable(...) if (select(skip,...)) then debugs[caller] = true else debugs[caller] =false end end
 	end
-	if (type(skip)=='table') then
-	pp("Inietto le funzioni")
-		for k,v in pairs(result) do
-			skip[k]=v
-		end
-		result.dump(result)
-	else
 	return result
-	end
 end
 function lib:CreateAddon(name,force,...)
 		local stub
