@@ -1,18 +1,7 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
 local MAJOR_VERSION = ("AlarCastHeader.lua"):gsub(".lua","")
 local MINOR_VERSION = 500 + tonumber(string.sub("$Revision: 85 $", 12, -3))
-local Type,Version,Ancestor = "AlarCastHeader",2
---[[
-Name: AlarPanels.lua
-Revision: $Rev: 85 $
-Author: Alar of Daggerspine
-Email: alar@aspide.it
-Website: http://www.curse.com
-SVN: $HeadUrl:$
-Description: Generic library
-Dependencies: Ace3
-License: LGPL v2.1
---]]
+local Type,Version,Ancestor = "AlarCastHeader",3
 local me, ns = ...
 --@debug@
 LibStub("AlarLoader-3.0"):loadingList(__FILE__,me)
@@ -23,56 +12,40 @@ local function debug(...)
 	print(...)
 --@end-debug@
 end
-local print=_G.print
-local notify=_G.print
-local error=_G.error
-local function dump() end
-local function debugEnable() end
-if (LibStub("AlarLoader-3.0",true)) then
-	local rc=LibStub("AlarLoader-3.0"):GetPrintFunctions(MAJOR_VERSION)
-	print=rc.print
-	--@debug@
-	debug=rc.debug
-	dump=rc.dump
-	--@end-debug@
-	notify=rc.notify
-	error=rc.error
-	debugEnable=rc.debugEnable
-else
-	debug("Missing AlarLoader-3.0")
-end
-local _,_,_,toc=GetBuildInfo()
-debugEnable(false)
-local L=LibStub("AceLocale-3.0"):GetLocale('AlarShared',true)
+local toc=select(4,GetBuildInfo())
+local TooltipHeader=SHIFT_KEY .. '+' ..KEY_BUTTON1 .. ': ' .. DRAG_MODEL
 --[[ Standard prologue end --]]
 local AWG=LibStub("AlarWidgets-3.0")
 local AceGUI=LibStub("AceGUI-3.0")
 local C=LibStub("AlarCrayon-3.0"):GetColorTable()
 local InjectStandardMethods=AWG.InjectStandardMethods
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
-local methods={} --# Control
-function methods:SetBackdrop(backdrop)
+local cc={} --# Control
+function cc:SetBackdrop(backdrop)
 	self.frame:SetBackdrop(backdrop)
 end
-function methods:OnAcquire()
+function cc:OnAcquire()
 	self:Parent(Ancestor,"OnAcquire")
-	self.frame.tooltipText=C(L["Drag with Shift button to move"],"yellow")
+	self.frame.tooltipText=C(TooltipHeader,"yellow")
 	self.content:Show()
 end
-function methods:Append(frame)
+function cc:Append(frame)
 	self:SetUserData(frame,'frame')
 	frame:SetParent(self.frame)
 end
-function methods:SetTitle(...)
+function cc:SetTitle(...)
 	self.frame:SetText(...)
 end
-function methods:SetTooltipText(text)
-	self.frame.tooltipText=C(L["Drag with Shift button to move"],"yellow") .. "\n" .. text
+function cc:AutoSize()
+	self.frame:SetWidth(self.frame:GetFontString():GetStringWidth()+20)
 end
-function methods:SetOnAttributeChanged(snippet)
+function cc:SetTooltipText(text)
+	self.frame.tooltipText=C(TooltipHeader,"yellow") .. "\n" .. text
+end
+function cc:SetOnAttributeChanged(snippet)
 	self.frame:SetAttribute('_onattributechanged',snippet)
 end
-function methods:ApplyStatus()
+function cc:ApplyStatus()
 	local status = self:Status()
 	local frame = self.frame
 	self:SetWidth(status.width or 100)
@@ -84,7 +57,7 @@ function methods:ApplyStatus()
 		frame:SetPoint("CENTER",UIParent,"CENTER")
 	end
 end
-function methods:SetModifiedCast(modifier,actiontype,button,value)
+function cc:SetModifiedCast(modifier,actiontype,button,value)
 	local attribute=actiontype
 	if (actiontype=="macrotext") then actiontype ="macro" end
 	self.frame:SetAttribute(modifier .. "type" .. button,actiontype)
@@ -92,27 +65,13 @@ function methods:SetModifiedCast(modifier,actiontype,button,value)
 end
 do
 	local serial=0
-	local function tooltipshow(this,r,g,b)
-		if InCombatLockdown() then return end
-		if(this.tooltipText ~= nil) then
-			GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
-			GameTooltip:SetText(this.tooltipText, r or 1, g or 0.82, b or 0);
-			if (this.obj:IsRestricted()) then
-				GameTooltip:AddLine(L["Disabled due to combat lockdown"],1,0,0)
-			end
-			GameTooltip:Show()
-		end
-	end
-	local function tooltiphide(this)
-			if(this.tooltipText ~= nil) then
-			GameTooltip:Hide();
-			end
-	end
+	---@function [parent=#Control] _Constructor
 	local function Constructor()
 		local frame=CreateFrame("Button",Type..serial,UIParent,"UIPanelButtonTemplate,SecureActionButtonTemplate,SecureHandlerAttributeTemplate")
 		serial =serial +1
 		local widget={frame=frame}
 		frame.obj=widget
+		widget.buttontText=_G[Type .. serial .. 'Text']
 		frame:SetClampedToScreen(true)
 		frame:SetMovable(true)
 		frame:EnableMouse(true)
@@ -120,8 +79,9 @@ do
 		frame:RegisterForDrag("LeftButton")
 		frame:SetScript("OnDragStart", function (frame) if (IsShiftKeyDown()) then frame:StartMoving() end end)
 		frame:SetScript("OnDragStop", frame.StopMovingOrSizing)
-		frame:SetScript("OnEnter",tooltipshow)
-		frame:SetScript("OnLeave",tooltiphide)
+		frame:SetScript("PostClick",function(this) this.obj:Fire("OnClose") end )
+		--frame:SetScript("OnEnter",tooltipshow)
+		--frame:SetScript("OnLeave",tooltiphide)
 		--Container Support
 		local content = CreateFrame("Frame",nil,frame)
 		widget.content = content
@@ -131,11 +91,12 @@ do
 
 		widget.type = Type
 		InjectStandardMethods(widget)
-		widget:Inject(methods,Ancestor)
+		widget:Inject(cc,Ancestor)
 		widget.localstatus = {}
 		frame:SetWidth(100)
 		frame:SetHeight(20)
 		frame:SetMovable(true)
+		if (not frame:GetPoint()) then frame:SetPoint("CENTER",UIParent) end
 		widget:Show()
 		return AceGUI:RegisterAsContainer(widget)
 	end
