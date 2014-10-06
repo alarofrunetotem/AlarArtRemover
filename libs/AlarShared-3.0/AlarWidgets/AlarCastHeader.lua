@@ -79,9 +79,7 @@ do
 		frame:RegisterForDrag("LeftButton")
 		frame:SetScript("OnDragStart", function (frame) if (IsShiftKeyDown()) then frame:StartMoving() end end)
 		frame:SetScript("OnDragStop", frame.StopMovingOrSizing)
-		frame:SetScript("PostClick",function(this) this.obj:Fire("OnClose") end )
-		--frame:SetScript("OnEnter",tooltipshow)
-		--frame:SetScript("OnLeave",tooltiphide)
+		frame:SetScript("PostClick",function(this) if (not IsShiftKeyDown()) then this.obj:Fire("OnClick") end end )
 		--Container Support
 		local content = CreateFrame("Frame",nil,frame)
 		widget.content = content

@@ -54,7 +54,7 @@ function cc:FadeOut(speed,delay)
 		fade:SetChange(-1)
 		fade:SetStartDelay(delay)
 		fade:SetDuration(speed)
-	debug("Fade started",delay,speed)
+		 debug("Fade started",delay,speed)
 		animation:Play()
 end
 function cc:FadeStop()
