@@ -2,11 +2,11 @@
 ## Title: Alar:|c00ff9900ArtRemover|r
 ## Notes: Removes Blizzard Art from Action Bars (Wod compatible)
 ## Author: Alar of Daggerspine
-## Version: @project-version@ @project-revision@
+#### Version: #@project-version@ @project-abbreviated-hash@
 ## X-Version: 3.3.2
 ## eMail: alar@aspide.it
 ## URL: http://wow.aspide.it
-## RequiredDeps: 
+## RequiredDeps:
 ## OptionalDeps: FuBar,Titan,Ace3,LibDebug
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
