@@ -1,7 +1,5 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
-local MAJOR_VERSION = ("AlarCastHeader.lua"):gsub(".lua","")
-local MINOR_VERSION = 500 + tonumber(string.sub("$Revision: 85 $", 12, -3))
-local Type,Version,Ancestor = "AlarCastHeader",3
+local Type,Version,Ancestor = "AlarCastHeader",4
 local me, ns = ...
 --@debug@
 LibStub("AlarLoader-3.0"):loadingList(__FILE__,me)

@@ -1,5 +1,5 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
-local Type,Version,Ancestor='AlarCast',7,nil
+local Type,Version,Ancestor='AlarCast',8,nil
 local pp=print
 local me, ns = ...
 --@debug@

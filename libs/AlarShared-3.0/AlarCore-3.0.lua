@@ -2124,6 +2124,6 @@ end
 --@end-do-not-package@
 --- reembed routine
 for target,_ in pairs(lib.mixinTargets) do
-lib:Embed(target)
+	lib:Embed(target)
 end
 

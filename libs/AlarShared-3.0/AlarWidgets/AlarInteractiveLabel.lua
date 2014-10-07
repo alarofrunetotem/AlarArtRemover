@@ -1,9 +1,7 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
-local MAJOR_VERSION = ("AlarInteractiveLabel.lua"):gsub(".lua","")
-local MINOR_VERSION = 500 + tonumber(string.sub("$Revision$", 12, -3))
 local me,ns=...
 local pp=print
-local Type, Version = "AlarInteractiveLabel", 23
+local Type, Version = "AlarInteractiveLabel", 24
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 local AWG=LibStub("AlarWidgets-3.0")

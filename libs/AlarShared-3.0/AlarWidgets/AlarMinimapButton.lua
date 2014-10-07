@@ -1,62 +1,18 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
-local MAJOR_VERSION = ("AlarMinimapButton.lua"):gsub(".lua","")
-local MINOR_VERSION = 500 + tonumber(string.sub("$Revision$", 12, -3))
-local pp=function() end
-local Type,Version,Ancestor="AlarMinimapButton",3,nil
---[[
-Name: AlarMinimapButton.lua
-Revision: $Rev$
-Author: Alar of Daggerspine
-Email: alar@aspide.it
-Website: http://www.curse.com
-SVN: $HeadUrl:$
-Description: Generic library
-Dependencies: Ace3
-License: LGPL v2.1
---]]
+local Type,Version,Ancestor="AlarMinimapButton",4,nil
+local pp=print
 local me, ns = ...
 --@debug@
-pp=print
 LibStub("AlarLoader-3.0"):loadingList(__FILE__,me)
 --@end-debug@
 if (LibDebug) then LibDebug() end
 local function debug(...)
 --@debug@
-	print(...)
+	--print(...)
 --@end-debug@
 end
-local print=_G.print
-local notify=_G.print
-local error=_G.error
-local function dump() end
-local function debugEnable() end
-if (LibStub("AlarLoader-3.0",true)) then
-	local rc=LibStub("AlarLoader-3.0"):GetPrintFunctions(MAJOR_VERSION)
-	print=rc.print
-	--@debug@
-	debug=rc.debug
-	dump=rc.dump
-	--@end-debug@
-	notify=rc.notify
-	error=rc.error
-	debugEnable=rc.debugEnable
-else
-	debug("Missing AlarLoader-3.0")
-end
-local _,_,_,toc=GetBuildInfo()
-if (not LibStub) then
-		error("Couldn't find LibStub. Please reinstall " .. MAJOR_VERSION )
-end
-local lib,old=LibStub:NewLibrary(MAJOR_VERSION,MINOR_VERSION)
-if (not lib) then
-		debug("Already loaded a newer or equal version of " .. MAJOR_VERSION)
-		return -- Already loaded
-end
-if (old) then
-		debug(format("Upgrading %s from %s to %s",MAJOR_VERSION,old,MINOR_VERSION))
-end
-debugEnable(false)
-local L=LibStub("AceLocale-3.0"):GetLocale('AlarShared',true)
+local print=pp
+local toc=select(4,GetBuildInfo())
 --[[ Standard prologue end --]]
 local _G=_G
 local AWG=LibStub("AlarWidgets-3.0")

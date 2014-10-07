@@ -1,6 +1,6 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
 local pp=print
-local Type,Version,ancestor='AlarCastSingleButton',5,'AlarCastButton'
+local Type,Version,ancestor='AlarCastSingleButton',6,'AlarCastButton'
 local me, ns = ...
 --@debug@
 LibStub("AlarLoader-3.0"):loadingList(__FILE__,me)

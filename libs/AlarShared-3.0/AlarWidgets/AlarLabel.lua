@@ -1,9 +1,7 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
-local MAJOR_VERSION = ("AlarLabel.lua"):gsub(".lua","")
-local MINOR_VERSION = 500 + tonumber(string.sub("$Revision$", 12, -3))
 local me,ns=...
 local pp=print
-local Type, Version = "AlarLabel", 23
+local Type, Version = "AlarLabel", 24
 LibStub("AlarLoader-3.0"):loadingList(__FILE__,me)
 
 --[[-----------------------------------------------------------------------------

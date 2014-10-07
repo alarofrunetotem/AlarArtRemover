@@ -1,48 +1,15 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
-local _,_,_,toc=GetBuildInfo()
-local pp=print
+local toc=select(4,GetBuildInfo())
 local me, ns = ...
---[[
-Name: AlarArtRemover.lua
-Revision: $Rev: 426 $
-Author: Alar of Daggerspine
-Email: alar@aspide.it
-Website: http://www.curse.com
-SVN: $HeadUrl:$
-License: GPL v2.1
---]]
-AlarDebugTable=AlarDebugTable or {}
-AlarDebugTable[GetTime()]=me..":"..__FILE__
---@debug@
-if (LibDebug) then LibDebug() end
---@end-debug@
-local function debug(...)
---@debug@
-print(...)
---@end-debug@
-end
-local print=_G.print
-local notify=_G.print
-local error=_G.error
-local function dump() end
-local function debugEnable() end
-if (LibStub("AlarLoader-3.0",true)) then
-	local rc=LibStub("AlarLoader-3.0"):GetPrintFunctions(me)
-	print=rc.print
-	--@debug@
-	debug=rc.debug
-	dump=rc.dump
-	--@end-debug@
-	notify=rc.notify
-	error=rc.error
-	debugEnable=rc.debugEnable
-else
-	debug("Missing AlarLoader-3.0")
-end
-debugEnable(false)
+local pp=print
 local L=LibStub("AceLocale-3.0"):GetLocale(me,true)
+local C=LibStub("AlarCrayon-3.0"):GetColorTable()
+local X=LibStub("AlarLoader-3.0")
+X:loadingList(__FILE__,me)
+X:GetPrintFunctions(me,ns)
+local print=ns.print or print
+local debug=ns.debug or print
 --[[ Standard prologue end --]]
-
 local function help(self)
 --===DOCBEGIN===
 		self:HF_Title("Blizzard art remover","Description")

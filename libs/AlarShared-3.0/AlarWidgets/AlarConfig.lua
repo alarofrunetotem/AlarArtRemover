@@ -1,19 +1,6 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
-local MAJOR_VERSION = ("AlarConfig.lua"):gsub(".lua","")
-local MINOR_VERSION = 500 + tonumber(string.sub("$Revision$", 12, -3))
+local Type,Version,ancestor = "AlarConfig",8,"Window"
 local pp=print
-local Type,Version,ancestor = "AlarConfig",7,"Window"
---[[
-Name: AlarPanels.lua
-Revision: $Rev$
-Author: Alar of Daggerspine
-Email: alar@aspide.it
-Website: http://www.curse.com
-SVN: $HeadUrl:$
-Description: Generic library
-Dependencies: Ace3
-License: LGPL v2.1
---]]
 local me, ns = ...
 --@debug@
 LibStub("AlarLoader-3.0"):loadingList(__FILE__,me)
@@ -21,30 +8,11 @@ LibStub("AlarLoader-3.0"):loadingList(__FILE__,me)
 if (LibDebug) then LibDebug() end
 local function debug(...)
 --@debug@
-	print(...)
+	--print(...)
 --@end-debug@
 end
-local print=_G.print
-local notify=_G.print
-local error=_G.error
-local function dump() end
-local function debugEnable() end
-if (LibStub("AlarLoader-3.0",true)) then
-	local rc=LibStub("AlarLoader-3.0"):GetPrintFunctions(MAJOR_VERSION)
-	print=rc.print
-	--@debug@
-	debug=rc.debug
-	dump=rc.dump
-	--@end-debug@
-	notify=rc.notify
-	error=rc.error
-	debugEnable=rc.debugEnable
-else
-	debug("Missing AlarLoader-3.0")
-end
-local _,_,_,toc=GetBuildInfo()
-debugEnable(false)
-local L=LibStub("AceLocale-3.0"):GetLocale('AlarShared',true)
+local print=pp
+local toc=select(4,GetBuildInfo())
 --[[ Standard prologue end --]]
 local AWG=LibStub("AlarWidgets-3.0")
 local AceGUI=LibStub("AceGUI-3.0")

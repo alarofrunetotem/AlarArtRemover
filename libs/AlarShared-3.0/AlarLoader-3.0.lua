@@ -1,22 +1,30 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
 local MAJOR_VERSION = "AlarLoader-3.0"
-local MINOR_VERSION = 1001
+local MINOR_VERSION = 1002
 local pp=print
 local me, ns = ...
 local module,old=LibStub:NewLibrary(MAJOR_VERSION,MINOR_VERSION) --#AlarLoader
 if (not module) then return end
+setmetatable(module,{
+	__call = function(t,...)
+		local fname,me,ns=...
+		t:loadingList(fname,me)
+		t:GetPrintFunctions(me,ns)
+	end
+	}
+)
 local lib=module --#AlarLoader
 ---@module AlarLoader
 --Inizializza l'ambiente standard di un addon
 --
-local tab={}
+local tab={} --- Temporary table for print functions injection
 lib.loadingTable=lib.loadingTable or {}
 lib.progressive=tonumber(lib.progressive) or 1
 ---@param #string file filename
 ---@param #string name addon name
 function lib:loadingList(file,name)
-	self.loadingTable[self.progressive]=format('%s in %s',file,name)
-	self.progressive=self.progressive+1
+	lib.loadingTable[self.progressive]=format('%s in %s',file,name)
+	lib.progressive=self.progressive+1
 end
 lib:loadingList(__FILE__,me)
 local function dumpdata() end
