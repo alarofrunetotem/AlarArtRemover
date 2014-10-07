@@ -62,15 +62,6 @@ local LIBRARIES=L["Libraries"]
 local TOGGLES=L["Toggles"]
 local CONFIGURATION=L["Configuration"]
 local HELPSECTIONS={DESCRIPTION,RELNOTES,CONFIGURATION,TOGGLES,LIBRARIES}
--- Checks for ACE3 availability
-if (not LibStub("AceAddon-3.0",true)) then
-		EnableAddOn("Ace3")
-		if (IsAddOnLoadOnDemand("Ace3")) then
-				LoadAddOn("Ace3")
-		else
-				error(L["Ace 3 required. Trying to enable it for next reload"])
-		end
-end
 
 local AceConfig = LibStub("AceConfig-3.0",true) or debug("Missing AceConfig-3.0")
 local AceRegistry = LibStub("AceConfigRegistry-3.0",true) or debug("Missing AceConfigRegistry-3.0")

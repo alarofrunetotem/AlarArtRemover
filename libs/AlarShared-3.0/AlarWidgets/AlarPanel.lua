@@ -105,9 +105,9 @@ function methods:LayoutFinished(w,h)
 end
 function methods:SetBackdrop(backdrop)
 		if (type("backdrop" == "string")) then
-			 self.frame:SetBackdrop(Backdrops[backdrop])
+			self.frame:SetBackdrop(Backdrops[backdrop])
 		else
-			 self.frame:SetBackdrop(backdrop)
+			self.frame:SetBackdrop(backdrop)
 		end
 end
 
@@ -163,7 +163,7 @@ function methods:OnAcquire()
 	self:Parent(Ancestor,'OnAcquire')
 	self.frame:SetFrameStrata("HIGH")
 	self.frame:SetClampedToScreen(true)
-	self.title.tooltipText=C(L["Drag to move"],"yellow") .. "\n" .. C(L["RightClick to rescale"],"green")
+	self.title.tooltipText=C(KEY_BUTTON1 ..': ' .. DRAG_MODEL,"yellow") .. "\n" .. C(L["Right Click to rescale"],"green")
 end
 local function close(this,event)
 	this.obj:Slider(false)

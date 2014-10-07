@@ -3,7 +3,7 @@
 ..\FrameXML\UI.xsd">
 <!-- $Id$ -->
 <Script file="AlarLoader-3.0.lua"/>
-<Script file="localization.lua"/>
+<Script file="locale.lua"/>
 <Script file="AlarCrayon-3.0.lua"/>
 <Script file="AlarCore-3.0.lua"/>
 </Ui>

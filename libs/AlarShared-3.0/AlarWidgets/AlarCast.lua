@@ -327,7 +327,7 @@ do
 			GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
 			GameTooltip:SetText(this.tooltipText, r or 1, g or 0.82, b or 0);
 			if (this.obj:IsRestricted()) then
-				GameTooltip:AddLine(L["Disabled due to combat lockdown"],1,0,0)
+				GameTooltip:AddLine(ERR_NOT_IN_COMBAT,1,0,0)
 			end
 			GameTooltip:Show()
 		end

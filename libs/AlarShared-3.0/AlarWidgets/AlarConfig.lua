@@ -91,7 +91,7 @@ do
 		closebutton:SetPoint("BOTTOMRIGHT",frame,"BOTTOMRIGHT",-27,17)
 		closebutton:SetHeight(20)
 		closebutton:SetWidth(100)
-		closebutton:SetText(L["Save"])
+		closebutton:SetText(SAVE)
 		self.closebutton = closebutton
 		closebutton.obj = self
 		--Status

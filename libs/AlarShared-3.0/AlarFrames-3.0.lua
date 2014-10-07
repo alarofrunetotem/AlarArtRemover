@@ -474,7 +474,7 @@ function lib:CreateMiniPanel(nome,titolo)
 				Save=true,
 				backdrop='minimal',
 				Rescale=false,Resize=true,Config=false,
-				Header=L[titolo],
+				Header=titolo,
 				Width=300,
 })
 end
@@ -487,7 +487,7 @@ function lib:CreateTrackerPanel(nome,titolo)
 				noResize=true,
 				noConfig=true,
 				noMin=true,
-				MiniHeader=L[titolo],
+				MiniHeader=titolo,
 				Width=250,
 })
 end
