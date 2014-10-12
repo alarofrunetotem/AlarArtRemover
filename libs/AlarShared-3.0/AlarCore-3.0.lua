@@ -1,6 +1,6 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
 local MAJOR_VERSION = "AlarCore-3.0"
-local MINOR_VERSION = 1000
+local MINOR_VERSION = 1001
 local pp=print
 local toc=select(4,GetBuildInfo())
 local me, ns = ...
@@ -36,7 +36,8 @@ end
 if (not LibStub) then
 	error("Couldn't find LibStub. Please reinstall " .. MAJOR_VERSION )
 end
-local lib,old=LibStub:NewLibrary(MAJOR_VERSION,MINOR_VERSION)
+local app,old=LibStub:NewLibrary(MAJOR_VERSION,MINOR_VERSION)
+local lib=app --#lib
 if (not lib) then
 	debug("Already loaded a newer or equal version of " .. MAJOR_VERSION)
 	return -- Already loaded
@@ -56,12 +57,17 @@ local _G=_G
 local floor=floor
 local abs=abs
 -- Help sections
-local DESCRIPTION=L["Description"]
-local RELNOTES=L["Release Notes"]
-local LIBRARIES=L["Libraries"]
-local TOGGLES=L["Toggles"]
-local CONFIGURATION=L["Configuration"]
-local HELPSECTIONS={DESCRIPTION,RELNOTES,CONFIGURATION,TOGGLES,LIBRARIES}
+local titles={
+	RELNOTES=L["Release Notes"],
+	LIBRARIES=L["Libraries"],
+	TOGGLES=L["Toggles"],
+	PROFILE=L["Profile"]
+}
+local RELNOTES='RELNOTES'
+local LIBRARIES='LIBRARIES'
+local TOGGLES='TOGGLES'
+local PROFILE='PROFILE'
+local HELPSECTIONS={RELNOTES,TOGGLES,PROFILE,LIBRARIES}
 
 local AceConfig = LibStub("AceConfig-3.0",true) or debug("Missing AceConfig-3.0")
 local AceRegistry = LibStub("AceConfigRegistry-3.0",true) or debug("Missing AceConfigRegistry-3.0")
@@ -372,6 +378,7 @@ local function _DebugEnable(info)
 	self:EnableDebug(status)
 end
 local function LoadDefaults(self)
+print("LOaddefault",self.title)
 		self.OptionsTable={
 				handler=self,
 				type="group",
@@ -485,8 +492,8 @@ local function LoadHelp(self)
 		end
 --@end-debug@
 		for _,section in ipairs(HELPSECTIONS) do
-				if (section == DESCRIPTION) then
-						self:HF_Load(section,main,' ' .. tostring(self.version) .. ' (r:' .. tostring(self.revision) ..')')
+				if (section == RELNOTES) then
+						self:HF_Load(section,main..section,' ' .. tostring(self.version) .. ' (r:' .. tostring(self.revision) ..')')
 				else
 						self:HF_Load(section,main .. section,'')
 				end
@@ -496,7 +503,7 @@ function mix:OnInitialize(...)
 	if (tonumber(self.revision)< 1) then
 		self.revision='Alpha'
 	end
-		self:Print("Version %s %s loaded" ,self:Colorize(self.version,'green'),self:Colorize(format("(Revision: %s)",self.revision),"silver"))
+		self:print(format("Version %s %s loaded" ,self:Colorize(self.version,'green'),self:Colorize(format("(Revision: %s)",self.revision),"silver")))
 		LoadDefaults(self)
 		self.help=setmetatable(
 				{},
@@ -511,41 +518,34 @@ function mix:OnInitialize(...)
 		local profile
 		if (AceDBOptions) then
 				self.ProfileOpts=AceDBOptions:GetOptionsTable(self.db)
-				profile=main .. 'profile'
+				titles.PROFILE=self.ProfileOpts.name
+				self.ProfileOpts.name=self.name
+				profile=main..PROFILE
 		end
 		LoadHelp(self)
-		AceConfigDialog:AddToBlizOptions(main,main )
-
-		AceConfig:RegisterOptionsTable(main .. CONFIGURATION,self.OptionsTable,{main,strlower(self.ID)})
-		self.CfgDlg=AceConfigDialog:AddToBlizOptions(main .. CONFIGURATION,CONFIGURATION,main)
-
+		AceConfig:RegisterOptionsTable(main,self.OptionsTable,{main,strlower(self.ID)})
+		self.CfgDlg=AceConfigDialog:AddToBlizOptions(main,main )
 		if (profile and not ignoreProfile) then
-				AceConfig:RegisterOptionsTable(profile,self.ProfileOpts)
-				AceConfigDialog:AddToBlizOptions(profile,L.Profile,main)
+				AceConfig:RegisterOptionsTable(main .. PROFILE,self.ProfileOpts)
+				AceConfigDialog:AddToBlizOptions(main .. PROFILE,titles.PROFILE,main)
 		end
 		if (self.help[RELNOTES]~='') then
-			self.CfgRel=AceConfigDialog:AddToBlizOptions(main .. RELNOTES,RELNOTES,main)
+			self.CfgRel=AceConfigDialog:AddToBlizOptions(main..RELNOTES,titles.RELNOTES,main)
 		end
 		if (self.help[TOGGLES]~='') then
-			AceConfigDialog:AddToBlizOptions(main .. TOGGLES,TOGGLES,main)
+			AceConfigDialog:AddToBlizOptions(main..TOGGLES,titles.TOGGLES,main)
 		end
 		if (self.help[LIBRARIES]~='') then
-			AceConfigDialog:AddToBlizOptions(main .. LIBRARIES,LIBRARIES,main)
-		end
-end
-
-function mix:GetAceOptionsTable(configtype)
-		configtype=configtype or 'dropdown'
-		if (AceRegistry) then
-				return AceRegistry:GetOptionsTable(AAU.name,configtype,MAJOR_VERSION)
-		else
-				return self.OptionsTable
+			AceConfigDialog:AddToBlizOptions(main..LIBRARIES,titles.LIBRARIES,main)
 		end
 end
 
 -- help related functions
 function hlp:HF_Push(section,text)
-		section=section or self.lastsection or DESCRIPTION
+		if (self.name=='PetCare') then
+			print("Pushing",section,text)
+		end
+		section=section or self.lastsection or RELNOTES
 		self.lastsection=section
 		self.help[section]=self.help[section]  .. '\n' .. text
 end
@@ -607,6 +607,7 @@ function hlp:RelNotes(major,minor,revision,t)
 		local spacer=""
 		local maxpanlen=70
 		lines={strsplit("\n",t)}
+		local max=5
 		for i,tt in ipairs(lines) do
 				local prefix,text=tt:match("^(Fixed):(.*)")
 				if (prefix == "Fixed") then
@@ -633,6 +634,10 @@ function hlp:RelNotes(major,minor,revision,t)
 				tta=tta..prefix..tt
 				tta=tta:gsub("Upgrade:",self:Colorize("Upgrade:",'Azure'))
 				lines[i]=tta:gsub("Example:",self:Colorize("Example:",'Orange'))
+				max=max-1
+				if (max<1) then
+					break
+				end
 		end
 		self:HF_Push(RELNOTES,fmt:format(major,minor,revision,strjoin("\n",unpack(lines))))
 end
@@ -643,6 +648,7 @@ function hlp:HF_Load(section,optionname,versione)
 		if (section == LIBRARIES) then
 				getlibs(self)
 		end
+		print("Loading ",section)
 		local testo =self.help[section]
 		--debug(section)
 		--debug(optionname)
@@ -1297,6 +1303,10 @@ function mix:Gui(info)
 end
 function mix:Help(info)
 		if (AceConfigDialog and AceGUI) then
+				if (neveropened) then
+					InterfaceAddOnsList_Update()
+					neveropened=false
+				end
 				InterfaceOptionsFrame_OpenToCategory(self.CfgRel)
 		else
 				self:Print("No GUI available")
@@ -1411,15 +1421,10 @@ function lib:Embed(target)
 		target.ID=GetAddOnMetadata(title,"X-ID") or (target.name:gsub("[^%u%d]","") .. "XXXX"):sub(1,3)
 		target.DATABASE=GetAddOnMetadata(title,"X-Database") or "db" .. target.ID
 		debug("Info for",target.name,'(',target.ID,')',target.DATABASE,GetAddOnMetadata(target.name,"X-Database"))
+		LibStub("AlarLoader-3.0"):GetPrintFunctions(self.name,target)
 		-- Standard Mixins
 		for name,method in pairs(mix) do
 				target[name] = method
-		end
-		-- Printing func
-		local rc=LibStub("AlarLoader-3.0"):GetPrintFunctions(target:GetName(),2)
-		for name,func in pairs(rc) do
-			target[name]=func
-			target[name:capitalize()]=func
 		end
 		-- Help system mixins
 		for name,method in pairs(hlp) do

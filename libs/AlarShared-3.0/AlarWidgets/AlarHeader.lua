@@ -1,22 +1,18 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
-local Type,Version,Ancestor = "AlarHeader",7
-local pp=print
-local me, ns = ...
---@debug@
-LibStub("AlarLoader-3.0"):loadingList(__FILE__,me)
---@end-debug@
-if (LibDebug) then LibDebug() end
-local function debug(...)
---@debug@
-	--print(...)
---@end-debug@
-end
-local print=pp
 local toc=select(4,GetBuildInfo())
---[[ Standard prologue end --]]
+local me, ns = ...
+local pp=print
+local L=LibStub("AceLocale-3.0"):GetLocale(me,true)
+local C=LibStub("AlarCrayon-3.0"):GetColorTable()
+LibStub("AlarLoader-3.0")(__FILE__,me,ns)
+local print=ns.print or print
+local debug=ns.debug or print
 local AWG=LibStub("AlarWidgets-3.0")
 local AceGUI=LibStub("AceGUI-3.0")
 local C=LibStub("AlarCrayon-3.0"):GetColorTable()
+local L=LibStub("AceLocale-3.0"):GetLocale("AlarShared")
+--[[ Standard prologue end --]]
+local Type,Version,Ancestor = "AlarHeader",7
 local InjectStandardMethods=AWG.InjectStandardMethods
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 local methods={}

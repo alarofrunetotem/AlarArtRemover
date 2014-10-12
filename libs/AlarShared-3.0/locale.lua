@@ -1,26 +1,19 @@
-local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
 local MAJOR_VERSION = "AlarShared-3.0.localization"
 local MINOR_VERSION = 1000
 local lib,old=LibStub:NewLibrary(MAJOR_VERSION,MINOR_VERSION)
 if not lib then return end
-local me, ns = ...
---@debug@
-LibStub("AlarLoader-3.0"):loadingList(__FILE__,me)
---@end-debug@
+local me = "AlarShared"
 local l=LibStub("AceLocale-3.0")
-local function getLocale(lang,default)
-	return l:GetLocale("AlarShared",lang) or l:NewLocale("AlarShared",lang,default,default)
-end
-local L=getLocale("enUS",true)
-L["Configuration"] = "Configuration"
-L["Description"] = "Description"
-L["Double Click to shrink"] = "Double Click to shrink"
-L["Libraries"] = "Libraries"
-L["Release Notes"] = "Release Notes"
-L["Right Click to rescale"] = "Right Click to rescale"
-L["Toggles"] = "Toggles"
+local L=l:NewLocale(me,"enUS",true,true)
+L["Configuration"] = true
+L["Description"] = true
+L["Double Click to shrink"] = true
+L["Libraries"] = true
+L["Release Notes"] = true
+L["Right Click to rescale"] = true
+L["Toggles"] = true
 
-L=getLocale("ptBR")
+L=l:NewLocale(me,"ptBR")
 if (L) then
 L["Configuration"] = "configura\195\167\195\163o"
 L["Description"] = "Descri\195\167\195\163o"
@@ -31,7 +24,7 @@ L["Right Click to rescale"] = "Clique direito para redimensionar"
 L["Toggles"] = "Alterna"
 return
 end
-L=getLocale("frFR")
+L=l:NewLocale(me,"frFR")
 if (L) then
 L["Configuration"] = "configuration"
 L["Description"] = "description"
@@ -42,7 +35,7 @@ L["Right Click to rescale"] = "Clic droit pour redimensionner"
 L["Toggles"] = "Bascule"
 return
 end
-L=getLocale("deDE")
+L=l:NewLocale(me,"deDE")
 if (L) then
 L["Configuration"] = "Konfiguration"
 L["Description"] = "Beschreibung"
@@ -53,7 +46,7 @@ L["Right Click to rescale"] = "Mit Rechtsklick neu skalieren"
 L["Toggles"] = "Schaltet"
 return
 end
-L=getLocale("koKR")
+L=l:NewLocale(me,"koKR")
 if (L) then
 L["Configuration"] = "\234\181\172\236\132\177"
 L["Description"] = "\236\132\164\235\170\133"
@@ -64,7 +57,7 @@ L["Right Click to rescale"] = "\236\152\164\235\165\184\236\170\189 \236\158\172
 L["Toggles"] = "\236\160\132\237\153\152"
 return
 end
-L=getLocale("esMX")
+L=l:NewLocale(me,"esMX")
 if (L) then
 L["Configuration"] = "Configuraci\195\179n"
 L["Description"] = "Descripci\195\179n"
@@ -75,7 +68,7 @@ L["Right Click to rescale"] = "Haz clic derecho para cambiar la escala de"
 L["Toggles"] = "Alterna"
 return
 end
-L=getLocale("ruRU")
+L=l:NewLocale(me,"ruRU")
 if (L) then
 L["Configuration"] = "\208\154\208\190\208\189\209\132\208\184\208\179\209\131\209\128\208\176\209\134\208\184\209\143"
 L["Description"] = "\208\158\208\191\208\184\209\129\208\176\208\189\208\184\208\181"
@@ -85,7 +78,7 @@ L["Release Notes"] = "\208\159\209\128\208\184\208\188\208\181\209\135\208\176\2
 L["Right Click to rescale"] = "\208\169\208\181\208\187\208\186\208\189\208\184\209\130\208\181 \208\191\209\128\208\176\208\178\208\190\208\185 \208\186\208\189\208\190\208\191\208\186\208\190\208\185 \208\188\209\139\209\136\208\184 \208\180\208\187\209\143 \208\184\208\183\208\188\208\181\208\189\208\181\208\189\208\184\209\143 \208\188\208\176\209\129\209\136\209\130\208\176\208\177\208\176"
 L["Toggles"] = "\208\159\208\181\209\128\208\181\208\186\208\187\209\142\209\135\208\181\208\189\208\184\208\181"
 end
-L=getLocale("zhCN")
+L=l:NewLocale(me,"zhCN")
 if (L) then
 L["Configuration"] = "\233\133\141\231\189\174"
 L["Description"] = "\232\175\180\230\152\142"
@@ -96,7 +89,7 @@ L["Right Click to rescale"] = "\229\143\179\233\148\174\229\141\149\229\135\187\
 L["Toggles"] = "\229\136\135\230\141\162"
 return
 end
-L=getLocale("esES")
+L=l:NewLocale(me,"esES")
 if (L) then
 L["Configuration"] = "Configuraci\195\179n"
 L["Description"] = "Descripci\195\179n"
@@ -107,7 +100,7 @@ L["Right Click to rescale"] = "Haz clic derecho para cambiar la escala de"
 L["Toggles"] = "Alterna"
 return
 end
-L=getLocale("zhTW")
+L=l:NewLocale(me,"zhTW")
 if (L) then
 L["Configuration"] = "\233\133\141\231\189\174"
 L["Description"] = "\232\175\180\230\152\142"
@@ -118,7 +111,7 @@ L["Right Click to rescale"] = "\229\143\179\233\148\174\229\141\149\229\135\187\
 L["Toggles"] = "\229\136\135\230\141\162"
 return
 end
-L=getLocale("itIT")
+L=l:NewLocale(me,"itIT")
 if (L) then
 L["Configuration"] = "Configurazione"
 L["Description"] = "Descrizione"

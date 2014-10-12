@@ -1,15 +1,15 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
 local MAJOR_VERSION = "AlarLoader-3.0"
-local MINOR_VERSION = 1002
+local MINOR_VERSION = 1003
 local pp=print
 local me, ns = ...
 local module,old=LibStub:NewLibrary(MAJOR_VERSION,MINOR_VERSION) --#AlarLoader
 if (not module) then return end
 setmetatable(module,{
-	__call = function(t,...)
-		local fname,me,ns=...
+	__call = function(t,fname,me,ns)
 		t:loadingList(fname,me)
 		t:GetPrintFunctions(me,ns)
+		return t
 	end
 	}
 )
@@ -113,9 +113,9 @@ function lib:CreateAddon(name,force,...)
 			stub=LibStub("AceAddon-3.0"):NewAddon(name,...)
 		end
 		if (stub) then
-			self.debugs[name]=false
+			lib.debugs[name]=false
 			do
-				local debugs=self.debugs
+				local debugs=lib.debugs
 				local addon=name
 				function stub:EnableDebug(status)
 					debugs[addon]=status
@@ -124,7 +124,7 @@ function lib:CreateAddon(name,force,...)
 			end
 				return stub
 		else
-			error("Unable to create stub")
+			error("Unable to create stub " .. tostring(name))
 		end
 end
 function lib:SetDebug(addon,status)

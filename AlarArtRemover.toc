@@ -1,8 +1,9 @@
 ## Interface: 50400
-## Title: Alar:|c00ff9900ArtRemover|r
-## Notes: Removes Blizzard Art from Action Bars (Wod compatible)
+## Title: AlarArtRemover
+## Notes: Removes Blizzard Art from Action Bars
+## Notes-itIT: Rimuove le texture Blizzard dalle action bars
 ## Author: Alar of Daggerspine
-#### Version: #@project-version@ @project-abbreviated-hash@
+## Version: @project-version@ @project-abbreviated-hash@
 ## X-Version: 3.3.2
 ## eMail: alar@aspide.it
 ## URL: http://wow.aspide.it

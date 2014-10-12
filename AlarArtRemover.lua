@@ -4,15 +4,15 @@ local me, ns = ...
 local pp=print
 local L=LibStub("AceLocale-3.0"):GetLocale(me,true)
 local C=LibStub("AlarCrayon-3.0"):GetColorTable()
-local X=LibStub("AlarLoader-3.0")
-X:loadingList(__FILE__,me)
-X:GetPrintFunctions(me,ns)
+LibStub("AlarLoader-3.0")(__FILE__,me,ns)
+--X:loadingList(__FILE__,me)
+--X:GetPrintFunctions(me,ns)
 local print=ns.print or print
 local debug=ns.debug or print
 --[[ Standard prologue end --]]
 local function help(self)
 --===DOCBEGIN===
-		self:HF_Title("Blizzard art remover","Description")
+		self:HF_Title("Blizzard art remover","RELNOTES")
 		self:HF_Paragraph("Description")
 		self:HF_Pre("Hides gryphons and artwork from blzzard main actionbar")
 		self:RelNotes(3,2,7,[[

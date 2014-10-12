@@ -1,6 +1,6 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
 local pp=print
-local Type,Version,ancestor='AlarCastSingleButton',6,'AlarCastButton'
+local Type,Version,ancestor='AlarCastSingleButton',7,'AlarCastButton'
 local me, ns = ...
 --@debug@
 LibStub("AlarLoader-3.0"):loadingList(__FILE__,me)
@@ -36,14 +36,12 @@ function cc:Pop(duration,speed)
 		frame:ClearAllPoints()
 		frame:SetPoint("CENTER",UIParent,"CENTER",offset,0)
 		self:Show()
-		debug ("Popping",self.spell,duration,speed)
 		if (type(duration) == 'number') then
 			speed=5
 			self:FadeOut()
 		end
 end
 function cc:FadeOut(speed,delay)
-	debug("FadeOut invoked")
 		local fade=self.fade
 		local animation=self.animation
 		local frame=self.frame
@@ -54,7 +52,6 @@ function cc:FadeOut(speed,delay)
 		fade:SetChange(-1)
 		fade:SetStartDelay(delay)
 		fade:SetDuration(speed)
-		 debug("Fade started",delay,speed)
 		animation:Play()
 end
 function cc:FadeStop()
