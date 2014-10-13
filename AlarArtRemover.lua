@@ -14,7 +14,7 @@ local function help(self)
 --===DOCBEGIN===
 		self:HF_Title("Blizzard art remover","RELNOTES")
 		self:HF_Paragraph("Description")
-		self:HF_Pre("Hides gryphons and artwork from blzzard main actionbar")
+		self:HF_Pre("Hides gryphons and artwork from blzzard main actionbar\n")
 		self:RelNotes(3,2,7,[[
 Upgrade: Updated to 5.4.8
 ]])
