@@ -1,6 +1,6 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
 local MAJOR_VERSION = "AlarCore-3.0"
-local MINOR_VERSION = 1001
+local MINOR_VERSION = 1002
 local pp=print
 local toc=select(4,GetBuildInfo())
 local me, ns = ...
@@ -378,7 +378,6 @@ local function _DebugEnable(info)
 	self:EnableDebug(status)
 end
 local function LoadDefaults(self)
-print("LOaddefault",self.title)
 		self.OptionsTable={
 				handler=self,
 				type="group",
@@ -503,7 +502,7 @@ function mix:OnInitialize(...)
 	if (tonumber(self.revision)< 1) then
 		self.revision='Alpha'
 	end
-		self:print(format("Version %s %s loaded" ,self:Colorize(self.version,'green'),self:Colorize(format("(Revision: %s)",self.revision),"silver")))
+		print(format("Version %s %s loaded" ,self:Colorize(self.version,'green'),self:Colorize(format("(Revision: %s)",self.revision),"silver")))
 		LoadDefaults(self)
 		self.help=setmetatable(
 				{},
@@ -542,9 +541,6 @@ end
 
 -- help related functions
 function hlp:HF_Push(section,text)
-		if (self.name=='PetCare') then
-			print("Pushing",section,text)
-		end
 		section=section or self.lastsection or RELNOTES
 		self.lastsection=section
 		self.help[section]=self.help[section]  .. '\n' .. text
@@ -648,7 +644,6 @@ function hlp:HF_Load(section,optionname,versione)
 		if (section == LIBRARIES) then
 				getlibs(self)
 		end
-		print("Loading ",section)
 		local testo =self.help[section]
 		--debug(section)
 		--debug(optionname)
