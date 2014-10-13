@@ -1,6 +1,6 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
 local MAJOR_VERSION = "AlarCore-3.0"
-local MINOR_VERSION = 1002
+local MINOR_VERSION = 1003
 local pp=print
 local toc=select(4,GetBuildInfo())
 local me, ns = ...
@@ -502,7 +502,7 @@ function mix:OnInitialize(...)
 	if (tonumber(self.revision)< 1) then
 		self.revision='Alpha'
 	end
-		print(format("Version %s %s loaded" ,self:Colorize(self.version,'green'),self:Colorize(format("(Revision: %s)",self.revision),"silver")))
+		self.print(format("Version %s %s loaded" ,self:Colorize(self.version,'green'),self:Colorize(format("(Revision: %s)",self.revision),"silver")))
 		LoadDefaults(self)
 		self.help=setmetatable(
 				{},
@@ -1416,7 +1416,7 @@ function lib:Embed(target)
 		target.ID=GetAddOnMetadata(title,"X-ID") or (target.name:gsub("[^%u%d]","") .. "XXXX"):sub(1,3)
 		target.DATABASE=GetAddOnMetadata(title,"X-Database") or "db" .. target.ID
 		debug("Info for",target.name,'(',target.ID,')',target.DATABASE,GetAddOnMetadata(target.name,"X-Database"))
-		LibStub("AlarLoader-3.0"):GetPrintFunctions(self.name,target)
+		LibStub("AlarLoader-3.0"):GetPrintFunctions(target.name,target)
 		-- Standard Mixins
 		for name,method in pairs(mix) do
 				target[name] = method
