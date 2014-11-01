@@ -1,5 +1,5 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
-local Type,Version,Ancestor='AlarCast',8,nil
+local Type,Version,Ancestor='AlarCast',9,nil
 local pp=print
 local me, ns = ...
 --@debug@
@@ -154,6 +154,7 @@ function cc:UpdateUsable(frame)
 	local icon = self.Icon;
 	if (not icon) then return end
 	local normalTexture = self.NormalTexture
+	if (not normalTexture) then return end
 	local rc,isUsable, notEnoughMana = pcall(IsUsableSpell,self.spell)
 	if (not rc) then return end
 	if ( isUsable ) then

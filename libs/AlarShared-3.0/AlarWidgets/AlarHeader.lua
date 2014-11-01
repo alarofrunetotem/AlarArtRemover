@@ -12,10 +12,10 @@ local AceGUI=LibStub("AceGUI-3.0")
 local C=LibStub("AlarCrayon-3.0"):GetColorTable()
 local L=LibStub("AceLocale-3.0"):GetLocale("AlarShared")
 --[[ Standard prologue end --]]
-local Type,Version,Ancestor = "AlarHeader",7
+local Type,Version,Ancestor = "AlarHeader",8
 local InjectStandardMethods=AWG.InjectStandardMethods
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
-local methods={}
+local methods={} --#Control
 function methods:SetBackdrop(backdrop)
 	self.frame:SetBackdrop(backdrop)
 end
@@ -45,10 +45,12 @@ function methods:ApplyStatus()
 end
 do
 	local serial=0
+	---@function [parent=#Control] _frameOnMouseDown
 	local function frameOnMouseDown(this)
 		this:StartMoving()
 		AceGUI:ClearFocus()
 	end
+	---@function [parent=#Control] _shrink
 	local function shrink(this)
 		if this.obj:IsRestricted() then return end
 		local content=this.obj.content
@@ -69,6 +71,7 @@ do
 			end
 		end
 	end
+	---@function [parent=#Control] _frameOnMouseUp
 	local function frameOnMouseUp(this)
 		this:StopMovingOrSizing()
 		local self = this.obj
@@ -89,6 +92,7 @@ do
 			GameTooltip:Hide();
 			end
 	end
+	---@function [parent=#Control] _Constructor
 	local function Constructor()
 		local frame=CreateFrame("Button",Type..serial,UIParent,"UIPanelButtonTemplate")
 		serial =serial +1
@@ -98,8 +102,8 @@ do
 		frame:SetScript("OnMouseDown",frameOnMouseDown)
 		frame:SetScript("OnMouseUp", frameOnMouseUp)
 		frame:SetScript("OnDoubleClick",shrink)
-		frame:SetScript("OnEnter",tooltipshow)
-		frame:SetScript("OnLeave",tooltiphide)
+		--frame:SetScript("OnEnter",tooltipshow)
+		--frame:SetScript("OnLeave",tooltiphide)
 		--Container Support
 		local content = CreateFrame("Frame",nil,frame)
 		widget.content = content
