@@ -985,7 +985,7 @@ function mix:OnEnable(first,...)
 		self.notfirst=true
 	end
 	self:ApplySettings()
-	self:OnEnabled(not notfirst,...)
+	self:OnEnabled(not self.notfirst,...)
 end
 function mix:OnDisable(...)
 	self.Print(C("disabled",'red'))
