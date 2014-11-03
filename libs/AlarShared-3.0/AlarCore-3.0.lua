@@ -1306,7 +1306,7 @@ function lib:Embed(target)
 	target.DATABASE=GetAddOnMetadata(title,"X-Database") or "db" .. target.ID
 	--@debug@
 	debug("Info for",target.name,'(',target.ID,')',target.DATABASE,GetAddOnMetadata(target.name,"X-Database"))
-	--@end-debugd@
+	--@end-debug@
 	LibStub("AlarLoader-3.0"):GetPrintFunctions(target.name,target)
 	-- Standard Mixins
 	for name,method in pairs(mix) do
