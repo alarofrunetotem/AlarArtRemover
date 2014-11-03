@@ -604,7 +604,12 @@ function mix:HF_Load(section,optionname,versione)
 		AceConfigDialog:SetDefaultSize(optionname, 600, 400)
 	end
 end
-
+-- Compatibility
+virt.EvtStart=setmetatable({},{__call=function() self:StartAutomaticEvents() end})
+virt.EvtStop=setmetatable({},{__call=function() self:StopAutomaticEvents() end})
+function virt:Register()
+	return
+end
 function virt:Localize(...)
 		return
 end
@@ -1275,54 +1280,58 @@ end
 -- This function get called on addon creation
 -- Anything I define here is immediately available to addon code
 function lib:Embed(target)
-		debug("Embedding " .. MAJOR_VERSION .. "." .. MINOR_VERSION .. " into " .. target.name)
-		-- Info from TOC
-		local v=GetAddOnMetadata(tostring(target),"version")
-		v=v or '0'
-		target.tocversion=v
-		local version,revision=v:match("([^$ ]*) *(.*)")
-		target.version=version or "0"
-		local title=target.name or target.fullname
-		if (target.version == '@'..'project-version@' and title) then
-				target.version=GetAddOnMetadata(title,'X-Version')
-		end
-		if (target.revision == '@'..'project-revision@' and title) then
-				target.revision=GetAddOnMetadata(title,'X-Revision')
-		end
-		target.revision=revision:match("%d+") or "0"
-		target.prettyversion=format("%s (Revision: %s)",tostringall(target.version,target.revision))
-		target.numericversion=versiontonumber(v)
-		target.title=GetAddOnMetadata(tostring(target),"title") or 'No title'
-		target.notes=GetAddOnMetadata(tostring(target),"notes") or 'No notes'
-		-- Setting sensible default for mandatory fields
-		target.ID=GetAddOnMetadata(title,"X-ID") or (target.name:gsub("[^%u%d]","") .. "XXXX"):sub(1,3)
-		target.DATABASE=GetAddOnMetadata(title,"X-Database") or "db" .. target.ID
-		debug("Info for",target.name,'(',target.ID,')',target.DATABASE,GetAddOnMetadata(target.name,"X-Database"))
-		LibStub("AlarLoader-3.0"):GetPrintFunctions(target.name,target)
-		-- Standard Mixins
-		for name,method in pairs(mix) do
-				target[name] = method
-		end
-		target._Apply=target._Apply or {}
-		target._Apply._handler=target
-		setmetatable(target._Apply,varmeta)
-		-- virtual methods, they can be ovverriden
-		-- versioning is not important, because virtual methods are always nop
-		for name,_ in pairs(virt) do
-				target[name]=target[name] or nop
-		end
-		target.registry=target.registry or {}
-		local r=target.registry
-		for _,subtable in pairs{'events','hooks','commands','options','icommands'} do
-				r[subtable]=r[subtable] or {}
-		end
-		target.org=target.org or {}
-		target.coroutines=target.coroutines or {}
-		lib.mixinTargets[target] = true
-		if (me == "AlarShared") then
-			local as=LibStub("AceAddon-3.0"):GetAddon("AlarShared",true)
-			if (as) then as:LoadOptions() end
-		end
+	--@debug@
+	debug("Embedding " .. MAJOR_VERSION .. "." .. MINOR_VERSION .. " into " .. target.name)
+	--@end-debug@
+	-- Info from TOC
+	local v=GetAddOnMetadata(tostring(target),"version")
+	v=v or '0'
+	target.tocversion=v
+	local version,revision=v:match("([^$ ]*) *(.*)")
+	target.version=version or "0"
+	local title=target.name or target.fullname
+	if (target.version == '@'..'project-version@' and title) then
+			target.version=GetAddOnMetadata(title,'X-Version')
+	end
+	if (target.revision == '@'..'project-revision@' and title) then
+			target.revision=GetAddOnMetadata(title,'X-Revision')
+	end
+	target.revision=revision:match("%d+") or "0"
+	target.prettyversion=format("%s (Revision: %s)",tostringall(target.version,target.revision))
+	target.numericversion=versiontonumber(v)
+	target.title=GetAddOnMetadata(tostring(target),"title") or 'No title'
+	target.notes=GetAddOnMetadata(tostring(target),"notes") or 'No notes'
+	-- Setting sensible default for mandatory fields
+	target.ID=GetAddOnMetadata(title,"X-ID") or (target.name:gsub("[^%u%d]","") .. "XXXX"):sub(1,3)
+	target.DATABASE=GetAddOnMetadata(title,"X-Database") or "db" .. target.ID
+	--@debug@
+	debug("Info for",target.name,'(',target.ID,')',target.DATABASE,GetAddOnMetadata(target.name,"X-Database"))
+	--@end-debugd@
+	LibStub("AlarLoader-3.0"):GetPrintFunctions(target.name,target)
+	-- Standard Mixins
+	for name,method in pairs(mix) do
+			target[name] = method
+	end
+	target._Apply=target._Apply or {}
+	target._Apply._handler=target
+	setmetatable(target._Apply,varmeta)
+	-- virtual methods, they can be ovverriden
+	-- versioning is not important, because virtual methods are always nop
+	for name,_ in pairs(virt) do
+			target[name]=target[name] or nop
+	end
+	target.registry=target.registry or {}
+	local r=target.registry
+	for _,subtable in pairs{'events','hooks','commands','options','icommands'} do
+			r[subtable]=r[subtable] or {}
+	end
+	target.org=target.org or {}
+	target.coroutines=target.coroutines or {}
+	lib.mixinTargets[target] = true
+	if (me == "AlarShared") then
+		local as=LibStub("AceAddon-3.0"):GetAddon("AlarShared",true)
+		if (as) then as:LoadOptions() end
+	end
 end
 
 
