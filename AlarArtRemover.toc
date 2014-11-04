@@ -4,7 +4,7 @@
 ## Notes-itIT: Rimuove le texture Blizzard dalle action bars
 ## Author: Alar of Daggerspine
 ## Version: @project-version@ @project-abbreviated-hash@
-## X-Version: 3.5.0
+## X-Version: 3.5.1
 ## eMail: alar@aspide.it
 ## URL: http://wow.aspide.it
 ## RequiredDeps:

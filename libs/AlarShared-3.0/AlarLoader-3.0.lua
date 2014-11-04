@@ -1,6 +1,6 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
 local MAJOR_VERSION = "AlarLoader-3.0"
-local MINOR_VERSION = 1003
+local MINOR_VERSION = 1004
 local pp=print
 local me, ns = ...
 local module,old=LibStub:NewLibrary(MAJOR_VERSION,MINOR_VERSION) --#AlarLoader
@@ -48,11 +48,12 @@ end
 lib.debugs=lib.debugs or {}
 local function GetChatFrame(chat)
 	if (chat) then
-		for i=1,10 do
+		for i=1,NUM_CHAT_WINDOWS do
 			local frame=_G["ChatFrame" .. i]
 			if (not frame) then break end
 			if (frame.name==chat) then return frame end
 		end
+		return nil
 	end
 	return DEFAULT_CHAT_FRAME
 end
@@ -60,7 +61,7 @@ function lib:GetPrintFunctions(caller,skip)
 	local result
 	if (type(skip)=='table') then result=skip else wipe(tab) result=tab end
 	do
-		local c=GetChatFrame
+		local GetChatFrame=GetChatFrame
 		local caller=tostring(caller) or ''
 		local skip=tonumber(skip) or 1
 		local prefixp=caller .. ':|r|cff20ff20'
@@ -82,11 +83,13 @@ function lib:GetPrintFunctions(caller,skip)
 		end
 		function result.debug(...)
 			if (debugs[caller]) then
-				c("ADebug"):AddMessage(strjoin(' ',date("%X"),prefixd,xformat(select(skip,...))),tostring(debugstack(2,1,0)))
+				local c = GetChatFrame("ADebug")
+				if (c) then c:AddMessage(strjoin(' ',date("%X"),prefixd,xformat(select(skip,...))),tostring(debugstack(2,1,0))) end
 			end
 		end
 		function result.sdebug(...)
-				c("ADebug"):AddMessage(strjoin(' ',date("%X"),prefixs,xformat(select(skip,...))),tostring(debugstack(2,1,0)))
+				local c = GetChatFrame("ADebug")
+				if (c) then c:AddMessage(strjoin(' ',date("%X"),prefixs,xformat(select(skip,...))),tostring(debugstack(2,1,0))) end
 		end
 		function result.notify(...) pp(prefixn,xformat(select(skip,...))) end
 		function result.error(...) pp(prefixe,xformat(select(skip,...))) end

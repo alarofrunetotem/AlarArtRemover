@@ -61,6 +61,7 @@ local GetItemInfo=GetItemInfo
 local UnitHealth=UnitHealth
 local UnitHealthMax=UnitHealthMax
 local GetItemInfo=GetItemInfo
+local CachedGetItemInfo
 local wipe=wipe
 local setmetatable=setmetatable
 local NUM_BAG_SLOTS=NUM_BAG_SLOTS
@@ -212,6 +213,17 @@ function mix:Parse(msg)
 	return cmd,subcmd,param,fullarg
 end
 ---
+-- Parses an itenlink and returns itemId without calling API again
+-- @param string itemlink
+-- @return number itemId or 0
+function mix:GetItemID(itemlink)
+	if (type(itemlink)=="string") then
+			return tonumber(itemlink:match("Hitem:(%d+):")) or 0
+	else
+			return 0
+	end
+end
+---
 -- Scans Bags for an item based on different criteria
 --
 -- All parameters are optional.
@@ -229,14 +241,17 @@ function mix:ScanBags(index,value,startbag,startslot)
 	startslot=startslot or 1
 	for bag=startbag,NUM_BAG_SLOTS,1 do
 		for slot=startslot,GetContainerNumSlots(bag),1 do
-			local itemid=GetContainerItemID(bag,slot) or 0
-			if (index==0) then
-				if (itemid==value) then
-					return itemid,bag,slot,GetItemInfo(itemid)
-				end
-			else
-				if (select(index,GetItemInfo(itemid))) then
-					return itemid,bag,slot,unpack(result)
+			local itemlink=GetContainerItemLink(bag,slot)
+			if (itemlink) then
+				if (index==0) then
+					if (self:GetItemID(itemlink)==value) then
+						return itemlink,bag,slot
+					end
+				else
+					local test=CachedGetItemInfo(itemlink,index)
+					if (value==test) then
+						return itemlink,bag,slot
+					end
 				end
 			end
 		end
@@ -439,6 +454,7 @@ local function LoadHelp(self)
 	end
 end
 function mix:OnInitialize(...)
+	CachedGetItemInfo=self:GetCachingGetItemInfo()
 	if (tonumber(self.revision)< 1) then
 		self.revision='Alpha'
 	end
@@ -1003,8 +1019,8 @@ end
 function mix:StartAutomaticEvents()
 	for k,v in pairs(self) do
 		if (type(v)=='function') then
-			if (k:sub(0,3)=='Evt') then
-				self:RegisterEvent(k:sub(3),k)
+			if (k:sub(1,3)=='Evt') then
+				self:RegisterEvent(k:sub(4),k)
 			end
 		end
 	end
@@ -1012,11 +1028,11 @@ end
 function mix:StopAutomaticEvents(ignore)
 	for k,v in pairs(self) do
 		if (type(v)=='function') then
-			if (k:sub(0,3)=='Evt') then
-				if (ignore and k==ignore or k:sub(3)==ignore) then
+			if (k:sub(1,3)=='Evt') then
+				if (ignore and k==ignore or k:sub(4)==ignore) then
 					--a kickstart event not to be disabled
 				else
-					self:UnregisterEvent(k:sub(3))
+					self:UnregisterEvent(k:sub(4))
 				end
 			end
 		end
