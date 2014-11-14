@@ -15,28 +15,8 @@ local function help(self)
 		self:HF_Title("Blizzard art remover","RELNOTES")
 		self:HF_Paragraph("Description")
 		self:HF_Pre("Hides gryphons and artwork from blzzard main actionbar\n")
-		self:RelNotes(3,2,7,[[
-Upgrade: Updated to 5.4.8
-]])
-		self:RelNotes(3,2,6,[[
-Fixed: Error in localization
-]])
-		self:RelNotes(3,0,0,[[
-Upgrade: Updated for WotLK
-]])
-		self:RelNotes(2,0,0,[[
-Upgrade: Now uses Ace3
-Fixed: Art status is now always remember betweeen section
-]])
-		self:RelNotes(1,0,5,[[
-Upgrade: WoW 2.4
-]])
-		self:RelNotes(1,0,4,[[
-Upgrade: Embedded libraries upgrade
-Fixed: ...AlarLib-2.0.lua:4689: bad argument #1 to 'pairs' (table expected, got nil)
-]])
-		self:RelNotes(1,0,0,[[
-Feature: Updated to WoW 2.3
+self:RelNotes(3,5,1,[[
+Upgrade: Updated to 6.0.3
 ]])
 --===DOCEND===
 end
