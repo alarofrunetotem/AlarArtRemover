@@ -1,6 +1,6 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
 local MAJOR_VERSION = "AlarCore-3.0"
-local MINOR_VERSION = 1004
+local MINOR_VERSION = 1005
 local pp=print
 local toc=select(4,GetBuildInfo())
 local me, ns = ...
@@ -718,7 +718,7 @@ function mix:AddText(text,image,imageHeight,imageWidth,imageCoords)
 end
 
 --self:AddToggle("AUTOLEAVE",true,"Quick Battlefield Leave","Alt-Click on hide button in battlefield alert leaves the queue")
-function mix:AddBoolean(flag,defaultvalue,name,description)
+function mix:AddBoolean(flag,defaultvalue,name,description,icon)
 	description=description or name
 	local group=getgroup(self)
 	local t={
@@ -729,6 +729,7 @@ function mix:AddBoolean(flag,defaultvalue,name,description)
 			desc=description,
 			arg=flag,
 			cmdHidden=true,
+			icon=icon,
 			order=getorder(self,group),
 
 	}
@@ -1251,20 +1252,24 @@ end
 function mix:getColorTable()
 	return C
 end
+lib.emptytable={false,false}
 lib.itemcache=lib.itemcache or
 	setmetatable({miss=0,tot=0},{
 		__index=function(table,key)
-			if (not key) then return new() end
+			if (not key) then return lib.emptytable end
 			local t=new(GetItemInfo(key))
 			if (t[2]) then
 				if (table.I) then
 					t[99]=table.I:GetItemLevelUpgrade(table.I:GetUpgradeID(t[2]))
 				else
-					print("No libiteminfo")
+					debug("No libiteminfo")
 					t[99]=0
 				end
 				t[100]=t[4]+t[99]
 				rawset(table,t[2],t)
+			else
+				del(t)
+				return lib.emptytable
 			end
 			table.miss=table.miss+1
 			return t
@@ -1277,6 +1282,13 @@ function mix:GetCachingGetItemInfo()
 		cache.I=LibStub("LibItemUpgradeInfo-1.0",true)
 		return
 		function(itemlink,index)
+			if (tonumber(itemlink)) then
+				if (tonumber(index)) then
+					return select(index,GetItemInfo(itemlink))
+				else
+					return GetItemInfo(itemlink)
+				end
+			end
 			cache.tot=cache.tot+1
 			if (index) then
 				return cache[itemlink][index]
