@@ -74,7 +74,9 @@ do
 		local t = next(list)
 		if t then
 			list[t] = nil
-			for i,v in pairs(...) do t[i]=v end
+			if (...) then
+				for i,v in pairs(...) do t[i]=v end
+			end
 			return t
 		else
 			return {...}
@@ -455,9 +457,6 @@ local function LoadHelp(self)
 end
 function mix:OnInitialize(...)
 	CachedGetItemInfo=self:GetCachingGetItemInfo()
-	if (tonumber(self.revision)< 1) then
-		self.revision='Alpha'
-	end
 	self.print(format("Version %s %s loaded" ,self:Colorize(self.version,'green'),self:Colorize(format("(Revision: %s)",self.revision),"silver")))
 	LoadDefaults(self)
 	self.help=setmetatable(
@@ -469,6 +468,11 @@ function mix:OnInitialize(...)
 			}
 	)
 	local ignoreProfile=self:OnInitialized(...)
+	if (not self.OnDisabled) then
+		self.OptionsTable.args.on.hidden=true
+		self.OptionsTable.args.off.hidden=true
+		self.OptionsTable.args.standby.hidden=true
+	end
 	local main=self.name
 	local profile
 	if (AceDBOptions) then
@@ -1318,24 +1322,25 @@ function lib:Embed(target)
 	local version,revision=v:match("([^$ ]*) *(.*)")
 	target.version=version or "0"
 	local title=target.name or target.fullname
-	if (target.version == '@'..'project-version@' and title) then
-			target.version=GetAddOnMetadata(title,'X-Version')
+	if (version:sub(1,1)=='@') then
+		version=GetAddOnMetadata(title,'X-Version')
 	end
-	if (target.revision == '@'..'project-revision@' and title) then
-			target.revision=GetAddOnMetadata(title,'X-Revision')
+	if (revision:sub(1,1)=='@') then
+		revision='Development'
 	end
-	target.revision=revision:match("%d+") or "0"
+	target.version=version or "0.0.1"
+	target.revision=revision or 'Development'
 	target.prettyversion=format("%s (Revision: %s)",tostringall(target.version,target.revision))
 	target.numericversion=versiontonumber(v)
-	target.title=GetAddOnMetadata(tostring(target),"title") or 'No title'
-	target.notes=GetAddOnMetadata(tostring(target),"notes") or 'No notes'
+	target.title=GetAddOnMetadata(title,"title") or 'No title'
+	target.notes=GetAddOnMetadata(title,"notes") or 'No notes'
 	-- Setting sensible default for mandatory fields
 	target.ID=GetAddOnMetadata(title,"X-ID") or (target.name:gsub("[^%u%d]","") .. "XXXX"):sub(1,3)
 	target.DATABASE=GetAddOnMetadata(title,"X-Database") or "db" .. target.ID
 	--@debug@
-	debug("Info for",target.name,'(',target.ID,')',target.DATABASE,GetAddOnMetadata(target.name,"X-Database"))
+	debug("Info for",target.name,'(',target.ID,')',target.DATABASE,GetAddOnMetadata(title,"X-Database"))
 	--@end-debug@
-	LibStub("AlarLoader-3.0"):GetPrintFunctions(target.name,target)
+	LibStub("AlarLoader-3.0"):GetPrintFunctions(title,target)
 	-- Standard Mixins
 	for name,method in pairs(mix) do
 			target[name] = method
