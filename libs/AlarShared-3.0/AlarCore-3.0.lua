@@ -1,6 +1,6 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
 local MAJOR_VERSION = "AlarCore-3.0"
-local MINOR_VERSION = 1005
+local MINOR_VERSION = 1006
 local pp=print
 local toc=select(4,GetBuildInfo())
 local me, ns = ...
@@ -469,9 +469,9 @@ function mix:OnInitialize(...)
 	)
 	local ignoreProfile=self:OnInitialized(...)
 	if (not self.OnDisabled) then
-		self.OptionsTable.args.on.hidden=true
-		self.OptionsTable.args.off.hidden=true
-		self.OptionsTable.args.standby.hidden=true
+		self.OptionsTable.args.on=nil
+		self.OptionsTable.args.off=nil
+		self.OptionsTable.args.standby=nil
 	end
 	local main=self.name
 	local profile
@@ -557,6 +557,44 @@ end
 function mix:HF_Pre(testo,section)
 	self:HF_Push(section,testo)
 end
+function mix:Wiki(testo,section)
+	section=section or self.lastsection or RELNOTES
+	self.lastsection=section
+	local fmtbullet=" * %s\n"
+	local progressive=1
+	local fmtnum=" %2d. %s\n"
+	local fmthead1="|cff" .. C.Orange  .."%s|r\n"
+	local fmthead2="|cff" .. C.Yellow  .."%s|r\n"
+	local text=''
+	for line in testo:gmatch("(%C*)%c+") do
+		line=line:gsub("^ *","")
+		line=line:gsub(" *$","")
+		local i,j= line:find('^%=+')
+		if (i) then
+			if (j==1) then
+				text=text .. fmthead1:format(line:sub(j+1,-j-1))
+			else
+				text=text .. fmthead2:format(line:sub(j+1,-j-1))
+			end
+		else
+			local i,j= line:find('^%*+')
+			if (i) then
+				text=text.. fmtbullet:format(line:sub(j+1))
+			else
+				local i,j= line:find('^#+')
+				if (i) then
+					text=text .. fmtnum:format(progressive,line:sub(j+1))
+					progressive=progressive + 1
+				else
+					text=text .. line.."\n"
+				end
+			end
+		end
+	end
+	self.help[section]=self.help[section]  .. '\n' .. text .. "\n--------------------------------------\n"
+
+	self:HF_Push(section,testo)
+end
 
 function mix:RelNotes(major,minor,revision,t)
 	local fmt=self:Colorize("Release note for %d.%d.%s",'Yellow') .."\n%s"
@@ -566,19 +604,16 @@ function mix:RelNotes(major,minor,revision,t)
 	lines={strsplit("\n",t)}
 	local max=5
 	for i,tt in ipairs(lines) do
-		local prefix,text=tt:match("^(Fixed):(.*)")
-		if (prefix == "Fixed") then
-			prefix=self:Colorize("Fixed: ",'Red')
-			spacer=           "       "
+		local prefix,text=tt:match("^(%a+):(.*)")
+		if (prefix == "Fixed" or prefix=="Fix") then
+			prefix=self:Colorize("Fix: ",'Red')
+			spacer="       "
+		elseif (prefix == "Feature") then
+			prefix=self:Colorize("Feature: ",'Green')
+			spacer=             "         "
 		else
-			prefix,text=tt:match("^(Feature):(.*)")
-			if (prefix == "Feature") then
-				prefix=self:Colorize("Feature: ",'Green')
-				spacer=             "         "
-			else
-				text=tt
-				prefix=spacer
-			end
+			text=tt
+			prefix=spacer
 		end
 		local tta=""
 		tt=text
@@ -1005,11 +1040,12 @@ function mix:OnEnable(first,...)
 		self.print("enabled")
 		self.notfirst=true
 	end
+		self.print("enabled")
 	self:ApplySettings()
 	self:OnEnabled(not self.notfirst,...)
 end
 function mix:OnDisable(...)
-	self.Print(C("disabled",'red'))
+	self.print(C("disabled",'red'))
 	self:OnDisabled(...)
 end
 local function _GetMethod(target,prefix,func)
