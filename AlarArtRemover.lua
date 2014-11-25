@@ -15,6 +15,9 @@ local function help(self)
 		self:HF_Title("Blizzard art remover","RELNOTES")
 		self:HF_Paragraph("Description")
 		self:HF_Pre("Hides gryphons and artwork from blzzard main actionbar\n")
+self:RelNotes(3,5,2,[[
+Upgrade: Updated Alar Shared version
+]])
 self:RelNotes(3,5,1,[[
 Upgrade: Updated to 6.0.3
 ]])

@@ -71,16 +71,18 @@ local new, del
 do
 	local list=lib.list
 	function new(...)
-		local t = next(list)
-		if t then
+			local t = next(list)
+			local tt=select(1,...)
+			if (not t) then
+				 t={}
+			end
 			list[t] = nil
-			if (...) then
-				for i,v in pairs(...) do t[i]=v end
+			if (type(tt)=="table") then
+				 for i,v in pairs(tt) do  t[i]=v  end
+			else
+				 for i,v in pairs({...}) do t[i]=v  end
 			end
 			return t
-		else
-			return {...}
-		end
 	end
 	function del(t)
 		setmetatable(t, nil)
@@ -563,8 +565,8 @@ function mix:Wiki(testo,section)
 	local fmtbullet=" * %s\n"
 	local progressive=1
 	local fmtnum=" %2d. %s\n"
-	local fmthead1="|cff" .. C.Orange  .."%s|r\n"
-	local fmthead2="|cff" .. C.Yellow  .."%s|r\n"
+	local fmthead1="|cff" .. C.Orange  .."%s|r\n \n \n"
+	local fmthead2="|cff" .. C.Yellow  .."%s|r\n \n"
 	local text=''
 	for line in testo:gmatch("(%C*)%c+") do
 		line=line:gsub("^ *","")
@@ -591,9 +593,7 @@ function mix:Wiki(testo,section)
 			end
 		end
 	end
-	self.help[section]=self.help[section]  .. '\n' .. text .. "\n--------------------------------------\n"
-
-	self:HF_Push(section,testo)
+	self.help[section]=self.help[section]  .. '\n' .. text
 end
 
 function mix:RelNotes(major,minor,revision,t)
