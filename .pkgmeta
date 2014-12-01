@@ -2,17 +2,18 @@ package-as: AlarArtRemover
 enable-nolib-creation: no
 
 externals:
-  libs/Ace3: 
-    url: svn://svn.wowace.com/wow/ace3/mainline/trunk
-    tag: latest
+	libs/Ace3:
+		url: svn://svn.wowace.com/wow/ace3/mainline/trunk
+		tag: latest
 
-ignore: 
- - luac.out
- - tests
- - benchs
- - docs
- - split.bat
- - unsplit.bat  
- - Ace3.lua
- - Ace3.toc
- - fontlist.txt
+ignore:
+- luac.out
+- tests
+- benchs
+- docs
+- split.bat
+- unsplit.bat
+- Ace3.lua
+- Ace3.toc
+- fontlist.txt
+- LibInit
