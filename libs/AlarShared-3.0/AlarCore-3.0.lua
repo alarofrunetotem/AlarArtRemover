@@ -1263,11 +1263,11 @@ function mix:_Trace(ft,fmt,...)
 			r,g,b)
 	if (ft) then
 		print "Full stack dump"
-			for i,info in ipairs(stack) do
-				print (format("Stack: %d. %s",i,self:Colorize(info,'green')))
-			end
-			print("--------------")
+		for i,info in ipairs(stack) do
+			print (format("Stack: %d. %s",i,self:Colorize(info,'green')))
 		end
+		print("--------------")
+	end
 end
 function mix:Long(msg) C:OnScreen('Yellow',msg,20) end
 function mix:Onscreen_Orange(msg) C:OnScreen('Orange',msg,2) end

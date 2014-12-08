@@ -25,29 +25,17 @@ Upgrade: Updated to 6.0.3
 end
 local addon=LibStub("AlarLoader-3.0"):CreateAddon(me,true)
 function addon:OnInitialized()
-		help(self)
-		local g=self:AddToggle("HIDEGRYPHON",false,L["Hide gryphon"],L["If checked, hides gryphon art"])
-		g.width='full'
-		g=self:AddToggle("HIDEMAINBAR",false,L["Hide main bar"],L["If checked, hides main bar art"])
-		g.width='full'
-		--g=self:AddToggle("HIDELAGMETER",false,L["Hide lagmeter"],L["If checked, hides lagmeter art"])
-		--g.width='full'
---[[
-		g=self:AddToggle("HIDEPETBAR",false,L["Hide pet bar"],L["If checked, hides pet bar art"])
-		g.width='full'
---]]
-		self.HIDEGRYPHON={tipo="form",
-				items={"MainMenuBarLeftEndCap","MainMenuBarRightEndCap"}
-				}
-		self.HIDELAGMETER={tipo="unknown",
-										items={"MainMenuBarPerformanceBarFrame"}
-										}
-		self.HIDEMAINBAR={tipo="form",
-										items={"MainMenuBarTexture0","MainMenuBarTexture1","MainMenuBarTexture2","MainMenuBarTexture3"}
-										}
-		self.HIDEPETBAR={tipo="texture",
-										items={"SlidingActionBarTexture0","SlidingActionBarTexture1"}
-										}
+	help(self)
+	local g=self:AddToggle("HIDEGRYPHON",false,L["Hide gryphon"],L["If checked, hides gryphon art"])
+	g.width='full'
+	g=self:AddToggle("HIDEMAINBAR",false,L["Hide main bar"],L["If checked, hides main bar art"])
+	g.width='full'
+	self.HIDEGRYPHON={tipo="form",
+		items={"MainMenuBarLeftEndCap","MainMenuBarRightEndCap"}
+	}
+	self.HIDEMAINBAR={tipo="form",
+		items={"MainMenuBarTexture0","MainMenuBarTexture1","MainMenuBarTexture2","MainMenuBarTexture3"}
+	}
 end
 function addon:Apply(toggle,value)
 		local work=self[toggle]
