@@ -185,7 +185,7 @@ function mix:DelTable(...)
 	return del(...)
 end
 function mix:VersionCompare(otherversion,strict)
-		oterhversion=versiontonumber(otherversion)
+		otherversion=versiontonumber(otherversion)
 		if (strict) then
 				return self.numericversion-otherversion
 		else
@@ -1939,7 +1939,7 @@ local function xdump(a,chat)
 end
 local function xfont(a)
 	if (a) then
-		mix:AlarFonts()
+		mix:AlarFonts(a)
 	else
 		mix:AlarFonts()
 	end
