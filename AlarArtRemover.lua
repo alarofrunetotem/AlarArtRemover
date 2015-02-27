@@ -38,17 +38,17 @@ function addon:OnInitialized()
 	}
 end
 function addon:Apply(toggle,value)
-		local work=self[toggle]
-		if (not work) then return end
-		if (work.tipo == "form") then
-				for _,f in pairs(work.items) do
-						if (not value) then
-								_G[f]:Show()
-						else
-								_G[f]:Hide()
-						end
-				end
+	local work=self[toggle]
+	if (not work) then return end
+	if (work.tipo == "form") then
+		for _,f in pairs(work.items) do
+			if (not value) then
+				_G[f]:Show()
+			else
+				_G[f]:Hide()
+			end
 		end
+	end
 end
 
 function addon:OnDisabled()
