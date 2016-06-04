@@ -1,3 +1,24 @@
+local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- Always check line number in regexp and file
+local me,ns=...
+local pp=print
+--@debug@
+--Postal_BlackBookButton
+-- SendMailNameEditBox
+LoadAddOn("Blizzard_DebugTools")
+LoadAddOn("LibDebug")
+if LibDebug then LibDebug() end
+--@end-debug@
+--[===[@non-debug@
+local print=function() end
+local DevTools_Dump=function() end
+--@end-non-debug@]===]
+local addon --#MailCommander
+local LibInit,minor=LibStub("LibInit",true)
+assert(LibInit,me .. ": Missing LibInit, please reinstall")
+addon=LibStub("LibInit"):NewAddon(ns,me,{noswitch=false,profile=true,enhancedProfile=true})
+local C=addon:GetColorTable()
+local L=addon:GetLocale()
+--[===[@non-debug@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
 local toc=select(4,GetBuildInfo())
 local me, ns = ...
@@ -24,9 +45,10 @@ Upgrade: Updated to 6.0.3
 --===DOCEND===
 end
 local addon=LibStub("AlarLoader-3.0"):CreateAddon(me,true)
+--@end-non-debug@]===]
+
 function addon:OnInitialized()
-	help(self)
-	local g=self:AddToggle("HIDEGRYPHON",false,L["Hide gryphon"],L["If checked, hides gryphon art"])
+	local g=self:AddToggle("HIDEGRYPHON",true,L["Hide gryphon"],L["If checked, hides gryphon art"])
 	g.width='full'
 	g=self:AddToggle("HIDEMAINBAR",false,L["Hide main bar"],L["If checked, hides main bar art"])
 	g.width='full'
