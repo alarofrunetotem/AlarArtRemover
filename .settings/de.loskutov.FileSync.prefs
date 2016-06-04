@@ -1,0 +1,7 @@
+WARNING=DO NOT MODIFY THIS FILE IF YOU DON'T UNDERSTAND
+defaultDestination=/home/giovanni/AddOns/AlarArtRemover
+defaultVariables=
+eclipse.preferences.version=1
+includeTeamPrivateFiles=false
+map|0=/|,|,|.buildpath;.pkgmeta;.project;.settings/;libs/|,
+useCurrentDateForDestinationFiles=false
