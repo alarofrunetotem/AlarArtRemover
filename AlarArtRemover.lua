@@ -58,6 +58,8 @@ function addon:OnInitialized()
 	self.HIDEMAINBAR={tipo="form",
 		items={"MainMenuBarTexture0","MainMenuBarTexture1","MainMenuBarTexture2","MainMenuBarTexture3"}
 	}
+	self:Trigger("HIDEGRYPHON")
+	self:Trigger("HIDEMAINBAR")
 end
 function addon:Apply(toggle,value)
 	local work=self[toggle]
