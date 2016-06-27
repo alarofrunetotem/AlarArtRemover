@@ -12,7 +12,7 @@ if LibDebug then LibDebug() end
 local print=function() end
 local DevTools_Dump=function() end
 --@end-non-debug@]===]
-local addon --#MailCommander
+local addon --#addon
 local LibInit,minor=LibStub("LibInit",true)
 assert(LibInit,me .. ": Missing LibInit, please reinstall")
 addon=LibStub("LibInit"):NewAddon(ns,me,{noswitch=false,profile=true,enhancedProfile=true})
