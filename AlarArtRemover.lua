@@ -18,35 +18,6 @@ assert(LibInit,me .. ": Missing LibInit, please reinstall")
 addon=LibStub("LibInit"):NewAddon(ns,me,{noswitch=false,profile=true,enhancedProfile=true})
 local C=addon:GetColorTable()
 local L=addon:GetLocale()
---[===[@non-debug@
-local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- MUST BE LINE 1
-local toc=select(4,GetBuildInfo())
-local me, ns = ...
-local pp=print
-local L=LibStub("AceLocale-3.0"):GetLocale(me,true)
-local C=LibStub("AlarCrayon-3.0"):GetColorTable()
-LibStub("AlarLoader-3.0")(__FILE__,me,ns)
---X:loadingList(__FILE__,me)
---X:GetPrintFunctions(me,ns)
-local print=ns.print or print
-local debug=ns.debug or print
---[[ Standard prologue end --]]
-local function help(self)
---===DOCBEGIN===
-		self:HF_Title("Blizzard art remover","RELNOTES")
-		self:HF_Paragraph("Description")
-		self:HF_Pre("Hides gryphons and artwork from blzzard main actionbar\n")
-self:RelNotes(3,5,2,[[
-Upgrade: Updated Alar Shared version
-]])
-self:RelNotes(3,5,1,[[
-Upgrade: Updated to 6.0.3
-]])
---===DOCEND===
-end
-local addon=LibStub("AlarLoader-3.0"):CreateAddon(me,true)
---@end-non-debug@]===]
-
 function addon:OnInitialized()
 	local g=self:AddToggle("HIDEGRYPHON",true,L["Hide gryphon"],L["If checked, hides gryphon art"])
 	g.width='full'
