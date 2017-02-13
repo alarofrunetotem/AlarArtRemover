@@ -1,6 +1,23 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- Always check line number in regexp and file
 local me,ns=...
 local pp=print
+local addon=ns
+function addon:Start()
+	local items={
+		MainMenuBarLeftEndCap,
+		MainMenuBarRightEndCap,
+		MainMenuBarTexture0,
+		MainMenuBarTexture1,
+		MainMenuBarTexture2,
+		MainMenuBarTexture3
+	}
+	for _,f in pairs(items) do
+		if f then f:Hide() end
+	end
+	
+end
+addon:Start()
+if true then return end
 --@debug@
 --Postal_BlackBookButton
 -- SendMailNameEditBox
@@ -12,6 +29,7 @@ if LibDebug then LibDebug() end
 local print=function() end
 local DevTools_Dump=function() end
 --@end-non-debug@]===]
+--[[
 local addon --#addon
 local LibInit,minor=LibStub("LibInit",true)
 assert(LibInit,me .. ": Missing LibInit, please reinstall")
@@ -32,6 +50,7 @@ function addon:OnInitialized()
 	self:Trigger("HIDEGRYPHON")
 	self:Trigger("HIDEMAINBAR")
 end
+--]]
 function addon:Apply(toggle,value)
 	local work=self[toggle]
 	if (not work) then return end

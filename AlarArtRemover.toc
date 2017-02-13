@@ -25,6 +25,4 @@
 ## X-Donation: http://wow.aspide.it
 ## X-eMail: alar@aspide.it
 ## X-Date: @project-date-iso@
-embeds.xml
-localization.lua
 AlarArtRemover.lua

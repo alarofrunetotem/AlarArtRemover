@@ -1,12 +1,8 @@
 package-as: AlarArtRemover
 enable-nolib-creation: no
 
-externals:
-	libs/LibInit:
-		url: git://git.curseforge.net/wow/libinit/mainline.git/LibInit
-		tag: latest
-
 ignore:
+- libs
 - luac.out
 - tests
 - benchs
