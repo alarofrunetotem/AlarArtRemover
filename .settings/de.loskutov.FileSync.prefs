@@ -1,5 +1,5 @@
 WARNING=DO NOT MODIFY THIS FILE IF YOU DON'T UNDERSTAND
-defaultDestination=/home/giovanni/AddOns/AlarArtRemover
+defaultDestination=/home/giovanni/fakewow/Interface/AddOns/AlarArtRemover
 defaultVariables=
 eclipse.preferences.version=1
 includeTeamPrivateFiles=false

@@ -9,7 +9,7 @@
 ## eMail: alar@aspide.it
 ## URL: http://wow.aspide.it
 ## RequiredDeps:
-## OptionalDeps: Ace3,LibDebug
+## OptionalDeps: 
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
 ## SavedVariables: dbAAR
