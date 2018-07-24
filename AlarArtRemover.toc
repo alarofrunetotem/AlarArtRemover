@@ -3,13 +3,13 @@
 ## Notes: Removes Blizzard Art from Action Bars
 ## Notes-itIT: Rimuove le texture Blizzard dalle action bars
 ## Author: Alar of Daggerspine
-## Version: @project-version@ 70200
+## Version: @project-version@ 80000
 ## X-Revision @project-abbreviated-hash@
 ## X-Version: 3.5.3
 ## eMail: alar@aspide.it
 ## URL: http://wow.aspide.it
 ## RequiredDeps:
-## OptionalDeps: 
+## OptionalDeps:
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
 ## SavedVariables: dbAAR
