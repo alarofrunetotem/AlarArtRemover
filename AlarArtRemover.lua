@@ -1,7 +1,6 @@
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- Always check line number in regexp and file
 print("AlarArtRemover loaded")
 C_Timer.After(2,function()
-  print("Hiding things")
   local items={
     MainMenuBarArtFrameBackground,
     MainMenuBarArtFrame.LeftEndCap,
