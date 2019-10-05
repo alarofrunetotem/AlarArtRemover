@@ -1,4 +1,4 @@
-## Interface: 80200
+## Interface: 80250
 ## Title: AlarArtRemover
 ## Notes: Removes Blizzard Art from Action Bars
 ## Notes-itIT: Rimuove le texture Blizzard dalle action bars
