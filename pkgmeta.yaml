@@ -2,16 +2,16 @@ package-as: AlarArtRemover
 enable-nolib-creation: no
 
 ignore:
-- libs
-- luac.out
-- tests
-- benchs
-- docs
-- split.bat
-- unsplit.bat
-- Ace3.lua
-- Ace3.toc
-- fontlist.txt
-- LibInit
-- libs
+   - libs
+   - luac.out
+   - tests
+   - benchs
+   - docs
+   - split.bat
+   - unsplit.bat
+   - Ace3.lua
+   - Ace3.toc
+   - fontlist.txt
+   - LibInit
+   - libs
 
