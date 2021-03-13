@@ -1,9 +1,9 @@
-## Interface: 90002
+## Interface: 90005
 ## Title: AlarArtRemover
 ## Notes: Removes Blizzard Art from Action Bars
 ## Notes-itIT: Rimuove le texture Blizzard dalle action bars
 ## Author: Alar of Daggerspine
-## Version: @project-version@ 90002
+## Version: @project-version@ 90005
 ## X-Revision @project-abbreviated-hash@
 ## X-Version: 3.5.3
 ## eMail: alar@aspide.it
