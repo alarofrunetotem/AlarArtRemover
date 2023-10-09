@@ -1,4 +1,4 @@
-## Interface: 100107
+## Interface: 11404
 ## Title: AlarArtRemover
 ## Notes: Removes Blizzard Art from Action Bars
 ## Notes-itIT: Rimuove le texture Blizzard dalle action bars
