@@ -1,7 +1,0 @@
-WARNING=DO NOT MODIFY THIS FILE IF YOU DON'T UNDERSTAND
-defaultDestination=D\:/Program Files (x86)/World of Warcraft/_retail_/Interface/AddOns/AlarArtRemover
-defaultVariables=
-eclipse.preferences.version=1
-includeTeamPrivateFiles=false
-map|0=/|,|,|libs/;.settings/;.project;.pkgmeta;.buildpath|,
-useCurrentDateForDestinationFiles=false
