@@ -1,5 +1,6 @@
 package-as: AlarArtRemover
 enable-nolib-creation: no
+enable-toc-creation: yes
 
 ignore:
    - libs
