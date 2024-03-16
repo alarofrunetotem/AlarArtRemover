@@ -17,7 +17,7 @@ if (GetAccountExpansionLevel()==0) then
 else
 C_Timer.After(2,function()
   local items={
-    MainMenuBarEndCaps,
+    MainMenuBar.EndCaps,
   }
   for _,f in pairs(items) do
     if f then f:Hide() end
