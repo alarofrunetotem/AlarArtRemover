@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-global
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- Always check line number in regexp and file
 local me,ns=...
 print("AlarArtRemover loaded",GetAccountExpansionLevel(),"yo")
