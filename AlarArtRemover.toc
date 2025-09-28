@@ -1,5 +1,5 @@
 ## Interface: 110200, 110205
-## Interface-Classic: 50501
+## Interface-Mists: 50501
 ## Interface-Cata: 40402
 ## Title: AlarArtRemover
 ## Notes: Removes Blizzard Art from Action Bars
@@ -7,7 +7,7 @@
 ## Author: Alar of Daggerspine
 ## Version: @project-version@ 100250
 ## IconTexture: 133457
-## X-Revision @project-abbreviated-hash@
+## X-Revision: @project-abbreviated-hash@
 ## X-Version: 3.14.0
 ## eMail: alar@aspide.it
 ## URL: http://wow.aspide.it
