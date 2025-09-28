@@ -1,5 +1,5 @@
 ## Interface: 110200, 110205
-## Interface-Classic: 50501
+## Interface-Mists: 50501
 ## Interface-Cata: 40402
 ## Title: AlarArtRemover
 ## Notes: Removes Blizzard Art from Action Bars
