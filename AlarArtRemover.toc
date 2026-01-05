@@ -1,10 +1,21 @@
-## Interface: 110200, 110205
-## Interface-Mists: 50501
+## Interface: 110207, 120000, 120001
+## Interface-Mists: 50503
 ## Interface-Cata: 40402
 ## Title: AlarArtRemover
 ## Notes: Removes Blizzard Art from Action Bars
 ## Notes-itIT: Rimuove le texture Blizzard dalle action bars
 ## Author: Alar of Daggerspine
+## Category: User Interface
+## Category-deDE: Benutzerinterface
+## Category-esES: Interfaz de usuario
+## Category-esMX: Interfaz de usuario
+## Category-frFR: Interface utilisateur
+## Category-itIT: Interfaccia utente
+## Category-koKR: 사용자 인터페이스
+## Category-ptBR: Interface do usuário
+## Category-ruRU: Интерфейс пользователя
+## Category-zhCN: 用户界面
+## Category-zhTW: 使用者介面
 ## Version: @project-version@ 100250
 ## IconTexture: 133457
 ## X-Revision: @project-abbreviated-hash@

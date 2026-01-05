@@ -1,8 +1,7 @@
----@diagnostic disable: undefined-global
 local __FILE__=tostring(debugstack(1,2,0):match("(.*):1:")) -- Always check line number in regexp and file
 local me,ns=...
-print("AlarArtRemover loaded",GetAccountExpansionLevel(),"yo")
-if (GetAccountExpansionLevel()==0) then
+local level =GetAccountExpansionLevel()
+if (level==0) then
   local addon=ns
   function addon:Start()
    local items={
@@ -16,13 +15,16 @@ if (GetAccountExpansionLevel()==0) then
   end
   addon:Start()
 else
-C_Timer.After(2,function()
-  local items={
-    MainMenuBar.EndCaps,
-  }
-  for _,f in pairs(items) do
-    if f then f:Hide() end
+  C_Timer.After(2,function()
+    local items={
+      MainMenuBar and MainMenuBar.EndCaps,
+      MainActionBar and MainActionBar.EndCaps
+    }
+    for _,f in pairs(items) do
+      if f then 
+        f:Hide()
+      end
+    end
   end
-end
-)
+  )
 end
