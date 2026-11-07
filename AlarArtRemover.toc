@@ -1,7 +1,7 @@
-## Interface: 120100, 120105
-## Interface-mainline: 50504
-## Interface-classic: 40402
+## Interface: 120105, 120107
 ## Title: AlarArtRemover
+## Interface-Forever: 16001
+## Interface-Classic: 50504
 ## Notes: Removes Blizzard Art from Action Bars
 ## Notes-itIT: Rimuove le texture Blizzard dalle action bars
 ## Author: Alar of Daggerspine
