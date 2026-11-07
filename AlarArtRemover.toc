@@ -4,8 +4,7 @@
 ## Interface-Mists: 50504
 ## Interface-Wrath: 38002
 ## Interface-Vanilla: 11509
-## Interface-Tbc: 1
-## Interface-Cata: 1
+## Interface-Cata: 40402
 ## Notes: Removes Blizzard Art from Action Bars
 ## Notes-itIT: Rimuove le texture Blizzard dalle action bars
 ## Author: Alar of Daggerspine
